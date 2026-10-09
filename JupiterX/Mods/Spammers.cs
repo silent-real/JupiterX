@@ -30,17 +30,28 @@ namespace JupiterX.Mods
             }
             else
             {
-                var vrrigType = Type.GetType("VRRig, Assembly-CSharp");
-                if (vrrigType == null)
-                    return;
                 var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-                var method = vrrigType.GetMethod("PlayHandTap", flags) ?? vrrigType.GetMethod("PlayHandTapLocal", flags);
+                var gorillaTaggerType = Type.GetType("GorillaTagger, Assembly-CSharp");
+                if (gorillaTaggerType == null)
+                    return;
+                var offlineRigField = gorillaTaggerType.GetField("offlineVRRig", flags);
+                if (offlineRigField == null)
+                    return;
+                var tagger = UnityEngine.Object.FindObjectOfType(Il2CppType.From(gorillaTaggerType));
+                if (tagger == null)
+                    return;
+                var offlineRig = offlineRigField.GetValue(tagger);
+                if (offlineRig == null)
+                    return;
+                var rigType = offlineRig.GetType();
+                var method = rigType.GetMethod("PlayHandTap", flags) ?? rigType.GetMethod("PlayHandTapLocal", flags);
                 if (method == null)
                     return;
-                var rigs = UnityEngine.Object.FindObjectsOfType(Il2CppType.From(vrrigType));
-                if (rigs == null || rigs.Length == 0)
-                    return;
-                method.Invoke(rigs[0], new object[] { index, false, 1f });
+                var parameters = method.GetParameters();
+                if (parameters.Length == 3)
+                {
+                    method.Invoke(offlineRig, new object[] { index, false, 9999f });
+                }
             }
         }
 
