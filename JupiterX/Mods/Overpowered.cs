@@ -684,17 +684,20 @@ namespace JupiterX.Mods
 
                 if (Main.gunLocked && Main.lockTarget != null)
                 {
-                    for (int i = 0; i < 25; i++)
+                    for (int i = 0; i < 225; i++)
                     {
                         RPCManager.RigRPC("SetJumpMultiplier", Main.lockTarget.photonView.Owner, new object[] { float.NaN });
                         RPCManager.RigRPC("SetJumpLimit", Main.lockTarget.photonView.Owner, new object[] { float.NaN });
+                        RPCManager.RigRPC("RequestCosmetics", Main.lockTarget.photonView.Owner, new object[] { });
+                        GorillaTagger.Instance.myVRRig.photonView.RPC("RequestCosmetics", Main.lockTarget.photonView.Owner, null);
+                        GorillaGameManager.instance.photonView.RPC("UpdatePlayerCosmetic", Main.lockTarget.photonView.Owner, null);
                     }
                 }
 
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -714,10 +717,13 @@ namespace JupiterX.Mods
         {
             if (Utility.RightTrigger)
             {
-                for (int i = 0; i < 25; i++)
+                for (int i = 0; i < 225; i++)
                 {
                     RPCManager.RigRPC("SetJumpMultiplier", RpcTarget.Others, new object[] { float.NaN });
                     RPCManager.RigRPC("SetJumpLimit", RpcTarget.Others, new object[] { float.NaN });
+                    RPCManager.RigRPC("RequestCosmetics", RpcTarget.Others, new object[] { });
+                    GorillaTagger.Instance.myVRRig.photonView.RPC("RequestCosmetics", RpcTarget.Others, null);
+                    GorillaGameManager.instance.photonView.RPC("UpdatePlayerCosmetic", RpcTarget.Others, null);
                 }
                 PhotonNetwork.SendAllOutgoingCommands();
             }
