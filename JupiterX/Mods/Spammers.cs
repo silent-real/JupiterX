@@ -34,13 +34,9 @@ namespace JupiterX.Mods
                 if (vrrigType == null)
                     return;
                 var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-                var method = vrrigType.GetMethod("PlayHandTap", flags);
+                var method = vrrigType.GetMethod("PlayHandTap", flags) ?? vrrigType.GetMethod("PlayHandTapLocal", flags);
                 if (method == null)
-                {
-                    method = vrrigType.GetMethod("PlayHandTapLocal", flags);
-                    if (method == null)
-                        return;
-                }
+                    return;
                 var rigs = UnityEngine.Object.FindObjectsOfType(Il2CppType.From(vrrigType));
                 if (rigs == null || rigs.Length == 0)
                     return;
