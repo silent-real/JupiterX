@@ -129,7 +129,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -162,7 +162,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -276,7 +276,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -315,7 +315,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -342,7 +342,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who && who != Utility.myVRRig())
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Utility.BetaBanAll(who.photonView.Owner.UserId);
                     }
@@ -379,7 +379,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -618,7 +618,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
@@ -656,7 +656,7 @@ namespace JupiterX.Mods
                 if (Main.GetGunInput(true))
                 {
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
-                    if (who)
+                    if (who != null && who != Utility.myVRRig())
                     {
                         Main.gunLocked = true;
                         Main.lockTarget = who;
