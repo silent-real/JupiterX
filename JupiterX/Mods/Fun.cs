@@ -26,15 +26,12 @@ namespace JupiterX.Mods
 {
     public class Fun
     {
-        private static VRMap Head =>
-            PhotonNetwork.InRoom ? GorillaTagger.Instance.myVRRig.head : GorillaTagger.Instance.offlineVRRig.head;
-
         private static float headSpinSpeed = 10f;
         public static void SpinHead(string axis)
         {
             if (Utility.ActualRig().enabled)
             {
-                Vector3 rot = Head.trackingRotationOffset;
+                Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
                 switch (axis.ToLower())
                 {
                     case "x":
@@ -49,20 +46,20 @@ namespace JupiterX.Mods
                     default:
                         return;
                 }
-                Head.trackingRotationOffset = rot;
+                Utility.ActualRig().head.trackingRotationOffset = rot;
             }
             else
             {
                 switch (axis.ToLower())
                 {
                     case "x":
-                        Head.rigTarget.transform.rotation = Quaternion.Euler(Head.rigTarget.transform.rotation.eulerAngles + new Vector3(headSpinSpeed, 0f, 0f));
+                        Utility.ActualRig().head.rigTarget.transform.rotation = Quaternion.Euler(Utility.ActualRig().head.rigTarget.transform.rotation.eulerAngles + new Vector3(headSpinSpeed, 0f, 0f));
                         break;
                     case "y":
-                        Head.rigTarget.transform.rotation = Quaternion.Euler(Head.rigTarget.transform.rotation.eulerAngles + new Vector3(0f, headSpinSpeed, 0f));
+                        Utility.ActualRig().head.rigTarget.transform.rotation = Quaternion.Euler(Utility.ActualRig().head.rigTarget.transform.rotation.eulerAngles + new Vector3(0f, headSpinSpeed, 0f));
                         break;
                     case "z":
-                        Head.rigTarget.transform.rotation = Quaternion.Euler(Head.rigTarget.transform.rotation.eulerAngles + new Vector3(0f, 0f, headSpinSpeed));
+                        Utility.ActualRig().head.rigTarget.transform.rotation = Quaternion.Euler(Utility.ActualRig().head.rigTarget.transform.rotation.eulerAngles + new Vector3(0f, 0f, headSpinSpeed));
                         break;
                     default:
                         return;
@@ -72,44 +69,44 @@ namespace JupiterX.Mods
 
         public static void FixHead()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             rot = Vector3.zero;
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static void UpsideDownHead()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             rot.z = 180f;
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static void BrokenNeck()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             rot.z = 90f;
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static void BackwardsHead()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             rot.y = 180f;
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static void SidewaysHead()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             rot.y = 90f;
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static float lastBangTime;
         public static readonly float BPM = 159f;
         public static void HeadBang()
         {
-            Vector3 rot = Head.trackingRotationOffset;
+            Vector3 rot = Utility.ActualRig().head.trackingRotationOffset;
             if (Time.time > lastBangTime)
             {
                 rot.x = 50f;
@@ -117,7 +114,7 @@ namespace JupiterX.Mods
             }
             else
                 rot.x = Mathf.Lerp(rot.x, 0f, 0.1f);
-            Head.trackingRotationOffset = rot;
+            Utility.ActualRig().head.trackingRotationOffset = rot;
         }
 
         public static void CubeAll()
