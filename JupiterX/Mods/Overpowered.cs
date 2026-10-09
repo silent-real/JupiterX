@@ -674,6 +674,57 @@ namespace JupiterX.Mods
             }
         }
 
+        public static void LagGun()
+        {
+            if (Main.GetGunInput(false))
+            {
+                var GunData = Main.RenderGun();
+                GameObject NewPointer = GunData.Pointer;
+                RaycastHit Ray = GunData.Ray;
+
+                Utility.SetMaster(Utility.MyPlayer());
+
+                if (Main.gunLocked && Main.lockTarget != null)
+                {
+                    for (int i = 0; i < 25; i++)
+                    {
+                        RPCManager.RigRPC("SetJumpMultiplier", Main.lockTarget.photonView.Owner, new object[] { float.NaN });
+                        RPCManager.RigRPC("SetJumpLimit", Main.lockTarget.photonView.Owner, new object[] { float.NaN });
+                    }
+                }
+
+                if (Main.GetGunInput(true))
+                {
+                    VRRig who = Ray.collider.GetComponentInParent<VRRig>();
+                    if (who)
+                    {
+                        Main.gunLocked = true;
+                        Main.lockTarget = who;
+                    }
+                    PhotonNetwork.SendAllOutgoingCommands();
+                }
+            }
+            else
+            {
+                Main.lockTarget = null;
+                if (Main.gunLocked)
+                    Main.gunLocked = false;
+            }
+        }
+
+        public static void LagAll()
+        {
+            if (Utility.RightTrigger)
+            {
+                for (int i = 0; i < 25; i++)
+                {
+                    RPCManager.RigRPC("SetJumpMultiplier", RpcTarget.Others, new object[] { float.NaN });
+                    RPCManager.RigRPC("SetJumpLimit", RpcTarget.Others, new object[] { float.NaN });
+                }
+                PhotonNetwork.SendAllOutgoingCommands();
+            }
+        }
+
 
         public static HalloweenGhostChaser lucy
         {

@@ -509,6 +509,9 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Create 50 Player Room", method =() => Overpowered.CreatePublic(50), isTogglable = true, toolTip = "Creates a public room that has 50 players allowed." },
                 new ButtonInfo { buttonText = "Create 100 Player Room", method =() => Overpowered.CreatePublic(100), isTogglable = true, toolTip = "Creates a public room that has 100 players allowed." },
 
+                new ButtonInfo { buttonText = "Lag Gun", method =() => Overpowered.LagGun(), isTogglable = true, toolTip = "Lets you lag someone you shoot at." },
+                new ButtonInfo { buttonText = "Lag All <color=grey>[</color><color=cyan>RT</color><color=grey>]</color>", method =() => Overpowered.LagAll(), isTogglable = true, toolTip = "Lets you lag all while holding trigger." },
+
                 new ButtonInfo { buttonText = "Crash Gun", method =() => Overpowered.CrashGun(), isTogglable = true, toolTip = "Lets you crash someone you shoot at." },
                 new ButtonInfo { buttonText = "Crash Gun V2", method =() => Overpowered.CrashGunV2(), isTogglable = true, toolTip = "Lets you crash someone you shoot at." },
                 new ButtonInfo { buttonText = "Crash Gun V3", overlapText = "Insta Crash Gun", method =() => Overpowered.CrashGunV3(), isTogglable = true, toolTip = "Lets you crash someone you shoot at." },
