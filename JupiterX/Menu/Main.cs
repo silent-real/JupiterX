@@ -65,11 +65,10 @@ namespace JupiterX.Menu
             try
 			{
                 Utility.toOpen = bothHands ? (Utility.LeftSecondary || Utility.RightSecondary) : (!RightHanded && Utility.LeftSecondary || (RightHanded && Utility.RightSecondary));
-				bool keyboardOpen = false;
 
                 if (menu == null)
 				{
-					if (Utility.toOpen || keyboardOpen)
+					if (Utility.toOpen)
 					{
                         if (!DisableMenuSounds)
                             Utility.PlaySound(Utility.menuOpenSound);
@@ -93,7 +92,7 @@ namespace JupiterX.Menu
 				}
 				else
 				{
-					if (Utility.toOpen || keyboardOpen)
+					if (Utility.toOpen)
 					    RecenterMenu();
 					else
 					{
