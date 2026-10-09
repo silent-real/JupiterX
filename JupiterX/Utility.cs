@@ -1328,10 +1328,9 @@ namespace JupiterX
         public static Vector2 LeftJoystickAxis;
 
         public static string fps = "0";
-        private static float fpsSmooth = 0f;
         public static void UpdateFPS()
         {
-            fps = Mathf.Lerp(fpsSmooth, 1f / Time.unscaledDeltaTime, Time.unscaledDeltaTime * 4f).ToString();
+            fps = (1f / Time.unscaledDeltaTime).ToString("F0");
         }
 
         public static GameObject platR = null;
