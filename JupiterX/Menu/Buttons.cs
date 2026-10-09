@@ -857,6 +857,8 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Z0", method =() => Application.OpenURL("https://github.com/kralsei"), isTogglable = false, toolTip = "Z0 is a helper of <b>JupiterX</b> and has made some of the crash mods and helped in general." },
                 new ButtonInfo { buttonText = "Dom", method =() => Application.OpenURL("https://github.com/xfi0"), isTogglable = false, toolTip = "Dom made the original soundboard code for his mod menu <b>Titled</b> that then Nova changed how it loads and added it to <b>JupiterX</b>." },
                 new ButtonInfo { buttonText = "Saturn", method =() => Application.OpenURL("https://github.com/saturnlamoooooooooooooooo"), isTogglable = false, toolTip = "Helped a lil with <b>JupiterX</b>." },
+
+                new ButtonInfo { buttonText = "Zenith", isTogglable = false, toolTip = "Helped with the <b>Photon Bots</b> for dlls." },
             },
 
             new[] // Achievements
