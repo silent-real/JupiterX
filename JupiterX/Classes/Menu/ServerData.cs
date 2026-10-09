@@ -377,7 +377,7 @@ namespace Console
         };
 
         public void Log(string msg) =>
-            Utility.Log(msg);
+            Utility.Log(msg, JupxLogType.Info);
 
         public void SendVote(string category)
         {

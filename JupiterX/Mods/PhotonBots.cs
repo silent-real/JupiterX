@@ -117,7 +117,6 @@ namespace JupiterX.Mods
             AppSettings baseCfg = BuildSettings();
 
             NotificationManager.SendNotification("<color=cyan>[BOTS]</color> Spawning " + botCount + " bots in [" + roomName + "] region [" + region + "]", 4f);
-            Utility.Log("[PhotonBots] Spawning " + botCount + " bots room=" + roomName + " region=" + region);
 
             spawning = true;
             spawnRoutine = BootstrapAndSpawn(roomName, center, baseCfg, botCount);
@@ -845,7 +844,7 @@ namespace JupiterX.Mods
                 }
                 catch (Exception ex)
                 {
-                    Utility.Log("[PhotonBots] Failed to create bot " + name + ": " + ex.Message);
+                    Utility.Log("[PhotonBots] Failed to create bot " + name + ": " + ex.Message, JupxLogType.Error);
                 }
                 spawned++;
                 float waited = 0f;

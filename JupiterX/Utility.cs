@@ -36,10 +36,25 @@ using static JupiterX.Settings;
 
 namespace JupiterX
 {
+    public enum JupxLogType
+    {
+        Info, Warning, Error
+    }
+
     public class Utility
     {
-        public static void Log(string msg) =>
-            MelonLoader.MelonLogger.Msg($"[JUPITERX] Log // {msg}");
+        public static void Log(string msg, JupxLogType type)
+        {
+            string prefix = "[*}";
+            switch (type)
+            {
+                case JupxLogType.Info: prefix = "[INFO]"; break;
+                case JupxLogType.Warning: prefix = "[WARNING]"; break;
+                case JupxLogType.Error: prefix = "[ERROR]"; break;
+            }
+            string full = $"{prefix} > {msg}";
+            MelonLoader.MelonLogger.Msg(full);
+        }
 
         public static void StopCurrentPrompt() =>
             prompts.RemoveAt(0);
@@ -1548,7 +1563,7 @@ namespace JupiterX
                 foreach (var quick in settings.quickactions)
                     quickActions.Add(quick);
             }
-            catch(Exception ex) { Log($"Unable to load settings {ex}"); }
+            catch(Exception ex) { Log($"Unable to load settings {ex}", JupxLogType.Error); }
         }
     }
 }

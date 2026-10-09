@@ -146,7 +146,7 @@ namespace JupiterX.Notifications
             }
             catch (Exception e)
             {
-                Utility.Log(e.Message);
+                Utility.Log(e.Message, JupxLogType.Error);
             }
         }
 

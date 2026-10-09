@@ -36,18 +36,18 @@ namespace JupiterX
         public override void OnInitializeMelon()
         {
             base.OnInitializeMelon();
-            Utility.Log("Applying patched");
+            Utility.Log("Applying patched", JupxLogType.Info);
             harmonyPatcher = new HarmonyLib.Harmony("jupiterx.nauth.patcher");
             harmonyPatcher.PatchAll();
-            Utility.Log("Applied patched");
+            Utility.Log("Applied patched", JupxLogType.Info);
         }
 
         public override void OnDeinitializeMelon()
         {
             base.OnDeinitializeMelon();
-            Utility.Log("Removing patches");
+            Utility.Log("Removing patches", JupxLogType.Info);
             harmonyPatcher.UnpatchSelf();
-            Utility.Log("Removed patched");
+            Utility.Log("Removed patched", JupxLogType.Info);
         }
 
         [Obsolete]
@@ -113,7 +113,7 @@ namespace JupiterX
             }
             catch (Exception exc)
             {
-                Utility.Log($"Error with PluginManager::LoadPlugins() at {exc.StackTrace}: {exc.Message}");
+                Utility.Log($"Error with PluginManager::LoadPlugins() at {exc.StackTrace}: {exc.Message}", JupxLogType.Error);
             }
         }
 

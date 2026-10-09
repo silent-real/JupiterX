@@ -47,11 +47,11 @@ namespace JupiterX.Managers
             try
             {
                 LoadPlugins();
-                Utility.Log("Reloaded plugins.");
+                Utility.Log("Reloaded plugins.", JupxLogType.Info);
             }
             catch (Exception e)
             {
-                Utility.Log("Reload failed: " + e);
+                Utility.Log("Reload failed: " + e, JupxLogType.Error);
             }
             Utility.LoadSettings();
             Buttons.CurrentCategoryName = "Main";
@@ -113,7 +113,7 @@ namespace JupiterX.Managers
                 }
                 catch (Exception e)
                 {
-                    Utility.Log($"Failed loading {file}: {e}");
+                    Utility.Log($"Failed loading {file}: {e}", JupxLogType.Error);
                 }
             }
             foreach (var plugin in Plugins)
@@ -153,13 +153,12 @@ namespace JupiterX.Managers
                 }
                 catch (Exception e)
                 {
-                    Utility.Log("Toggle error: " + e);
+                    Utility.Log("Toggle error: " + e, JupxLogType.Error);
                 }
             }
             var btn = Buttons.GetIndex(plugin.FileName);
             if (btn != null)
                 btn.overlapText = GetStatus(plugin);
-            Utility.Log($"{plugin.Name} -> {(plugin.Enabled ? "Enabled" : "Disabled")}");
         }
         public static void ExecuteUpdate()
         {

@@ -89,7 +89,7 @@ namespace JupiterX.Mods
                 }
                 catch (Exception exception)
                 {
-                    Utility.Log(string.Format("mat error {1} - {0}", exception.Message, exception.StackTrace));
+                    Utility.Log(string.Format("mat error {1} - {0}", exception.Message, exception.StackTrace), JupxLogType.Error);
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace JupiterX.Mods
                 }
                 catch (Exception exception)
                 {
-                    Utility.Log(string.Format("restore mat error {1} - {0}", exception.Message, exception.StackTrace));
+                    Utility.Log(string.Format("restore mat error {1} - {0}", exception.Message, exception.StackTrace), JupxLogType.Error);
                 }
             }
             oldMats.Clear();

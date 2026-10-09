@@ -150,7 +150,7 @@ namespace JupiterX.Menu
 			}
 			catch (Exception exc)
 			{
-				Utility.Log(string.Format("{0} // Error with drawing {1} : {2}", Utility.name, exc.StackTrace, exc.Message));
+				Utility.Log(string.Format("{0} // Error with drawing {1} : {2}", Utility.name, exc.StackTrace, exc.Message), JupxLogType.Error);
 			}
 
             if (Utility.isTriggers)
@@ -247,7 +247,7 @@ namespace JupiterX.Menu
 								}
 								catch (Exception exc)
 								{
-                                    Utility.Log(string.Format("{0} // Error with mod {1} at {2}: {3}", Utility.name, v.buttonText, exc.StackTrace, exc.Message));
+                                    Utility.Log(string.Format("{0} // Error with mod {1} at {2}: {3}", Utility.name, v.buttonText, exc.StackTrace, exc.Message), JupxLogType.Error);
 								}
 							}
 						}
@@ -256,7 +256,7 @@ namespace JupiterX.Menu
 			}
 			catch (Exception exc)
 			{
-				Utility.Log(string.Format("{0} // Error with executing mods at {1}: {2}", Utility.name, exc.StackTrace, exc.Message));
+				Utility.Log(string.Format("{0} // Error with executing mods at {1}: {2}", Utility.name, exc.StackTrace, exc.Message), JupxLogType.Error);
 			}
 
             if (pointerTrail)
@@ -632,7 +632,7 @@ namespace JupiterX.Menu
                 }
                 catch 
                 {
-                    Utility.Log("Menu draw is erroring, returning to home page");
+                    Utility.Log("Menu draw is erroring, returning to home page", JupxLogType.Warning);
                     CurrentCategoryName = "Main";
                 }
             }
@@ -1056,7 +1056,7 @@ namespace JupiterX.Menu
             ButtonInfo target = GetIndex(buttonText);
             if (target == null)
             {
-                Utility.Log($"{buttonText} does not exist");
+                Utility.Log($"{buttonText} does not exist", JupxLogType.Warning);
                 return;
             }
             string newIndicator = " <color=grey>[</color><color=cyan>New</color><color=grey>]</color>";
@@ -1108,7 +1108,7 @@ namespace JupiterX.Menu
                             try { target.enableMethod?.Invoke(); }
                             catch (Exception exc)
                             {
-                                Utility.Log($"Error enabling {target.buttonText}: {exc.Message}");
+                                Utility.Log($"Error enabling {target.buttonText}: {exc.Message}", JupxLogType.Error);
                             }
                         }
                         else
@@ -1118,7 +1118,7 @@ namespace JupiterX.Menu
                             try { target.disableMethod?.Invoke(); }
                             catch (Exception exc)
                             {
-                                Utility.Log($"Error disabling {target.buttonText}: {exc.Message}");
+                                Utility.Log($"Error disabling {target.buttonText}: {exc.Message}", JupxLogType.Error);
                             }
                         }
                     }
@@ -1130,7 +1130,7 @@ namespace JupiterX.Menu
                         try { target.method?.Invoke(); }
                         catch (Exception exc)
                         {
-                            Utility.Log($"Error running {target.buttonText}: {exc.Message}");
+                            Utility.Log($"Error running {target.buttonText}: {exc.Message}", JupxLogType.Error);
                         }
                     }
                     break;
@@ -1142,7 +1142,7 @@ namespace JupiterX.Menu
             ButtonInfo target = Buttons.GetIndex(buttonText);
             if (target == null)
             {
-                Utility.Log($"{buttonText} does not exist");
+                Utility.Log($"{buttonText} does not exist", JupxLogType.Warning);
                 return;
             }
             string newIndicator = " <color=grey>[</color><color=cyan>New</color><color=grey>]</color>";
@@ -1182,7 +1182,7 @@ namespace JupiterX.Menu
                                 try { target.enableMethod.Invoke(); }
                                 catch (Exception exc)
                                 {
-                                    Utility.Log($"Error with mod enableMethod {target.buttonText} at {exc.StackTrace}: {exc.Message}");
+                                    Utility.Log($"Error with mod enableMethod {target.buttonText} at {exc.StackTrace}: {exc.Message}", JupxLogType.Error);
                                 }
                             }
                         }
@@ -1191,7 +1191,7 @@ namespace JupiterX.Menu
                             try { target.enableMethod?.Invoke(); }
                             catch (Exception exc)
                             {
-                                Utility.Log($"Error enabling {target.buttonText}: {exc.Message}");
+                                Utility.Log($"Error enabling {target.buttonText}: {exc.Message}", JupxLogType.Error);
                             }
                         }
                     }
@@ -1207,7 +1207,7 @@ namespace JupiterX.Menu
                                 try { target.disableMethod.Invoke(); }
                                 catch (Exception exc)
                                 {
-                                    Utility.Log($"Error with mod disableMethod {target.buttonText} at {exc.StackTrace}: {exc.Message}");
+                                    Utility.Log($"Error with mod disableMethod {target.buttonText} at {exc.StackTrace}: {exc.Message}", JupxLogType.Error);
                                 }
                             }
                         }
@@ -1216,7 +1216,7 @@ namespace JupiterX.Menu
                             try { target.disableMethod?.Invoke(); }
                             catch (Exception exc)
                             {
-                                Utility.Log($"Error disabling {target.buttonText}: {exc.Message}");
+                                Utility.Log($"Error disabling {target.buttonText}: {exc.Message}", JupxLogType.Error);
                             }
                         }
                     }

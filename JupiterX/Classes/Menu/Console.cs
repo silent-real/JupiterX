@@ -222,7 +222,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
         public static ConsoleJupiterX instance;
 
         public static void Log(string text) => // Method used to log info, replace if using a custom logger
-            Utility.Log(text);
+            Utility.Log(text, JupxLogType.Info);
 
         public virtual void Awake()
         {
