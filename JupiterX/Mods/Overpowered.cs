@@ -358,8 +358,7 @@ namespace JupiterX.Mods
         public static void SlowAll()
         {
             Utility.SetMaster(Utility.MyPlayer());
-            Utility.myVRRig().photonView.RPC("SetSlowedTime", Main.lockTarget.photonView.Owner, null);
-            Utility.myVRRig().photonView.RPC("SetJoinTaggedTime", Main.lockTarget.photonView.Owner, null);
+            Utility.myVRRig().photonView.RPC("SetTaggedTime", RpcTarget.Others, null);
         }
 
         public static void SlowGun()
@@ -374,8 +373,7 @@ namespace JupiterX.Mods
                 if (Main.gunLocked && Main.lockTarget != null)
                 {
                     Utility.SetMaster(Utility.MyPlayer());
-                    Utility.myVRRig().photonView.RPC("SetSlowedTime", Main.lockTarget.photonView.Owner, null);
-                    Utility.myVRRig().photonView.RPC("SetJoinTaggedTime", Main.lockTarget.photonView.Owner, null);
+                    Utility.myVRRig().photonView.RPC("SetTaggedTime", Main.lockTarget.photonView.Owner, null);
                 }
 
                 if (Main.GetGunInput(true))
