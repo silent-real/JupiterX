@@ -42,9 +42,6 @@ namespace JupiterX.Mods
             if (PhotonNetwork.InRoom)
             {
                 Utility.MakeMeMaster();
-                PhotonNetwork.CurrentRoom.SetMasterClient(Utility.MyPlayer());
-                GorillaNot.instance.currentMasterClient = Utility.MyPlayer();
-                GorillaNot.instance.OnMasterClientSwitched(Utility.MyPlayer());
             }
         }
 
