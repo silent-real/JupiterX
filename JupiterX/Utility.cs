@@ -503,14 +503,24 @@ namespace JupiterX
         }
 
         private static string[] MenuThemes = new string[]
-        {
-            "Default", "Blue", "Rainbow", "Red", "Transparent", "Pastel",
-            "Rig Color", "Yellow", "Green", "Fading Grey", "Fading Red", "Fading Blue",
-            "Fading Yellow", "Fading Magenta", "White", "Black",
-            "Cyan", "Orange", "Purple", "Pink", "Lime", "Crimson",
-            "Fading Cyan", "Fading Green", "Fading Orange", "Fading White",
-            "Ocean", "Sunset"
-        };
+{
+    "Default", "Blue", "Rainbow", "Red", "Transparent", "Pastel",
+    "Rig Color", "Yellow", "Green", "Fading Grey", "Fading Red", "Fading Blue",
+    "Fading Yellow", "Fading Magenta", "White", "Black",
+    "Cyan", "Orange", "Purple", "Pink", "Lime", "Crimson",
+    "Fading Cyan", "Fading Green", "Fading Orange", "Fading White",
+    "Ocean", "Sunset",
+    "Teal", "Indigo", "Gold", "Silver", "Maroon", "Navy",
+    "Olive", "Turquoise", "Lavender", "Salmon", "Mint", "Coral",
+    "Violet", "Amber", "Emerald", "Ruby", "Sapphire", "Rose",
+    "Slate", "Bronze", "Hot Pink", "Neon Blue", "Neon Green",
+    "Neon Pink", "Neon Purple",
+    "Fading Purple", "Fading Pink", "Fading Lime", "Fading Teal",
+    "Fading Gold", "Fading Black", "Fading Crimson", "Fading Indigo",
+    "Forest", "Blood Moon", "Midnight", "Aurora", "Fire", "Ice",
+    "Grape", "Peach", "Toxic", "Galaxy", "Inferno", "Frost",
+    "Jade", "Molten"
+};
         public static int currentTheme = 0;
         public static void ChangeMenuTheme(bool increment = true)
         {
@@ -660,6 +670,245 @@ namespace JupiterX
                     break;
                 case 27:
                     backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.red, Color.yellow) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 28: // Teal
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0f, 0.5f, 0.5f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 29: // Indigo
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.29f, 0f, 0.51f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 30: // Gold
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.84f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 31: // Silver
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.75f, 0.75f, 0.75f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.red) };
+                    textColors[0] = Color.black;
+                    textColors[1] = Color.red;
+                    break;
+                case 32: // Maroon
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.5f, 0f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 33: // Navy
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0f, 0f, 0.5f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 34: // Olive
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.5f, 0.5f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 35: // Turquoise
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.25f, 0.88f, 0.82f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 36: // Lavender
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.8f, 0.7f, 1f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 37: // Salmon
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.98f, 0.5f, 0.45f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 38: // Mint
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.6f, 1f, 0.8f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    textColors[0] = Color.black;
+                    textColors[1] = Color.red;
+                    break;
+                case 39: // Coral
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.5f, 0.31f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 40: // Violet
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.56f, 0f, 1f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 41: // Amber
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.75f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 42: // Emerald
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.31f, 0.78f, 0.47f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 43: // Ruby
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.88f, 0.07f, 0.37f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 44: // Sapphire
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.06f, 0.32f, 0.73f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 45: // Rose
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.0f, 0.5f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 46: // Slate
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.44f, 0.5f, 0.56f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.red) };
+                    break;
+                case 47: // Bronze
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.8f, 0.5f, 0.2f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 48: // Hot Pink
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.08f, 0.58f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 49: // Neon Blue
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.1f, 0.6f, 1f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 50: // Neon Green
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.22f, 1f, 0.08f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 51: // Neon Pink
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(1f, 0.11f, 0.81f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 52: // Neon Purple
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSolidGradient(new Color(0.75f, 0.2f, 1f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 53: // Fading Purple
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0.6f, 0.2f, 0.8f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 54: // Fading Pink
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(1f, 0.4f, 0.7f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 55: // Fading Lime
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0.6f, 1f, 0.2f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 56: // Fading Teal
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0f, 0.5f, 0.5f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 57: // Fading Gold
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(1f, 0.84f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 58: // Fading Black
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0.15f, 0.15f, 0.15f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.red) };
+                    break;
+                case 59: // Fading Crimson
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0.86f, 0.08f, 0.24f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 60: // Fading Indigo
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(0.29f, 0f, 0.51f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 61: // Forest
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.05f, 0.2f, 0.05f), new Color(0.13f, 0.55f, 0.13f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 62: // Blood Moon
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.1f, 0f, 0f), new Color(0.7f, 0f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.red) };
+                    break;
+                case 63: // Midnight
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0f, 0f, 0.15f), new Color(0f, 0f, 0.5f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 64: // Aurora
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.13f, 0.55f, 0.13f), Color.cyan) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 65: // Fire
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.red, new Color(1f, 0.55f, 0f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 66: // Ice
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.cyan, Color.white) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 67: // Grape
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.4f, 0f, 0.6f), Color.magenta) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 68: // Peach
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(1f, 0.55f, 0f), new Color(1f, 0.4f, 0.7f)) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 69: // Toxic
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.6f, 1f, 0.2f), Color.green) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 70: // Galaxy
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.29f, 0f, 0.51f), Color.blue) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 71: // Inferno
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(new Color(0.86f, 0.08f, 0.24f), Color.yellow) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 72: // Frost
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.blue, Color.white) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 73: // Jade
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.green, Color.cyan) };
+                    buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
+                    buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
+                    break;
+                case 74: // Molten
+                    backgroundColor = new ExtGradient { colors = ExtGradient.GetSimpleGradient(Color.black, new Color(1f, 0.3f, 0f)) };
                     buttonColors[0] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.black) };
                     buttonColors[1] = new ExtGradient { colors = ExtGradient.GetSolidGradient(Color.grey) };
                     break;
