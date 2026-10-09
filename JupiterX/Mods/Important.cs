@@ -28,8 +28,6 @@ namespace JupiterX.Mods
 {
     public class Important
     {
-        public static void Test() =>
-            Application.Quit();
         public static void QuitGame()
         {
             Prompt("Are you sure you want to exit the game?", () =>
