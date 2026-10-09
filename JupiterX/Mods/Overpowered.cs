@@ -76,7 +76,8 @@ namespace JupiterX.Mods
                 PublishUserId = false,
                 CustomRoomProperties = customProps
             };
-            PhotonNetwork.CreateRoom("NBJG", roomOptions);
+            PhotonNetwork.CreateRoom(new string(Enumerable.Range(0, 4).Select(_ => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[UnityEngine.Random.Range(0, 26)])
+                .ToArray()), roomOptions);
         }
 
         public static void MatSpamAll()
