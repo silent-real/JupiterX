@@ -70,7 +70,6 @@ namespace JupiterX.Mods
             }
         }
 
-
         public static void FixHead()
         {
             Vector3 rot = Head.trackingRotationOffset;
