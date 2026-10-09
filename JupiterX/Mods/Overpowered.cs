@@ -214,7 +214,7 @@ namespace JupiterX.Mods
             }
         }
 
-        public static void LagOnTouch()
+        public static void LagOnYouTouch()
         {
             if (PhotonNetwork.InRoom)
             {
@@ -222,16 +222,21 @@ namespace JupiterX.Mods
                 {
                     if (rig != null && rig != Utility.myVRRig())
                     {
-                        if (Vector3.Distance(rig.transform.position, Utility.myVRRig().rightHandTransform.position) <= 0.35f || Vector3.Distance(rig.transform.position, Utility.myVRRig().leftHandTransform.position) <= 0.35f)
+                        if (Vector3.Distance(rig.headMesh.transform.position, Utility.myVRRig().rightHandTransform.position) <= 0.50f || Vector3.Distance(rig.headMesh.transform.position, Utility.myVRRig().leftHandTransform.position) <= 0.50f)
                         {
-                            Utility.BetaCrashPlayer(rig.photonView.Owner);
+                            for (int i = 0; i < 50; i++)
+                            {
+                                PhotonNetwork.RaiseEvent(2, null, new RaiseEventOptions { TargetActors = new int[] { rig.photonView.Owner.ActorNumber } }, SendOptions.SendUnreliable);
+                                PhotonNetwork.RaiseEvent(3, null, new RaiseEventOptions { TargetActors = new int[] { rig.photonView.Owner.ActorNumber } }, SendOptions.SendUnreliable);
+                            }
+                            PhotonNetwork.SendAllOutgoingCommands();
                         }
                     }
                 }
             }
         }
 
-        public static void CrashOnTouch()
+        public static void CrashOnYouTouch()
         {
             if (PhotonNetwork.InRoom)
             {
@@ -239,7 +244,7 @@ namespace JupiterX.Mods
                 {
                     if (rig != null && rig != Utility.myVRRig())
                     {
-                        if (Vector3.Distance(rig.transform.position, Utility.myVRRig().rightHandTransform.position) <= 0.35f || Vector3.Distance(rig.transform.position, Utility.myVRRig().leftHandTransform.position) <= 0.35f)
+                        if (Vector3.Distance(rig.headMesh.transform.position, Utility.myVRRig().rightHandTransform.position) <= 0.50f || Vector3.Distance(rig.headMesh.transform.position, Utility.myVRRig().leftHandTransform.position) <= 0.50f)
                         {
                             for (int i = 0; i < 150; i++)
                             {

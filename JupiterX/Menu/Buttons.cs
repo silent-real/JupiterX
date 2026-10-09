@@ -523,8 +523,8 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Crash All V5 <color=grey>[</color><color=cyan>RT</color><color=grey>]</color>", method =() => Overpowered.CrashAllV5(), isTogglable = true, toolTip = "Lets you crash all while holding right trigger." },
                 new ButtonInfo { buttonText = "Crash All V6 <color=grey>[</color><color=cyan>RT</color><color=grey>]</color>", method =() => Overpowered.CrashAllV5(), isTogglable = true, toolTip = "Lets you crash all while holding right trigger." },
 
-                new ButtonInfo { buttonText = "Lag on Touch", method =() => Overpowered.LagOnTouch(), isTogglable = true, toolTip = "Lags who ever you touch." },
-                new ButtonInfo { buttonText = "Crash on Touch", method =() => Overpowered.CrashOnTouch(), isTogglable = true, toolTip = "Crashes who ever you touch." },
+                new ButtonInfo { buttonText = "Lag On You Touch", method =() => Overpowered.LagOnYouTouch(), isTogglable = true, toolTip = "Lags who ever you touch." },
+                new ButtonInfo { buttonText = "Crash On You Touch", method =() => Overpowered.CrashOnYouTouch(), isTogglable = true, toolTip = "Crashes who ever you touch." },
 
                 new ButtonInfo { buttonText = "Ban All", method =() => Utility.BanAll(), isTogglable = true, toolTip = "Lets you ban everyone in the current room." },
                 new ButtonInfo { buttonText = "Ban Gun", method =() => Overpowered.BanGun(), isTogglable = true, toolTip = "Lets you ban someone you shoot at." },
