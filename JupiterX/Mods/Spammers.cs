@@ -10,16 +10,43 @@
 //  Version: 2.0.0 | By Silent/Ashley/Nova (@s1lnt)
 // ============================================================
 
+using HarmonyLib;
 using JupiterX.Managers;
 using JupiterX.Menu;
 using Photon.Pun;
+using System;
+using System.Reflection;
+using UnhollowerRuntimeLib;
 
 namespace JupiterX.Mods
 {
     public class Spammers
     {
-        private static void PlaySound(int index) =>
-            RPCManager.RigRPC("PlayHandTap", RpcTarget.All, new object[] { index, false, 99999f });
+        private static void PlaySound(int index)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                RPCManager.RigRPC("PlayHandTap", RpcTarget.All, new object[] { index, false, 99999f });
+            }
+            else
+            {
+                var vrrigType = Type.GetType("VRRig, Assembly-CSharp");
+                if (vrrigType == null)
+                    return;
+                var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+                var method = vrrigType.GetMethod("PlayHandTap", flags);
+                if (method == null)
+                {
+                    method = vrrigType.GetMethod("PlayHandTapLocal", flags);
+                    if (method == null)
+                        return;
+                }
+                var rigs = UnityEngine.Object.FindObjectsOfType(Il2CppType.From(vrrigType));
+                if (rigs == null || rigs.Length == 0)
+                    return;
+                method.Invoke(rigs[0], new object[] { index, false, 1f });
+            }
+        }
 
         public static void HandTapSpam()
         {
