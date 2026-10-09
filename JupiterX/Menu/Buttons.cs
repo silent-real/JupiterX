@@ -180,6 +180,7 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Exit Important", method =() => CurrentCategoryName = "Main", isTogglable = false, toolTip = "Returns to the main page of the menu." },
 
                 new ButtonInfo { buttonText = "Quit Game", method =() => Important.QuitGame(), isTogglable = false, toolTip = "Quits your game." },
+                new ButtonInfo { buttonText = "Quit asdasd", method =() => Important.Test(), isTogglable = false, toolTip = "Quits your game." },
 
                 new ButtonInfo { buttonText = "Clear Notifcations", method =() => NotificationManager.ClearAllNotifications(), isTogglable = false, toolTip = "Clears all the notifications." },
 

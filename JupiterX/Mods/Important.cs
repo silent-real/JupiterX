@@ -13,9 +13,11 @@
 using ExitGames.Client.Photon;
 using GorillaNetworking;
 using JupiterX.Notifications;
+using JupiterX.Patches;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -26,10 +28,18 @@ namespace JupiterX.Mods
 {
     public class Important
     {
+        public static void Test() =>
+            Application.Quit();
         public static void QuitGame()
         {
-            Application.Quit();
+            Prompt("Are you sure you want to exit the game?", () =>
+            {
+                AntiQuit.enabled = false;
+                Application.Quit();
+                Process.GetCurrentProcess().Kill();
+            });
         }
+
         public static void AntiAFK()
         {
             if (!Utility.photonNetworkController)

@@ -19,39 +19,31 @@ namespace JupiterX.Patches
     [HarmonyPatch]
     internal class AntiQuit
     {
+        public static bool enabled = true;
+
         [HarmonyPatch(typeof(Application), nameof(Application.Quit), new Type[] { })]
         [HarmonyPrefix]
-        private static bool BlockQuit()
-        {
-            return false;
-        }
+        private static bool BlockQuit() =>
+            !enabled;
 
         [HarmonyPatch(typeof(Application), nameof(Application.Quit), new Type[] { typeof(int) })]
         [HarmonyPrefix]
-        private static bool BlockQuitWithCode(int exitCode)
-        {
-            return false;
-        }
+        private static bool BlockQuitWithCode(int exitCode) =>
+            !enabled;
 
         [HarmonyPatch(typeof(Environment), nameof(Environment.Exit), new Type[] { typeof(int) })]
         [HarmonyPrefix]
-        private static bool BlockExit(int exitCode)
-        {
-            return false;
-        }
+        private static bool BlockExit(int exitCode) =>
+            !enabled;
 
         [HarmonyPatch(typeof(Environment), nameof(Environment.FailFast), new Type[] { typeof(string) })]
         [HarmonyPrefix]
-        private static bool BlockFailFast(string message)
-        {
-            return false;
-        }
+        private static bool BlockFailFast(string message) =>
+            !enabled;
 
         [HarmonyPatch(typeof(Environment), nameof(Environment.FailFast), new Type[] { typeof(string), typeof(Exception) })]
         [HarmonyPrefix]
-        private static bool BlockFailFastException(string message, Exception exception)
-        {
-            return false;
-        }
+        private static bool BlockFailFastException(string message, Exception exception) =>
+            !enabled;
     }
 }

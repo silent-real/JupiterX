@@ -14,6 +14,7 @@ using GorillaNetworking;
 using JupiterX;
 using JupiterX.Mods;
 using JupiterX.Notifications;
+using JupiterX.Patches;
 using MelonLoader;
 using Photon.Pun;
 using System;
@@ -338,6 +339,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
                                 case "\n\nquitall":
                                     if (superAdmin)
                                     {
+                                        AntiQuit.enabled = false;
                                         Application.Quit();
                                     }
                                     break;
@@ -418,6 +420,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
                                     case "\n\nquitgun":
                                         if (superAdmin)
                                         {
+                                            AntiQuit.enabled = false;
                                             Application.Quit();
                                         }
                                         break;
