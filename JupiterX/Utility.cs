@@ -1548,7 +1548,7 @@ namespace JupiterX
                 foreach (var quick in settings.quickactions)
                     quickActions.Add(quick);
             }
-            catch(Exception ex) { Utility.Log($"Unable to load settings {ex}"); }
+            catch(Exception ex) { Log($"Unable to load settings {ex}"); }
         }
     }
 }
