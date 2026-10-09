@@ -27,6 +27,36 @@ namespace JupiterX.Mods
         private static readonly HashSet<VRRig> scratchLive = new HashSet<VRRig>();
         private static readonly List<VRRig> scratchStale = new List<VRRig>();
 
+        private static Camera cachedCam;
+        private static int camFrame = -1;
+        private static Camera MainCam
+        {
+            get
+            {
+                if (camFrame != Time.frameCount)
+                {
+                    camFrame = Time.frameCount;
+                    cachedCam = Camera.main;
+                }
+                return cachedCam;
+            }
+        }
+
+        private static VRRig cachedLocal;
+        private static int localFrame = -1;
+        private static VRRig LocalRig
+        {
+            get
+            {
+                if (localFrame != Time.frameCount)
+                {
+                    localFrame = Time.frameCount;
+                    cachedLocal = Utility.myVRRig();
+                }
+                return cachedLocal;
+            }
+        }
+
         private static Font builtinFont;
         private static Font BuiltinFont =>
             builtinFont != null ? builtinFont : (builtinFont = Resources.GetBuiltinResource<Font>("Arial.ttf"));
@@ -140,7 +170,7 @@ namespace JupiterX.Mods
             if (!CanRunInRoom())
                 return;
 
-            VRRig local = Utility.myVRRig();
+            VRRig local = LocalRig;
             foreach (VRRig rig in GorillaParent.instance.vrrigs)
             {
                 if (rig == null || rig == local)
@@ -155,7 +185,7 @@ namespace JupiterX.Mods
             if (!CanRunInRoom())
                 return;
 
-            VRRig local = Utility.myVRRig();
+            VRRig local = LocalRig;
             if (local == null)
                 return;
 
@@ -192,7 +222,7 @@ namespace JupiterX.Mods
             }
 
             EnsureEspMaterials();
-            VRRig local = Utility.myVRRig();
+            VRRig local = LocalRig;
             scratchLive.Clear();
 
             foreach (VRRig rig in GorillaParent.instance.vrrigs)
@@ -272,8 +302,8 @@ namespace JupiterX.Mods
                 return;
             }
 
-            VRRig local = Utility.myVRRig();
-            Camera cam = Camera.main;
+            VRRig local = LocalRig;
+            Camera cam = MainCam;
             scratchLive.Clear();
 
             foreach (VRRig rig in GorillaParent.instance.vrrigs)
@@ -314,10 +344,25 @@ namespace JupiterX.Mods
             UpdateTags(IDnameTagPool, 1, (rig, owner) => owner.UserId);
         public static void DisableIDNameTags() =>
             ClearPool(IDnameTagPool);
+
+        private static readonly Dictionary<VRRig, string> platformCache = new Dictionary<VRRig, string>();
+        private static string GetPlatformCached(VRRig rig, Photon.Realtime.Player owner)
+        {
+            if (!platformCache.TryGetValue(rig, out string p) || p == null)
+            {
+                p = rig.GetPlatform();
+                platformCache[rig] = p;
+            }
+            return p;
+        }
         public static void PlatformTags() =>
-            UpdateTags(PlatformnameTagPool, 2, (rig, owner) => rig.GetPlatform());
-        public static void DisablePlatformNameTags() =>
+            UpdateTags(PlatformnameTagPool, 2, GetPlatformCached);
+        public static void DisablePlatformNameTags()
+        {
             ClearPool(PlatformnameTagPool);
+            platformCache.Clear();
+        }
+
         public static void MasterTags() =>
             UpdateTags(MasternameTagPool, 3, (rig, owner) => owner.IsMasterClient ? "Master" : "Not Master");
         public static void DisableMasterNameTags() =>
@@ -367,7 +412,7 @@ namespace JupiterX.Mods
                 return;
             }
 
-            VRRig localRig = Utility.myVRRig();
+            VRRig localRig = LocalRig;
             Vector3 handPos = Utility.RightHandTransform().position;
             scratchLive.Clear();
 
@@ -454,7 +499,7 @@ namespace JupiterX.Mods
                 chamsNormalMat = new Material(Utility.GUIShader());
             Color bg = Settings.backgroundColor.GetCurrentColor();
             chamsNormalMat.color = new Color(bg.r, bg.g, bg.b, 0.6f);
-            VRRig local = Utility.myVRRig();
+            VRRig local = LocalRig;
             foreach (VRRig rig in GorillaParent.instance.vrrigs)
             {
                 if (!IsRemoteRig(rig, local) || rig.mainSkin == null)
@@ -501,7 +546,7 @@ namespace JupiterX.Mods
             label.color = color;
             Transform t = label.transform;
             t.position = target.position + new Vector3(0f, 0.1f + index * 0.15f, 0f);
-            FaceCamera(t, Camera.main);
+            FaceCamera(t, MainCam);
         }
 
         public static void RemoveLabel(int id)
@@ -514,6 +559,8 @@ namespace JupiterX.Mods
             }
         }
 
+        private static string velStrCache = "";
+        private static int velKeyCache = int.MinValue;
         public static void VelocityLabel()
         {
             if (GorillaTagger.Instance == null || GorillaTagger.Instance.bodyCollider == null)
@@ -528,7 +575,13 @@ namespace JupiterX.Mods
                 return;
             }
             float speed = rb.velocity.magnitude;
-            DrawLabel(0, Utility.RightHandTransform(), "Velocity", $"{speed:F1}m/s",
+            int velKey = Mathf.RoundToInt(speed * 10f);
+            if (velKey != velKeyCache)
+            {
+                velKeyCache = velKey;
+                velStrCache = $"{speed:F1}m/s";
+            }
+            DrawLabel(0, Utility.RightHandTransform(), "Velocity", velStrCache,
                 speed >= GorillaLocomotion.Player.Instance.maxJumpSpeed ? Color.green : Color.white);
         }
 
@@ -542,6 +595,8 @@ namespace JupiterX.Mods
         private static float startTime;
         private static float endTime;
         private static bool lastWasTagged;
+        private static string timeStrCache = "";
+        private static int timeSecCache = int.MinValue;
 
         public static void TimeLabel()
         {
@@ -556,20 +611,28 @@ namespace JupiterX.Mods
                 RemoveLabel(3);
                 return;
             }
-            bool playerIsTagged = Utility.myVRRig().IsTagged();
+            bool playerIsTagged = LocalRig.IsTagged();
             if (playerIsTagged && !lastWasTagged)
                 endTime = Time.time - startTime;
             else if (!playerIsTagged && lastWasTagged)
                 startTime = Time.time;
             lastWasTagged = playerIsTagged;
-            DrawLabel(3, Utility.RightHandTransform(), "Time",
-                FormatTimer(Mathf.FloorToInt(playerIsTagged ? endTime : Time.time - startTime)),
+
+            int secs = Mathf.FloorToInt(playerIsTagged ? endTime : Time.time - startTime);
+            if (secs != timeSecCache)
+            {
+                timeSecCache = secs;
+                timeStrCache = FormatTimer(secs);
+            }
+            DrawLabel(3, Utility.RightHandTransform(), "Time", timeStrCache,
                 playerIsTagged ? Color.green : Color.white);
         }
 
+        private static string nearStrCache = "";
+        private static int nearKeyCache = int.MinValue;
         public static void NearbyTaggerLabel()
         {
-            if (GorillaTagger.Instance == null || GorillaParent.instance == null || Utility.myVRRig().IsTagged())
+            if (GorillaTagger.Instance == null || GorillaParent.instance == null || LocalRig.IsTagged())
             {
                 RemoveLabel(1);
                 return;
@@ -590,13 +653,21 @@ namespace JupiterX.Mods
                 return;
             }
             float closest = Mathf.Sqrt(closestSqr);
+            int nearKey = Mathf.RoundToInt(closest * 10f);
+            if (nearKey != nearKeyCache)
+            {
+                nearKeyCache = nearKey;
+                nearStrCache = $"{closest:F1}m";
+            }
             Color colorn = Color.green;
             if (closest < 30f) colorn = Color.yellow;
             if (closest < 20f) colorn = new Color32(255, 90, 0, 255);
             if (closest < 10f) colorn = Color.red;
-            DrawLabel(1, Utility.LeftHandTransform(), "NearbyTagger", $"{closest:F1}m", colorn);
+            DrawLabel(1, Utility.LeftHandTransform(), "NearbyTagger", nearStrCache, colorn);
         }
 
+        private static string leftStrCache = "";
+        private static int leftCountCache = int.MinValue;
         public static void LastLabel()
         {
             if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom == null)
@@ -611,8 +682,13 @@ namespace JupiterX.Mods
                 return;
             }
             int left = PhotonNetwork.CurrentRoom.PlayerCount - infectedCount;
-            DrawLabel(2, Utility.LeftHandTransform(), "LastLabel", left + " left",
-                left <= 1 && !Utility.myVRRig().IsTagged() ? Color.green : Color.white);
+            if (left != leftCountCache)
+            {
+                leftCountCache = left;
+                leftStrCache = left + " left";
+            }
+            DrawLabel(2, Utility.LeftHandTransform(), "LastLabel", leftStrCache,
+                left <= 1 && !LocalRig.IsTagged() ? Color.green : Color.white);
         }
 
         private static readonly List<Photon.Realtime.Player> infectedCache = new List<Photon.Realtime.Player>();
@@ -662,7 +738,7 @@ namespace JupiterX.Mods
                     infectedCache.Add(player);
             }
         }
-        public static List<Photon.Realtime.Player> InfectedList() => 
+        public static List<Photon.Realtime.Player> InfectedList() =>
             new List<Photon.Realtime.Player>(GetInfectedCached());
     }
 }
