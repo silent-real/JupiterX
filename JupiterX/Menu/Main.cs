@@ -1483,9 +1483,9 @@ namespace JupiterX.Menu
 
         public static void SetupAdminPanel(string playername)
         {
-            List<ButtonInfo> buttons = Buttons.buttons[0].ToList();
+            List<ButtonInfo> buttons = Buttons.buttons[GetCategory("Main")].ToList();
             buttons.Add(new ButtonInfo { buttonText = "Admin", method = () => Buttons.CurrentCategoryName = "Admin", isTogglable = false, toolTip = "Opens the admin mods." });
-            Buttons.buttons[0] = buttons.ToArray();
+            Buttons.buttons[GetCategory("Main")] = buttons.ToArray();
             NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>{(playername == "NOVA" ? "OWNER" : "ADMIN")}</color><color=grey>]</color> Welcome, {playername}! Admin mods have been enabled.", 10f);
         }
 
