@@ -17,6 +17,7 @@ using Photon.Pun;
 using System;
 using System.Reflection;
 using UnhollowerRuntimeLib;
+using UnityEngine;
 
 namespace JupiterX.Mods
 {
@@ -30,29 +31,40 @@ namespace JupiterX.Mods
             }
             else
             {
-                var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-                var gorillaTaggerType = Type.GetType("GorillaTagger, Assembly-CSharp");
-                if (gorillaTaggerType == null)
-                    return;
-                var offlineRigField = gorillaTaggerType.GetField("offlineVRRig", flags);
-                if (offlineRigField == null)
-                    return;
-                var tagger = UnityEngine.Object.FindObjectOfType(Il2CppType.From(gorillaTaggerType));
-                if (tagger == null)
-                    return;
-                var offlineRig = offlineRigField.GetValue(tagger);
-                if (offlineRig == null)
-                    return;
-                var rigType = offlineRig.GetType();
-                var method = rigType.GetMethod("PlayHandTap", flags) ?? rigType.GetMethod("PlayHandTapLocal", flags);
-                if (method == null)
-                    return;
-                var parameters = method.GetParameters();
-                if (parameters.Length == 3)
-                {
-                    method.Invoke(offlineRig, new object[] { index, false, 9999f });
-                }
+                PlayHandTapLocal(index, false, 999999f);
             }
+        }
+
+        public static void PlayHandTapLocal(int soundIndex, bool isLeftHand, float volume)
+        {
+            var taggerType = Type.GetType("GorillaTagger, Assembly-CSharp");
+            var rigType = Type.GetType("VRRig, Assembly-CSharp");
+            if (taggerType == null || rigType == null)
+                return;
+            var instanceProp = taggerType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+            object taggerInstance = instanceProp?.GetValue(null);
+            if (taggerInstance == null)
+                return;
+            var rigField = taggerType.GetField("offlineVRRig", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            object rigInstance = rigField?.GetValue(taggerInstance)
+                ?? taggerType.GetProperty("offlineVRRig", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(taggerInstance);
+            if (rigInstance == null)
+                return;
+            var tapMethod = rigType.GetMethod("PlayHandTap", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ??  rigType.GetMethod("PlayHandTapLocal", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (tapMethod == null)
+                return;
+            var ps = tapMethod.GetParameters();
+            var args = new object[ps.Length];
+            bool intSet = false, boolSet = false, floatSet = false;
+            for (int i = 0; i < ps.Length; i++)
+            {
+                var pt = ps[i].ParameterType;
+                if (pt == typeof(int) && !intSet) { args[i] = soundIndex; intSet = true; }
+                else if (pt == typeof(bool) && !boolSet) { args[i] = isLeftHand; boolSet = true; }
+                else if (pt == typeof(float) && !floatSet) { args[i] = Mathf.Clamp01(volume); floatSet = true; }
+                else args[i] = ps[i].HasDefaultValue ? ps[i].DefaultValue : pt.IsValueType ? Activator.CreateInstance(pt) : null;
+            }
+            tapMethod.Invoke(rigInstance, args);
         }
 
         public static void HandTapSpam()
