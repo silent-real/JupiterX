@@ -151,8 +151,8 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Legacy Ghostview", enableMethod =() => legacyGhostview = true, disableMethod =() => legacyGhostview = false, toolTip = "Reverts the transparent rig to the two balls when you're in ghost."},
 
                 new ButtonInfo { buttonText = "Menu Presets", method =() => CurrentCategoryName = "Menu Presets", isTogglable = false, toolTip = "Opens the page of presets."},
-                new ButtonInfo { buttonText = "Save Preferences", method =() => Utility.SaveSettings(), isTogglable = false, toolTip = "Saves your enabled mods to file." },
-                new ButtonInfo { buttonText = "Load Preferences", method =() => Utility.LoadSettings(), isTogglable = false, toolTip = "Loads your saved mods from a file." },
+                new ButtonInfo { buttonText = "Save Preferences", method =() => Utility.SavePreferences(), isTogglable = false, toolTip = "Saves your enabled mods to file." },
+                new ButtonInfo { buttonText = "Load Preferences", method =() => Utility.LoadPreferences(), isTogglable = false, toolTip = "Loads your saved mods from a file." },
             },
 
             new ButtonInfo[] { // Movement Settings

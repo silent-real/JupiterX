@@ -1734,9 +1734,8 @@ namespace JupiterX
             public List<string> quickactions { get; set; }
         }
 
-        public static void SaveSettings()
+        public static string SaveSettings()
         {
-            Directory.CreateDirectory(MainPath);
             SavedSettings settings = new SavedSettings
             {
                 currentTheme = currentTheme,
@@ -1753,68 +1752,54 @@ namespace JupiterX
                 favorites = favorites,
                 quickactions = quickActions
             };
-            settings.enabledMods = Buttons.buttons.SelectMany(x => x).Where(x => x.enabled).Select(x => x.buttonText).ToList();
-            File.WriteAllText(PreferencesPath, JsonConvert.SerializeObject(settings, Formatting.Indented));
+            return JsonConvert.SerializeObject(settings, Formatting.Indented);
         }
 
-        public static void LoadSettings()
+        public static void LoadSettings(string json)
         {
-            string path = PreferencesPath;
-            if (!File.Exists(path))
+            if (string.IsNullOrEmpty(json))
                 return;
             try
             {
-                SavedSettings settings = JsonConvert.DeserializeObject<SavedSettings>(File.ReadAllText(path));
+                SavedSettings settings = JsonConvert.DeserializeObject<SavedSettings>(json);
                 if (settings == null)
                     return;
 
-                currentTheme = settings.currentTheme - 1;
-                ChangeMenuTheme();
-
-                currentFontStyleChoice = settings.currentFontStyleChoice - 1;
-                ChangeFontStyle();
-
-                PageType = settings.PageType - 1;
-                ChangePageType();
-
-                dropType = settings.dropType - 1;
-                ChangeDropType();
-
-                inputTextColorInt = settings.inputTextColorInt - 1;
-                ChangeInputTextColor();
-
-                gunVariation = settings.gunVariation - 1;
-                ChangeGunVariation();
-
-                GunDirection = settings.GunDirection - 1;
-                ChangeGunDirection();
-
-                menuScaleIndex = settings.menuScaleIndex - 1;
-                ChangeMenuScale();
-
-                Movement.FlySpeedAmount = settings.FlySpeedAmount - 1;
-                Movement.ChangeFlySpeed();
-
-                Movement.ArmSizeAmount = settings.ArmSizeAmount - 1;
-                Movement.ChangeArmLength();
+                currentTheme = settings.currentTheme - 1; ChangeMenuTheme();
+                currentFontStyleChoice = settings.currentFontStyleChoice - 1; ChangeFontStyle();
+                PageType = settings.PageType - 1; ChangePageType();
+                dropType = settings.dropType - 1; ChangeDropType();
+                inputTextColorInt = settings.inputTextColorInt - 1; ChangeInputTextColor();
+                gunVariation = settings.gunVariation - 1; ChangeGunVariation();
+                GunDirection = settings.GunDirection - 1; ChangeGunDirection();
+                menuScaleIndex = settings.menuScaleIndex - 1; ChangeMenuScale();
+                Movement.FlySpeedAmount = settings.FlySpeedAmount - 1; Movement.ChangeFlySpeed();
+                Movement.ArmSizeAmount = settings.ArmSizeAmount - 1; Movement.ChangeArmLength();
 
                 HashSet<string> enabled = settings.enabledMods.ToHashSet();
                 foreach (ButtonInfo button in Buttons.buttons.SelectMany(x => x))
-                {
-                    bool shouldBeEnabled = enabled.Contains(button.buttonText);
-                    if (button.enabled != shouldBeEnabled)
+                    if (button.enabled != enabled.Contains(button.buttonText))
                         Toggle(button.buttonText);
-                }
 
                 favorites.Clear();
-                foreach (var fav in settings.favorites)
-                    favorites.Add(fav);
+                foreach (var fav in settings.favorites) favorites.Add(fav);
 
                 quickActions.Clear();
-                foreach (var quick in settings.quickactions)
-                    quickActions.Add(quick);
+                foreach (var quick in settings.quickactions) quickActions.Add(quick);
             }
-            catch(Exception ex) { Log($"Unable to load settings {ex}", JupxLogType.Error); }
+            catch (Exception ex) { Log($"Unable to load settings {ex}", JupxLogType.Error); }
+        }
+
+        public static void SavePreferences()
+        {
+            Directory.CreateDirectory(MainPath);
+            File.WriteAllText(PreferencesPath, SaveSettings());
+        }
+
+        public static void LoadPreferences()
+        {
+            if (File.Exists(PreferencesPath))
+                LoadSettings(File.ReadAllText(PreferencesPath));
         }
     }
 }

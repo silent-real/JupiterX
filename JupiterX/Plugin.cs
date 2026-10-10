@@ -123,7 +123,7 @@ namespace JupiterX
             base.OnApplicationLateStart();
             if (File.Exists($"{Utility.PreferencesPath}"))
             {
-                Utility.LoadSettings();
+                Utility.LoadPreferences();
             }
         }
 

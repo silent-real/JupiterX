@@ -53,7 +53,7 @@ namespace JupiterX.Managers
             {
                 Utility.Log("Reload failed: " + e, JupxLogType.Error);
             }
-            Utility.LoadSettings();
+            Utility.LoadPreferences();
             Buttons.CurrentCategoryName = "Main";
         }
         public static void LoadPlugins()
