@@ -1412,7 +1412,7 @@ namespace JupiterX
             }
         }
 
-        public const string version = "2.7.0";
+        public const string version = "3.0.0";
         public static string serverversion;
         public static string minversion;
         public static string discord = "https://novax.lol/d";
