@@ -1,5 +1,5 @@
 ﻿// ============================================================
-//  JupiterX | Mods/GTH.cs
+//  JupiterX | Mods/GorillaTagHorror.cs
 //  Copyright (c) 2026 Jupiterx (@NAuth). All rights reserved.
 //
 //  This software and its source code are the property of the
@@ -10,7 +10,6 @@
 //  Version: 2.0.0 | By Silent/Ashley/Nova (@s1lnt)
 // ============================================================
 
-using Console;
 using HarmonyLib;
 using JupiterX.Notifications;
 using Photon.Pun;
@@ -21,7 +20,7 @@ using static JupiterX.Menu.Main;
 
 namespace JupiterX.Mods
 {
-    public class GTH
+    public class GorillaTagHorror
     {
         private static GameObject Timmy
         {
