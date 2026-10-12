@@ -143,10 +143,8 @@ namespace JupiterX.Mods
             rec.Bitrate = 20000;
             rec.SourceType = Recorder.InputSourceType.Microphone;
             rec.SourceType = Recorder.InputSourceType.Microphone;
-            if (rec.GetComponent<MicAmplifier>() == null)
-                rec.gameObject.AddComponent<MicAmplifier>();
-            rec.GetComponent<MicAmplifier>().AmplificationFactor = 1;
-            rec.GetComponent<MicAmplifier>().BoostValue = 0;
+            rec.GetOrAddComponent<MicAmplifier>().AmplificationFactor = 1;
+            rec.GetOrAddComponent<MicAmplifier>().BoostValue = 0;
         }
         public static void LowQualityMic()
         {
@@ -161,10 +159,8 @@ namespace JupiterX.Mods
             rec.Bitrate = 12000;
             rec.VoiceDetection = true;
             rec.VoiceDetectionThreshold = 0.02f;
-            if (rec.GetComponent<MicAmplifier>() == null)
-                rec.gameObject.AddComponent<MicAmplifier>();
-            rec.GetComponent<MicAmplifier>().AmplificationFactor = 1f;
-            rec.GetComponent<MicAmplifier>().BoostValue = 0f;
+            rec.GetOrAddComponent<MicAmplifier>().AmplificationFactor = 1f;
+            rec.GetOrAddComponent<MicAmplifier>().BoostValue = 0f;
         }
 
         public static void HighQualityMic()
@@ -179,10 +175,8 @@ namespace JupiterX.Mods
             rec.SourceType = Recorder.InputSourceType.Microphone;
             rec.Bitrate = 32000;
             rec.VoiceDetection = false;
-            if (rec.GetComponent<MicAmplifier>() == null)
-                rec.gameObject.AddComponent<MicAmplifier>();
-            rec.GetComponent<MicAmplifier>().AmplificationFactor = 2f;
-            rec.GetComponent<MicAmplifier>().BoostValue = 10f;
+            rec.GetOrAddComponent<MicAmplifier>().AmplificationFactor = 2f;
+            rec.GetOrAddComponent<MicAmplifier>().BoostValue = 10f;
         }
 
         public static void BassBoostMic()
@@ -197,10 +191,8 @@ namespace JupiterX.Mods
             rec.SourceType = Recorder.InputSourceType.Microphone;
             rec.Bitrate = 18000;
             rec.VoiceDetection = false;
-            if (rec.GetComponent<MicAmplifier>() == null)
-                rec.gameObject.AddComponent<MicAmplifier>();
-            rec.GetComponent<MicAmplifier>().AmplificationFactor = 2.5f;
-            rec.GetComponent<MicAmplifier>().BoostValue = 15f;
+            rec.GetOrAddComponent<MicAmplifier>().AmplificationFactor = 2.5f;
+            rec.GetOrAddComponent<MicAmplifier>().BoostValue = 15f;
         }
         public static void BassBoostMicExtreme()
         {
@@ -214,10 +206,8 @@ namespace JupiterX.Mods
             rec.SourceType = Recorder.InputSourceType.Microphone;
             rec.Bitrate = 16000;
             rec.VoiceDetection = false;
-            if (rec.GetComponent<MicAmplifier>() == null)
-                rec.gameObject.AddComponent<MicAmplifier>();
-            rec.GetComponent<MicAmplifier>().AmplificationFactor = 3f;
-            rec.GetComponent<MicAmplifier>().BoostValue = 25f;
+            rec.GetOrAddComponent<MicAmplifier>().AmplificationFactor = 3f;
+            rec.GetOrAddComponent<MicAmplifier>().BoostValue = 25f;
         }
 
         public static void GetIdSelf()
