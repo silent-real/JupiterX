@@ -1,23 +1,27 @@
-**(LTS) Long Term Support, JupiterX is on LTS due to may be shutting down at the start of 2027**
-
-# *You can use either [Melon Loader](https://github.com/LemonLoader/MelonLoader/releases/tag/0.6.5.1) or [Lemon Loader](https://github.com/xfi0/MelonLoader_057_Fixed/releases/tag/0.5.7)*
-
-# JupiterX V2 is one of the best Gorilla Tag Copy mod menus.
+## **JupiterX is one of the best and longest standing Gorilla Tag Copy Mod Menu**
 
 With:
 ```
+Basic Mods
+Overpowered Mods
 First Public Menu With Working RPCs for Lemon Loader.
-Projectile Mods.
-Sound Spammers.
-Overpowered Mods.
-One of the first ever soundboards.
-Lucy Mods.
-OP Crashers.
-GTH Mods.
-Photon Bots.
-And more.
+Projectile Mods
+SS Sound Spammers
+Photon Bots
+Overpowered Crashers
+Gorilla Tag Horror Mods
+One of the first ever public menus with a working server side soundboard
 ```
 
-**All for free**
+# **Requirements**
+```md
+# Any meta quest headset
+# Working lemon loader
+# Any Gorilla Tag Copy
+```
 
-**discord.gg/dtQdz59FJG**
+[Lemon Loader](https://github.com/xfi0/MelonLoader_057_Fixed/releases/tag/0.5.7)
+
+**You can get all this for free with no payment in the discord or in the releases**
+
+***Join the discord* https://novax.lol/d**
