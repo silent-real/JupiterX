@@ -12,7 +12,6 @@
 
 using easyInputs;
 using JupiterX.Classes.Menu;
-using JupiterX.Extensions;
 using JupiterX.Managers;
 using JupiterX.Notifications;
 using Photon.Pun;
@@ -32,7 +31,27 @@ namespace JupiterX.Menu
 {
 	public class Main
 	{
-		public static void Prefix()
+        public static void OnPreload()
+        {
+            NetworkSystem.JoinedRoom += OnJoinedRoom;
+            NetworkSystem.LeftRoom += OnLeftRoom;
+            NetworkSystem.MasterClientSwitched += OnMasterClientSwitched;
+
+            NetworkSystem.PlayerJoinedRoom += OnPlayerJoined;
+            NetworkSystem.PlayerLeftRoom += OnPlayerLeave;
+        }
+
+        public static void OnDeinitMelon()
+        {
+            NetworkSystem.JoinedRoom -= OnJoinedRoom;
+            NetworkSystem.LeftRoom -= OnLeftRoom;
+            NetworkSystem.MasterClientSwitched -= OnMasterClientSwitched;
+
+            NetworkSystem.PlayerJoinedRoom -= OnPlayerJoined;
+            NetworkSystem.PlayerLeftRoom -= OnPlayerLeave;
+        }
+
+        public static void Prefix()
 		{
             if (Utility.canusemenu == false)
             {
@@ -171,50 +190,6 @@ namespace JupiterX.Menu
             }
 
             Utility.lastDeltaTime = (1f / Time.deltaTime).ToString();
-
-            // Join / leave room reminders
-            try
-            {
-                if (PhotonNetwork.InRoom)
-                    lastRoom = PhotonNetwork.CurrentRoom.Name;
-                if (PhotonNetwork.InRoom && !lastInRoom)
-                {
-                    if (!disableRoomNotifications)
-                        NotificationManager.SendNotification("<color=grey>[</color><color=blue>JOIN ROOM</color><color=grey>]</color> Room Code: " + lastRoom + "");
-                }
-                if (!PhotonNetwork.InRoom && lastInRoom)
-                {
-                    if (clearNotificationsOnDisconnect)
-                        NotificationManager.ClearAllNotifications();
-
-                    if (!disableRoomNotifications)
-                        NotificationManager.SendNotification("<color=grey>[</color><color=blue>LEAVE ROOM</color><color=grey>]</color> Room Code: " + lastRoom + "");
-                    lastMasterClient = false;
-                }
-                lastInRoom = PhotonNetwork.InRoom;
-            }
-            catch { }
-
-            // Master client notification
-            try
-            {
-                if (PhotonNetwork.InRoom)
-                {
-                    if (!Utility.IsMaster())
-                        GetIndex("MasterLabel").overlapText = "You are not master client.";
-                    else
-                        GetIndex("MasterLabel").overlapText = "You are master client.";
-
-                    if (Utility.IsMaster() && !lastMasterClient)
-                    {
-                        if (disableMasterClientNotifications)
-                            return;
-                        NotificationManager.SendNotification("<color=grey>[</color><color=purple>MASTER</color><color=grey>]</color> You are now master client.");
-                    }
-                    lastMasterClient = Utility.IsMaster();
-                }
-            }
-            catch { }
 
             // Constant
             try
@@ -1238,6 +1213,48 @@ namespace JupiterX.Menu
         public static string GetFileExtension(string fileName) =>
             fileName.ToLower().Split('.')[fileName.Split('.').Length - 1];
 
+        public static void OnJoinedRoom()
+        {
+            lastRoom = PhotonNetwork.CurrentRoom.Name;
+            if (!disableRoomNotifications)
+                NotificationManager.SendNotification("<color=grey>[</color><color=blue>JOIN ROOM</color><color=grey>]</color> Room Code: " + lastRoom);
+        }
+
+        public static void OnLeftRoom()
+        {
+            if (clearNotificationsOnDisconnect)
+                NotificationManager.ClearAllNotifications();
+
+            if (!disableRoomNotifications)
+                NotificationManager.SendNotification("<color=grey>[</color><color=blue>LEAVE ROOM</color><color=grey>]</color> Room Code: " + lastRoom + "");
+        }
+
+        public static void OnMasterClientSwitched()
+        {
+            if (disableMasterClientNotifications)
+                return;
+            NotificationManager.SendNotification("<color=grey>[</color><color=purple>MASTER</color><color=grey>]</color> You are now master client.");
+
+            if (!Utility.IsMaster())
+                GetIndex("MasterLabel").overlapText = "You are not master client.";
+            else
+                GetIndex("MasterLabel").overlapText = "You are master client.";
+        }
+
+        public static void OnPlayerJoined(Photon.Realtime.Player player)
+        {
+            if (player != PhotonNetwork.LocalPlayer && !Main.disablePlayerNotifications)
+            {
+                NotificationManager.SendNotification($"<color=grey>[</color><color=green>JOIN</color><color=grey>]</color> Name: {Utility.CleanPlayerName(player.NickName)}");
+            }
+        }
+
+        public static void OnPlayerLeave(Photon.Realtime.Player player)
+        {
+            if (player != PhotonNetwork.LocalPlayer && !Main.disablePlayerNotifications)
+                NotificationManager.SendNotification($"<color=grey>[</color><color=red>LEAVE</color><color=grey>]</color> Name: {Utility.CleanPlayerName(player.NickName)}");
+        }
+
         private static void RenderPrompt()
         {
             if (CurrentPrompt == null)
@@ -1543,7 +1560,6 @@ namespace JupiterX.Menu
         public static int framePressCooldown;
 
         public static bool lastInRoom = false;
-        public static bool lastMasterClient = false;
         public static string lastRoom = "";
 
         public static bool disableMasterClientNotifications;

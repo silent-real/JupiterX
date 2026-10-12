@@ -40,11 +40,13 @@ namespace JupiterX
             harmonyPatcher = new HarmonyLib.Harmony("jupiterx.nauth.patcher");
             harmonyPatcher.PatchAll();
             Utility.Log("Applied patched", JupxLogType.Info);
+            Menu.Main.OnPreload();
         }
 
         public override void OnDeinitializeMelon()
         {
             base.OnDeinitializeMelon();
+            Menu.Main.OnDeinitMelon();
             Utility.Log("Removing patches", JupxLogType.Info);
             harmonyPatcher.UnpatchSelf();
             Utility.Log("Removed patched", JupxLogType.Info);
