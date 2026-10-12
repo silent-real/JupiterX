@@ -12,12 +12,14 @@
 
 using ExitGames.Client.Photon;
 using GorillaNetworking;
+using JupiterX.Managers;
 using JupiterX.Notifications;
 using JupiterX.Patches;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -106,7 +108,7 @@ namespace JupiterX.Mods
         private class RoomConfig
         {
             public bool open;
-            public bool bigroomname;
+            public string customRoomName;
             public bool maxplayers;
         }
 
@@ -115,81 +117,58 @@ namespace JupiterX.Mods
             RoomConfig roomconfig = new RoomConfig();
             prompts.Clear();
 
-            Prompt("Would you like to make a public room ?", () => 
+            void CreateRoom()
             {
-                roomconfig.open = true;
-                Prompt("Big Room Name ?", () =>
+                Hashtable roomprops = new Hashtable();
+                roomprops.Add("gameMode", "forestDEFAULTDEFAULTINFECTIOINFECTION");
+                RoomOptions roomoptions = new RoomOptions()
                 {
-                    roomconfig.bigroomname = true;
-                    Prompt("255 Players ?", () =>
-                    {
-                        roomconfig.maxplayers = true;
-                        Prompt("Create Room", () =>
-                        {
-                            NotificationManager.SendNotification("Creating room.");
-                            Hashtable roomprops = new Hashtable();
-                            roomprops.Add("gameMode", "forestDEFAULTDEFAULTINFECTIOINFECTION");
-                            RoomOptions roomOptions = new RoomOptions()
-                            {
-                                CustomRoomProperties = roomprops,
-                                PublishUserId = true,
-                                IsOpen = roomconfig.open,
-                                IsVisible = roomconfig.open,
-                                MaxPlayers = roomconfig.maxplayers ? (byte)255 : (byte)10,
-                                SuppressPlayerInfo = true
-                            };
-                            PhotonNetwork.CreateRoom(RandomRoomName(roomconfig.bigroomname), roomOptions);
-                            NotificationManager.SendNotification("Created room.");
-                        }, () =>
-                        {
-                            NotificationManager.SendNotification("Not creating room.");
-                        });
-                    }, () =>
-                    {
-                        roomconfig.maxplayers = false;
-                        NotificationManager.SendNotification("Creating room");
-                    });
+                    PublishUserId = true,
+                    IsVisible = roomconfig.open,
+                    IsOpen = roomconfig.open,
+                    MaxPlayers = (byte)(roomconfig.maxplayers ? 255 : 10),
+                    CustomRoomProperties = roomprops
+                };
+                PhotonNetwork.CreateRoom(roomconfig.customRoomName);
+            }
+
+            void AskPublic()
+            {
+                Prompt("Would you like to make a public room ?", () =>
+                {
+                    roomconfig.open = true;
+                    CreateRoom();
                 }, () =>
                 {
-                    roomconfig.bigroomname = false;
+                    roomconfig.open = false;
+                    CreateRoom();
                 });
-            }, () => 
+            }
+
+            void AskMaxPlayers()
             {
-                roomconfig.open = false;
-                Prompt("Big Room Name ?", () =>
+                Prompt("Would you like to use max players or keep default ?", () =>
                 {
-                    roomconfig.bigroomname = true;
-                    Prompt("255 Players ?", () =>
+                    roomconfig.maxplayers = true;
+                }, () =>
+                {
+                    roomconfig.maxplayers = false;
+                });
+            }
+
+            Prompt("Would you like to create a room ?", () =>
+            {
+                Prompt("Would you like to use a custom room name ?", () =>
+                {
+                    KeyboardManager.Input("Enter room name", s =>
                     {
-                        roomconfig.maxplayers = true;
-                        Prompt("Create Room", () =>
-                        {
-                            NotificationManager.SendNotification("Creating room.");
-                            Hashtable roomprops = new Hashtable();
-                            roomprops.Add("gameMode", "forestDEFAULTDEFAULTINFECTIOINFECTION");
-                            RoomOptions roomOptions = new RoomOptions()
-                            {
-                                CustomRoomProperties = roomprops,
-                                PublishUserId = true,
-                                IsOpen = roomconfig.open,
-                                IsVisible = roomconfig.open,
-                                MaxPlayers = roomconfig.maxplayers ? (byte)255 : (byte)10,
-                                SuppressPlayerInfo = true
-                            };
-                            PhotonNetwork.CreateRoom(RandomRoomName(roomconfig.bigroomname), roomOptions);
-                            NotificationManager.SendNotification("Created room.");
-                        }, () =>
-                        {
-                            NotificationManager.SendNotification("Not creating room.");
-                        });
-                    }, () =>
-                    {
-                        roomconfig.maxplayers = false;
-                        NotificationManager.SendNotification("Creating room");
+                        roomconfig.customRoomName = s;
+                        AskMaxPlayers();
                     });
                 }, () =>
                 {
-                    roomconfig.bigroomname = false;
+                    roomconfig.customRoomName = Generate(4);
+                    AskMaxPlayers();
                 });
             });
         }
