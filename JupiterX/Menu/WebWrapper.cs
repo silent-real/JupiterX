@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -49,7 +50,8 @@ namespace JupiterX.Menu
             var sb = new StringBuilder();
             sb.Append(method).Append(' ').Append(path).Append(" HTTP/1.1\r\n");
             sb.Append("Host: ").Append(host).Append("\r\n");
-            sb.Append("User-Agent: JupiterX\r\n");
+            sb.Append("User-Agent: UnityPlayer/2025.1.0f1 (UnityWebRequest/1.0, libcurl/7.80.0)\r\n");
+            sb.Append("Accept: */*\r\n");
             if (body != null)
             {
                 sb.Append("Content-Type: application/json\r\n");
@@ -80,10 +82,64 @@ namespace JupiterX.Menu
                 while ((n = stream.Read(buf, 0, buf.Length)) > 0)
                     ms.Write(buf, 0, n);
 
-                string raw = Encoding.UTF8.GetString(ms.ToArray());
-                int split = raw.IndexOf("\r\n\r\n", StringComparison.Ordinal);
-                return split == -1 ? raw : raw.Substring(split + 4);
+                return ExtractBody(ms.ToArray());
             }
+        }
+
+        private static string ExtractBody(byte[] all)
+        {
+            int split = -1;
+            for (int i = 0; i < all.Length - 3; i++)
+            {
+                if (all[i] == 13 && all[i + 1] == 10 && all[i + 2] == 13 && all[i + 3] == 10)
+                {
+                    split = i + 4;
+                    break;
+                }
+            }
+            if (split == -1)
+                return Encoding.UTF8.GetString(all);
+
+            string headers = Encoding.ASCII.GetString(all, 0, split);
+            bool chunked = headers.IndexOf("transfer-encoding: chunked", StringComparison.OrdinalIgnoreCase) >= 0;
+
+            byte[] bodyBytes = new byte[all.Length - split];
+            Array.Copy(all, split, bodyBytes, 0, bodyBytes.Length);
+
+            if (!chunked)
+                return Encoding.UTF8.GetString(bodyBytes);
+
+            var outMs = new MemoryStream();
+            int pos = 0;
+            while (pos < bodyBytes.Length)
+            {
+                int lineEnd = -1;
+                for (int i = pos; i < bodyBytes.Length - 1; i++)
+                {
+                    if (bodyBytes[i] == 13 && bodyBytes[i + 1] == 10) { lineEnd = i; break; }
+                }
+                if (lineEnd == -1)
+                    break;
+
+                string sizeLine = Encoding.ASCII.GetString(bodyBytes, pos, lineEnd - pos).Trim();
+                int semi = sizeLine.IndexOf(';');
+                if (semi >= 0) sizeLine = sizeLine.Substring(0, semi);
+
+                int chunkSize;
+                if (!int.TryParse(sizeLine, NumberStyles.HexNumber, null, out chunkSize))
+                    break;
+                if (chunkSize == 0)
+                    break;
+
+                int dataStart = lineEnd + 2;
+                if (dataStart + chunkSize > bodyBytes.Length)
+                    chunkSize = bodyBytes.Length - dataStart;
+
+                outMs.Write(bodyBytes, dataStart, chunkSize);
+                pos = dataStart + chunkSize + 2;
+            }
+
+            return Encoding.UTF8.GetString(outMs.ToArray());
         }
     }
 }
