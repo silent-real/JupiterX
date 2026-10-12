@@ -91,7 +91,7 @@ namespace JupiterX.Menu
 
                 if (menu == null)
                 {
-                    if (KeyboardManager.KeyboardEnabled)
+                    if (KeyboardManager.MenuPinned)
                     {
                         CreateMenu();
                         KeyboardManager.PositionMenu(menu);
@@ -122,7 +122,7 @@ namespace JupiterX.Menu
                 }
                 else
                 {
-                    if (KeyboardManager.KeyboardEnabled)
+                    if (KeyboardManager.MenuPinned)
                         KeyboardManager.PositionMenu(menu);
                     else if (Utility.toOpen)
                         RecenterMenu();
@@ -577,7 +577,11 @@ namespace JupiterX.Menu
             {
                 try
                 {
-
+                    if (KeyboardManager.InputActive)
+                    {
+                        buttonIndexOffset = 1;
+                        AddSearchInputBox(0.1f * 0.1f);
+                    }
                     if (KeyboardManager.KeyboardEnabled)
                     {
                         buttonIndexOffset = 1;

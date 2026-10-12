@@ -41,18 +41,20 @@ namespace JupiterX.Managers
 
         public static bool InputActive => mode == Mode.Input;
 
+        public static bool MenuPinned => mode == Mode.Search || mode == Mode.Input;
+
         public static bool KeepMenuOpen;
 
         public static Vector3 KeyboardOffset = new(0f, -0.38f, 0.48f);
-        public static Vector3 MenuOffset = new(0f, -0.07f, 0.62f);
+        public static Vector3 MenuOffset = new(0f, -0.01f, 0.64f);
         public static float KeyboardTilt = 50f;
-        public static float MenuTilt = 20f;
+        public static float MenuTilt = 1f;
         public static float TurnThreshold = 40f;
         public static float ReturnDistance = 1.0f;
         public static float FollowSpeed = 8f;
 
         public static Vector3 RightSphereOffset = new(0.013f, -0.025f, 0.1f);
-        public static Vector3 LeftSphereOffset = new(-0.015f, -0.025f, 0.1f);
+        public static Vector3 LeftSphereOffset = new(-0.013f, -0.025f, 0.1f);
 
         private static readonly HashSet<string> ExcludedFromSearch = new() { "Search", "Disconnect", "Global Return", "Admin" };
 
@@ -71,7 +73,6 @@ namespace JupiterX.Managers
         private static string inputPrompt = "";
         private static Action<string> inputSubmit;
         private static Action inputCancel;
-        private static TextMeshPro inputBarText;
 
         private static bool shift;
         private static bool capsLock;
@@ -138,6 +139,11 @@ namespace JupiterX.Managers
             anchorInit = false;
 
             Load();
+
+            if (Menu.Main.menu != null)
+                Menu.Main.ReloadMenu();
+            EnsureMenu();
+            KeepMenuOpen = true;
         }
 
         public static void Close()
@@ -160,7 +166,10 @@ namespace JupiterX.Managers
                 Menu.Main.ReloadMenu();
             }
             else if (was == Mode.Input)
+            {
+                Menu.Main.ReloadMenu();
                 cancel?.Invoke();
+            }
         }
         public static void QueueAction(Action action)
         {
@@ -196,7 +205,6 @@ namespace JupiterX.Managers
             Root = null;
             leftSphere = null;
             rightSphere = null;
-            inputBarText = null;
             keys.Clear();
         }
 
@@ -210,8 +218,6 @@ namespace JupiterX.Managers
             Root.transform.localScale = Visible;
 
             CreateBackground();
-            if (mode == Mode.Input)
-                CreateInputBar();
             CreateHandSpheres();
             BuildLayout();
             SpawnKeys();
@@ -220,7 +226,7 @@ namespace JupiterX.Managers
         }
         private static void EnsureMenu()
         {
-            if (mode != Mode.Search) return;
+            if (!MenuPinned) return;
 
             if (Menu.Main.menu == null)
             {
@@ -320,6 +326,12 @@ namespace JupiterX.Managers
         public static string InputDisplay()
         {
             string caret = caretOn ? "<color=#00FFFF>|</color>" : "<color=#00000000>|</color>";
+
+            if (mode == Mode.Input)
+                return query.Length == 0
+                    ? caret + $"<color=#888888>{inputPrompt}</color>"
+                    : $"<color=#888888>{inputPrompt}:</color> {query}{caret}";
+
             return query.Length == 0
                 ? caret + "<color=#888888>Search</color>"
                 : query + caret;
@@ -444,14 +456,8 @@ namespace JupiterX.Managers
 
         private static void RefreshDisplay()
         {
-            if (mode == Mode.Search && Menu.Main.searchInputText != null)
+            if (MenuPinned && Menu.Main.searchInputText != null)
                 Menu.Main.searchInputText.text = InputDisplay();
-
-            if (mode == Mode.Input && inputBarText != null)
-            {
-                string caret = caretOn ? "<color=#00FFFF>|</color>" : "<color=#00000000>|</color>";
-                inputBarText.text = $"<color=#888888>{inputPrompt}:</color> {query}{caret}";
-            }
         }
 
         private static void RefreshKeyLabels()
@@ -611,39 +617,14 @@ namespace JupiterX.Managers
             bg.transform.SetParent(Root.transform, false);
             bg.transform.localRotation = Quaternion.identity;
 
-            if (mode == Mode.Input)
-            {
-                bg.transform.localPosition = new Vector3(0f, 0.025f, 0f);
-                bg.transform.localScale = new Vector3(1.0f, 0.76f, 0.03f);
-            }
-            else
-            {
-                bg.transform.localPosition = new Vector3(0f, -0.04f, 0f);
-                bg.transform.localScale = new Vector3(1.0f, 0.6f, 0.03f);
-            }
+            bg.transform.localPosition = new Vector3(0f, -0.04f, 0f);
+            bg.transform.localScale = new Vector3(1.0f, 0.6f, 0.03f);
 
             Renderer r = bg.GetComponent<Renderer>();
             r.material = new Material(Utility.StandardShader());
             r.material.color = Settings.backgroundColor.GetCurrentColor();
             UnityEngine.Object.Destroy(bg.GetComponent<Collider>());
         }
-        private static void CreateInputBar()
-        {
-            GameObject bar = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            bar.name = "InputBar";
-            bar.transform.SetParent(Root.transform, false);
-            bar.transform.localPosition = new Vector3(0f, 0.31f, -0.02f);
-            bar.transform.localRotation = Quaternion.identity;
-            bar.transform.localScale = new Vector3(0.92f, 0.09f, 0.02f);
-
-            Renderer r = bar.GetComponent<Renderer>();
-            r.material = new Material(Utility.StandardShader());
-            r.material.color = new Color(0.06f, 0.06f, 0.08f);
-            UnityEngine.Object.Destroy(bar.GetComponent<Collider>());
-
-            inputBarText = CreateLabel("InputText", new Vector3(0f, 0.31f, -0.035f), new Vector2(0.86f, 0.06f), 3f, TextAlignmentOptions.Left);
-        }
-
         private static void CreateHandSpheres()
         {
             rightSphere = CreateSphere(GorillaTagger.Instance.rightHandTransform, RightSphereOffset);
