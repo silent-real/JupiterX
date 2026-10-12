@@ -98,41 +98,32 @@ namespace JupiterX.Menu
 					{
 						if (!dynamicAnimations)
                         {
-                            Rigidbody comp = menu.AddComponent<Rigidbody>();
+                            Rigidbody comp = menu.GetOrAddComponent<Rigidbody>();
                             switch (Utility.MainDropType)
                             {
                                 case 0: // Destroy
                                     UnityEngine.Object.Destroy(menu, Time.deltaTime);
-                                    menu = null;
-                                    UnityEngine.Object.Destroy(reference);
-                                    reference = null;
                                     break;
 
                                 case 1: // Drop
                                     comp.velocity = Vector3.zero;
                                     UnityEngine.Object.Destroy(menu, 5);
-                                    menu = null;
-                                    UnityEngine.Object.Destroy(reference);
-                                    reference = null;
                                     break;
 
                                 case 2: // Drop
                                     comp.useGravity = false;
                                     comp.velocity = RightHanded ? Utility.ThrowMenu(EasyHand.RightHand) : Utility.ThrowMenu(EasyHand.LeftHand);
                                     UnityEngine.Object.Destroy(menu, 5);
-                                    menu = null;
-                                    UnityEngine.Object.Destroy(reference);
-                                    reference = null;
                                     break;
 
                                 case 3: // Throw
                                     comp.velocity = RightHanded ? Utility.ThrowMenu(EasyHand.RightHand) : Utility.ThrowMenu(EasyHand.LeftHand);
                                     UnityEngine.Object.Destroy(menu, 5);
-                                    menu = null;
-                                    UnityEngine.Object.Destroy(reference);
-                                    reference = null;
                                     break;
                             }
+                            menu = null;
+                            UnityEngine.Object.Destroy(reference);
+                            reference = null;
                         }
                         else
                         {
@@ -315,7 +306,7 @@ namespace JupiterX.Menu
             if (Rounding)
                 RoundMenuObject(menuBackground);
 
-            ColorChanger colorChanger = menuBackground.AddComponent<ColorChanger>();
+            ColorChanger colorChanger = menuBackground.GetOrAddComponent<ColorChanger>();
             colorChanger.colors = backgroundColor;
             colorChanger.Start();
 
@@ -333,9 +324,9 @@ namespace JupiterX.Menu
 			// Canvas
 			canvasObject = new GameObject();
 			canvasObject.transform.parent = menu.transform;
-			Canvas canvas = canvasObject.AddComponent<Canvas>();
-			CanvasScaler canvasScaler = canvasObject.AddComponent<CanvasScaler>();
-			canvasObject.AddComponent<GraphicRaycaster>();
+			Canvas canvas = canvasObject.GetOrAddComponent<Canvas>();
+			CanvasScaler canvasScaler = canvasObject.GetOrAddComponent<CanvasScaler>();
+			canvasObject.GetOrAddComponent<GraphicRaycaster>();
 			canvas.renderMode = RenderMode.WorldSpace;
 			canvasScaler.dynamicPixelsPerUnit = lowqualttext ? 1000f : 2500f;
 
@@ -346,7 +337,7 @@ namespace JupiterX.Menu
 					{
 						parent = canvasObject.transform
 					}
-			}.AddComponent<Text>();
+			}.GetOrAddComponent<Text>();
 			text.font = currentFont;
 
             if (CustomMenuTitle)
@@ -406,7 +397,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-                }.AddComponent<Text>();
+                }.GetOrAddComponent<Text>();
                 buildLabel.font = currentFont;
                 buildLabel.text = $"Build {Utility.version}";
 
@@ -439,7 +430,7 @@ namespace JupiterX.Menu
                     {
                         parent = canvasObject.transform
                     }
-                }.AddComponent<Text>();
+                }.GetOrAddComponent<Text>();
                 fpsObject.font = currentFont;
                 fpsObject.text = "FPS: " + Utility.fps;
                 fpsObject.color = textColors[0];
@@ -502,9 +493,9 @@ namespace JupiterX.Menu
 			gameObject.transform.rotation = Quaternion.identity;
 			gameObject.transform.localScale = Utility.PageObjScale;
 			gameObject.transform.localPosition = Utility.PageObjectPosLeft;
-            gameObject.AddComponent<ButtonCollider>().relatedText = "NextPage"; // PreviousPage
+            gameObject.GetOrAddComponent<ButtonCollider>().relatedText = "NextPage"; // PreviousPage
 
-            colorChanger = gameObject.AddComponent<ColorChanger>();
+            colorChanger = gameObject.GetOrAddComponent<ColorChanger>();
 			colorChanger.colors = buttonColors[0];
 			colorChanger.Start();
 
@@ -514,7 +505,7 @@ namespace JupiterX.Menu
 						{
 							parent = canvasObject.transform
 						}
-			}.AddComponent<Text>();
+			}.GetOrAddComponent<Text>();
 			text.font = currentFont;
 			text.text = "<";
 			text.fontSize = 1;
@@ -538,9 +529,9 @@ namespace JupiterX.Menu
             gameObject2.transform.rotation = Quaternion.identity;
             gameObject2.transform.localScale = Utility.PageObjScale;
             gameObject2.transform.localPosition = Utility.PageObjectPosRight;
-            gameObject2.AddComponent<ButtonCollider>().relatedText = "PreviousPage"; // NextPage
+            gameObject2.GetOrAddComponent<ButtonCollider>().relatedText = "PreviousPage"; // NextPage
 
-            colorChanger = gameObject2.AddComponent<ColorChanger>();
+            colorChanger = gameObject2.GetOrAddComponent<ColorChanger>();
 			colorChanger.colors = buttonColors[0];
 			colorChanger.Start();
 
@@ -555,7 +546,7 @@ namespace JupiterX.Menu
 						{
 							parent = canvasObject.transform
 						}
-			}.AddComponent<Text>();
+			}.GetOrAddComponent<Text>();
 			text.font = currentFont;
 			text.text = ">";
 			text.fontSize = 1;
@@ -652,10 +643,10 @@ namespace JupiterX.Menu
 
                 buttonObject.transform.localPosition = new Vector3(0.56f, 0f, 0.28f - offset);
 
-                ButtonCollider Button = buttonObject.AddComponent<ButtonCollider>();
+                ButtonCollider Button = buttonObject.GetOrAddComponent<ButtonCollider>();
                 Button.relatedText = method.buttonText;
 
-                ColorChanger colorChanger = buttonObject.AddComponent<ColorChanger>();
+                ColorChanger colorChanger = buttonObject.GetOrAddComponent<ColorChanger>();
                 colorChanger.Start();
 
                 if (incrementalButtons)
@@ -692,7 +683,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-            }.AddComponent<Text>();
+            }.GetOrAddComponent<Text>();
 
             string targetButtonText = method.overlapText ?? method.buttonText;
 
@@ -747,7 +738,7 @@ namespace JupiterX.Menu
                 buttonObject.transform.localScale = new Vector3(0.09f, 0.102f, 0.1f * 0.8f);
                 buttonObject.transform.localPosition = new Vector3(0.56f, 0.399f, 0.28f - offset);
 
-                ButtonCollider button = buttonObject.AddComponent<ButtonCollider>();
+                ButtonCollider button = buttonObject.GetOrAddComponent<ButtonCollider>();
                 button.relatedText = method.buttonText;
                 button.incremental = true;
                 button.positive = increment;
@@ -757,7 +748,7 @@ namespace JupiterX.Menu
 
                 if (lastClickedName != method.buttonText + (increment ? "+" : "-"))
                 {
-                    ColorChanger colorChanger = buttonObject.AddComponent<ColorChanger>();
+                    ColorChanger colorChanger = buttonObject.GetOrAddComponent<ColorChanger>();
                     colorChanger.colors = buttonColors[0];
                 }
             }
@@ -773,7 +764,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-            }.AddComponent<Text>();
+            }.GetOrAddComponent<Text>();
 
             buttonText.font = currentFont;
             buttonText.text = increment ? "+" : "-";
@@ -827,11 +818,11 @@ namespace JupiterX.Menu
             if (offcenteredPosition)
                 buttonObject.transform.localPosition += new Vector3(0f, 0.16f, 0f);
 
-            buttonObject.AddComponent<ButtonCollider>().relatedText = "Global Return";
+            buttonObject.GetOrAddComponent<ButtonCollider>().relatedText = "Global Return";
 
             if (lastClickedName != "Global Return")
             {
-                ColorChanger colorChanger = buttonObject.AddComponent<ColorChanger>();
+                ColorChanger colorChanger = buttonObject.GetOrAddComponent<ColorChanger>();
                 colorChanger.colors = colorChanger.colors = buttonColors[0];
             }
 
@@ -841,7 +832,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-            }.AddComponent<Image>();
+            }.GetOrAddComponent<Image>();
 
             if (returnIcon == null)
                 returnIcon = LoadTexture("return");
@@ -876,9 +867,9 @@ namespace JupiterX.Menu
             buttonObject.transform.localScale = new Vector3(0.09f, 0.102f, 0.08f);
             buttonObject.transform.localPosition = new Vector3(0.56f, -0.450f, -0.58f);
 
-            buttonObject.AddComponent<ButtonCollider>().relatedText = "Search";
+            buttonObject.GetOrAddComponent<ButtonCollider>().relatedText = "Search";
 
-            ColorChanger colorChanger = buttonObject.AddComponent<ColorChanger>();
+            ColorChanger colorChanger = buttonObject.GetOrAddComponent<ColorChanger>();
             colorChanger.colors = buttonColors[KeyboardManager.KeyboardEnabled  ? 1 : 0];
 
             Image searchImage = new GameObject
@@ -887,7 +878,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-            }.AddComponent<Image>();
+            }.GetOrAddComponent<Image>();
             if (searchIcon == null)
                 searchIcon = LoadTexture("search");
 
@@ -1258,7 +1249,7 @@ namespace JupiterX.Menu
                 {
                     parent = canvasObject.transform
                 }
-            }.AddComponent<Text>();
+            }.GetOrAddComponent<Text>();
             promptText.font = currentFont;
             promptText.text = CurrentPrompt.Message;
 
@@ -1292,7 +1283,7 @@ namespace JupiterX.Menu
                     {
                         parent = canvasObject.transform
                     }
-                }.AddComponent<Image>();
+                }.GetOrAddComponent<Image>();
 
                 component.sizeDelta = new Vector2(component.sizeDelta.x, 0.03f);
                 component.localPosition = new Vector3(0.06f, 0f, 0.1f);
@@ -1319,15 +1310,15 @@ namespace JupiterX.Menu
                 button.transform.localScale = new Vector3(0.09f, CurrentPrompt.DeclineText == null ? 0.9f : 0.4375f, 0.08f);
                 button.transform.localPosition = new Vector3(0.56f, CurrentPrompt.DeclineText == null ? 0f : 0.2375f, -0.43f);
 
-                button.AddComponent<ButtonCollider>().relatedText = "Accept Prompt";
+                button.GetOrAddComponent<ButtonCollider>().relatedText = "Accept Prompt";
 
                 if (lastClickedName != "Accept Prompt")
                 {
-                    ColorChanger colorChanger = button.AddComponent<ColorChanger>();
+                    ColorChanger colorChanger = button.GetOrAddComponent<ColorChanger>();
                     colorChanger.colors = buttonColors[0];
                 }
 
-                Text text = new GameObject { transform = { parent = canvasObject.transform } }.AddComponent<Text>();
+                Text text = new GameObject { transform = { parent = canvasObject.transform } }.GetOrAddComponent<Text>();
                 text.font = currentFont;
                 text.fontStyle = Utility.currentFontStyle;
                 text.text = CurrentPrompt.AcceptText;
@@ -1356,14 +1347,14 @@ namespace JupiterX.Menu
                 button.transform.localScale = new Vector3(0.09f, 0.4375f, 0.08f);
                 button.transform.localPosition = new Vector3(0.56f, -0.2375f, -0.43f);
 
-                button.AddComponent<ButtonCollider>().relatedText = "Decline Prompt";
+                button.GetOrAddComponent<ButtonCollider>().relatedText = "Decline Prompt";
 
                 if (lastClickedName != "Decline Prompt")
                 {
-                    ColorChanger colorChanger = button.AddComponent<ColorChanger>();
+                    ColorChanger colorChanger = button.GetOrAddComponent<ColorChanger>();
                     colorChanger.colors = buttonColors[0];
                 }
-                Text text = new GameObject { transform = { parent = canvasObject.transform } }.AddComponent<Text>();
+                Text text = new GameObject { transform = { parent = canvasObject.transform } }.GetOrAddComponent<Text>();
                 text.font = currentFont;
                 text.fontStyle = Utility.currentFontStyle;
                 text.text = CurrentPrompt.DeclineText;
@@ -1688,7 +1679,7 @@ namespace JupiterX.Menu
 
             foreach (GameObject Changed in ToChange)
             {
-                ClampColor TargetChanger = Changed.AddComponent<ClampColor>();
+                ClampColor TargetChanger = Changed.GetOrAddComponent<ClampColor>();
                 TargetChanger.targetRenderer = ToRoundRenderer;
             }
 
@@ -1752,7 +1743,7 @@ namespace JupiterX.Menu
             GameObject[] allObjects = { baseA, baseB, corners[0], corners[1], corners[2], corners[3] };
             foreach (GameObject obj in allObjects)
             {
-                ClampColor clampColor = obj.AddComponent<ClampColor>();
+                ClampColor clampColor = obj.GetOrAddComponent<ClampColor>();
                 clampColor.targetRenderer = renderer;
             }
             renderer.enabled = false;
@@ -1843,7 +1834,7 @@ namespace JupiterX.Menu
             {
                 if (line == null)
                 {
-                    line = Pointer.AddComponent<LineRenderer>();
+                    line = Pointer.GetOrAddComponent<LineRenderer>();
                     line.useWorldSpace = true;
                     line.material = new Material(Utility.GUIShader());
                     line.startWidth = 0.02f;
