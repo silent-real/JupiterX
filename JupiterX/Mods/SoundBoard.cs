@@ -35,7 +35,7 @@ namespace JupiterX.Mods
         public static float RecoverTime = -1f;
         public static bool LoopAudio = false;
         public static string Subdirectory = "";
-        public static float volume;
+        public static float volume = 5f;
         private static GameObject notinroomholder = null;
 
         public static void LoadSoundboard()
@@ -97,6 +97,31 @@ namespace JupiterX.Mods
                 name = "Soundboard",
                 description = "You havent used this before? try using the sounds and dont abuse it."
             });
+        }
+
+        private static readonly Queue<Action> mainThreadQueue = new Queue<Action>();
+        private static readonly object queueLock = new object();
+
+        public static void RunOnMain(Action action)
+        {
+            lock (queueLock) mainThreadQueue.Enqueue(action);
+        }
+        public static void PumpMainThread()
+        {
+            while (true)
+            {
+                Action queued = null;
+                lock (queueLock)
+                {
+                    if (mainThreadQueue.Count > 0) queued = mainThreadQueue.Dequeue();
+                }
+                if (queued == null) break;
+                try { queued(); }
+                catch (Exception e) { Utility.Log("Soundboard pump error: " + e.Message, JupxLogType.Error); }
+            }
+
+            if (AudioIsPlaying && !LoopAudio && RecoverTime > 0f && Time.time >= RecoverTime)
+                RestoreMicrophone();
         }
 
         public static void LoadSoundLibrary()
@@ -252,23 +277,109 @@ namespace JupiterX.Mods
         {
             if (!File.Exists(soundpath))
                 return;
+
             string extension = Path.GetExtension(soundpath).ToLowerInvariant();
-            AudioClip clip = null;
-            if (extension == ".wav")
+            string clipName = Path.GetFileNameWithoutExtension(soundpath);
+
+            var t = new System.Threading.Thread(() =>
             {
-                byte[] soundData = File.ReadAllBytes(soundpath);
-                clip = CreateAudioClipFromWav(soundData, Path.GetFileNameWithoutExtension(soundpath));
+                float[] samples = null;
+                int channels = 0, sampleRate = 0;
+
+                try
+                {
+                    if (extension == ".wav")
+                    {
+                        byte[] soundData = File.ReadAllBytes(soundpath);
+                        samples = DecodeWav(soundData, out channels, out sampleRate);
+                    }
+                    else if (extension == ".mp3")
+                    {
+                        samples = DecodeMp3(soundpath, out channels, out sampleRate);
+                    }
+                }
+                catch { samples = null; }
+
+                if (samples == null || channels <= 0 || sampleRate <= 0)
+                    return;
+
+                RunOnMain(() =>
+                {
+                    int sampleCount = samples.Length / channels;
+                    AudioClip clip = AudioClip.Create(clipName, sampleCount, channels, sampleRate, false);
+                    Plugin.StartCoroutine(UploadAndPlay(clip, samples));
+                });
+            });
+            t.IsBackground = true;
+            t.Start();
+        }
+
+        private static System.Collections.IEnumerator UploadAndPlay(AudioClip clip, float[] samples)
+        {
+            float gain = Mathf.Clamp(volume / 5f, 0f, 2f);
+            const int chunk = 131072;
+            int offset = 0;
+
+            while (offset < samples.Length)
+            {
+                int count = Math.Min(chunk, samples.Length - offset);
+                float[] slice = new float[count];
+                Array.Copy(samples, offset, slice, 0, count);
+                if (gain != 1f)
+                    for (int i = 0; i < count; i++)
+                        slice[i] = Mathf.Clamp(slice[i] * gain, -1f, 1f);
+                clip.SetData(slice, offset / clip.channels);
+                offset += count;
+                yield return null;
             }
-            else if (extension == ".mp3")
-                clip = CreateAudioClipFromMp3(soundpath);
 
             if (PhotonNetwork.InRoom)
-            {
-                if (clip != null)
-                    PlayAudioThroughMicrophone(clip);
-            }
+                PlayAudioThroughMicrophone(clip);
             else
                 PlayClipNotInRoom(clip);
+        }
+
+        private static float[] DecodeWav(byte[] wavData, out int channels, out int sampleRate)
+        {
+            channels = 0; sampleRate = 0;
+            if (wavData.Length < 44) return null;
+            channels = BitConverter.ToInt16(wavData, 22);
+            sampleRate = BitConverter.ToInt32(wavData, 24);
+            int bitsPerSample = BitConverter.ToInt16(wavData, 34);
+            int dataSize = wavData.Length - 44;
+            if (channels <= 0 || bitsPerSample <= 0) return null;
+            int sampleCount = dataSize / (channels * (bitsPerSample / 8));
+            float[] samples = new float[sampleCount * channels];
+            if (bitsPerSample == 16)
+            {
+                for (int i = 0; i < sampleCount * channels; i++)
+                    samples[i] = BitConverter.ToInt16(wavData, 44 + i * 2) / 32768f;
+            }
+            else if (bitsPerSample == 8)
+            {
+                for (int i = 0; i < sampleCount * channels; i++)
+                    samples[i] = (wavData[44 + i] - 128) / 128f;
+            }
+            else return null;
+            return samples;
+        }
+
+        private static float[] DecodeMp3(string path, out int channels, out int sampleRate)
+        {
+            channels = 0; sampleRate = 0;
+            MpegFile mpegFile = new MpegFile(path);
+            channels = mpegFile.Channels;
+            sampleRate = mpegFile.SampleRate;
+            List<float> all = new List<float>(1 << 20);
+            float[] buffer = new float[16384];
+            int read;
+            while ((read = mpegFile.ReadSamples(buffer, 0, buffer.Length)) > 0)
+            {
+                if (read == buffer.Length) all.AddRange(buffer);
+                else { for (int i = 0; i < read; i++) all.Add(buffer[i]); }
+            }
+            mpegFile.Dispose();
+            return all.Count == 0 ? null : all.ToArray();
         }
 
         private static void PlayClipNotInRoom(AudioClip clip)
@@ -350,15 +461,19 @@ namespace JupiterX.Mods
                 return;
             try
             {
-                Recorder component = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
+                Recorder component = GetRecorder();
                 if (component == null)
                     return;
+                bool wasAlreadyPlaying = AudioIsPlaying;
                 component.SourceType = Recorder.InputSourceType.AudioClip;
                 component.AudioClip = clip;
-                typeof(Recorder).GetMethod("RestartRecording")?.Invoke(component, new object[] { LoopAudio });
-                typeof(Recorder).GetProperty("DebugEchoMode")?.SetValue(component, true);
+                if (!wasAlreadyPlaying)
+                {
+                    typeof(Recorder).GetMethod("RestartRecording")?.Invoke(component, new object[] { LoopAudio });
+                    typeof(Recorder).GetProperty("DebugEchoMode")?.SetValue(component, true);
+                }
                 AudioIsPlaying = true;
-                RecoverTime = Time.time + clip.length + 0.4f;
+                RecoverTime = LoopAudio ? -1f : Time.time + clip.length + 0.4f;
             }
             catch { }
         }
@@ -367,15 +482,16 @@ namespace JupiterX.Mods
         {
             try
             {
-                Recorder component = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
+                AudioIsPlaying = false;
+                RecoverTime = -1f;
+
+                Recorder component = GetRecorder();
                 if (component != null)
                 {
-                    component.SourceType = Recorder.InputSourceType.Microphone;
-                    component.AudioClip = null;
-                    typeof(Recorder).GetMethod("RestartRecording")?.Invoke(component, new object[] { true });
                     typeof(Recorder).GetProperty("DebugEchoMode")?.SetValue(component, false);
-                    AudioIsPlaying = false;
-                    RecoverTime = -1f;
+                    component.AudioClip = null;
+                    component.SourceType = Recorder.InputSourceType.Microphone;
+                    typeof(Recorder).GetMethod("RestartRecording")?.Invoke(component, new object[] { true });
                 }
             }
             catch { }
@@ -385,8 +501,20 @@ namespace JupiterX.Mods
         {
             if (PhotonNetwork.InRoom)
                 RestoreMicrophone();
-            else
-                notinroomholder.GetComponent<AudioSource>().Stop();
+            else if (notinroomholder != null)
+            {
+                AudioSource src = notinroomholder.GetComponent<AudioSource>();
+                if (src != null) src.Stop();
+            }
+        }
+
+        private static Recorder cachedRecorder;
+
+        private static Recorder GetRecorder()
+        {
+            if (cachedRecorder == null)
+                cachedRecorder = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
+            return cachedRecorder;
         }
 
         public static void PlaySoundFile(string soundpath) =>

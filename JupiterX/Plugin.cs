@@ -130,6 +130,8 @@ namespace JupiterX
         public override void OnUpdate()
         {
             base.OnUpdate();
+            Mods.Soundboard.PumpMainThread();
+
             if (Utility.canusemenu == false)
             {
                 NotificationManager.SendNotification("<color=red>[INFO]</color> Menu is locked!", 15f);
