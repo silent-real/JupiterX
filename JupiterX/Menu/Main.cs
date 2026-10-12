@@ -1260,14 +1260,12 @@ namespace JupiterX.Menu
 
         public static void OnMasterClientSwitched()
         {
-            if (disableMasterClientNotifications)
+            bool isMaster = Utility.IsMaster();
+            GetIndex("MasterLabel").overlapText = isMaster ? "You are master client." : "You are not master client.";
+
+            if (disableMasterClientNotifications || !isMaster)
                 return;
             NotificationManager.SendNotification("<color=grey>[</color><color=purple>MASTER</color><color=grey>]</color> You are now master client.");
-
-            if (!Utility.IsMaster())
-                GetIndex("MasterLabel").overlapText = "You are not master client.";
-            else
-                GetIndex("MasterLabel").overlapText = "You are master client.";
         }
 
         public static void OnPlayerJoined(Photon.Realtime.Player player)
