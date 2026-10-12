@@ -240,7 +240,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
     ▐███▌▐█▌.▐▌██▐█▌▐█▄▪▐█▐█▌.▐▌▐█▌▐▌▐█▄▄▌
     ·▀▀▀  ▀█▄▀▪▀▀ █▪ ▀▀▀▀  ▀█▄▀▪.▀▀▀  ▀▀▀       
            Console {MenuName} {ConsoleVersion}
-     Developed by Nova
+                Developed by Nova
 ");
         }
 
