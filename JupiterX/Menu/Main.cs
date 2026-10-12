@@ -1046,8 +1046,8 @@ namespace JupiterX.Menu
 
             switch (true)
             {
-                case true when fromMenu && !ignoreForce && gripHeld:
-                    if (target.buttonText == "Exit Favorite" && !disableFavoritingKeybind) return;
+                case true when fromMenu && !ignoreForce && gripHeld && !disableFavoritingKeybind:
+                    if (target.buttonText == "Exit Favorite") return;
 
                     if (favorites.Contains(target.buttonText))
                     {
