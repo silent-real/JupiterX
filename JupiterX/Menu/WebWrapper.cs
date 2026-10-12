@@ -82,7 +82,7 @@ namespace JupiterX.Menu
 
                 string raw = Encoding.UTF8.GetString(ms.ToArray());
                 int split = raw.IndexOf("\r\n\r\n", StringComparison.Ordinal);
-                return split == -1 ? raw : raw.Substring(split + 4); // body only
+                return split == -1 ? raw : raw.Substring(split + 4);
             }
         }
     }
