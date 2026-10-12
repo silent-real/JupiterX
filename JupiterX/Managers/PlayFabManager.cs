@@ -10,11 +10,10 @@
 //  Version: 2.0.0 | By Silent/Ashley/Nova (@s1lnt)
 // ============================================================
 
-using Il2CppSystem.Net;
 using System;
+using JupiterX.Menu;
 using JupiterX.Notifications;
 using Newtonsoft.Json;
-using System.Text;
 using Newtonsoft.Json.Linq;
 
 namespace JupiterX.Managers
@@ -24,24 +23,46 @@ namespace JupiterX.Managers
         public static void CreateAccount(CreateAccountRequest caRequest, Action<CreateAccountResponse> callback)
         {
             if (caRequest == null)
+            {
                 NotificationManager.SendNotification("Your createaccountrequest is null somehow im a dumbass.", 2f);
-            WebClient client = new WebClient();
-            client.Headers.Add("Content-Type", "application/json");
+                return;
+            }
             string url = $"https://{caRequest.TitleId}.playfabapi.com/Client/LoginWithCustomID";
             string json = JsonConvert.SerializeObject(caRequest);
-            byte[] requestBytes = Encoding.UTF8.GetBytes(json);
-            byte[] responseBytes = client.UploadData(url, "POST", requestBytes);
-            string responseJson = Encoding.UTF8.GetString(responseBytes);
-            JObject responseData = JObject.Parse(responseJson);
-            CreateAccountResponse response = new CreateAccountResponse
+            WebWrapper.Post(url, json, responseJson =>
             {
-                PlayFabId = (string)responseData["data"]["PlayFabId"],
-                SessionTicket = (string)responseData["data"]["SessionTicket"],
-                EntityId = (string)responseData["data"]["EntityToken"]["Entity"]["Id"],
-                EntityToken = (string)responseData["data"]["EntityToken"]["EntityToken"],
-                EntityType = (string)responseData["data"]["EntityToken"]["Entity"]["Type"]
-            };
-            callback?.Invoke(response);
+                if (string.IsNullOrEmpty(responseJson) || responseJson.StartsWith("ERROR:", StringComparison.Ordinal))
+                {
+                    NotificationManager.SendNotification($"PlayFab login failed: {responseJson}", 3f);
+                    callback?.Invoke(null);
+                    return;
+                }
+                try
+                {
+                    JObject responseData = JObject.Parse(responseJson);
+                    JToken data = responseData["data"];
+                    if (data == null)
+                    {
+                        NotificationManager.SendNotification("PlayFab returned no data block.", 3f);
+                        callback?.Invoke(null);
+                        return;
+                    }
+                    CreateAccountResponse response = new CreateAccountResponse
+                    {
+                        PlayFabId = (string)data["PlayFabId"],
+                        SessionTicket = (string)data["SessionTicket"],
+                        EntityId = (string)data["EntityToken"]["Entity"]["Id"],
+                        EntityToken = (string)data["EntityToken"]["EntityToken"],
+                        EntityType = (string)data["EntityToken"]["Entity"]["Type"]
+                    };
+                    callback?.Invoke(response);
+                }
+                catch (Exception e)
+                {
+                    NotificationManager.SendNotification($"PlayFab parse error: {e.Message}", 3f);
+                    callback?.Invoke(null);
+                }
+            });
         }
 
         public class CreateAccountRequest
