@@ -128,25 +128,25 @@ namespace JupiterX.Mods
         public static void LoadSoundLibrary()
         {
             string url = "https://raw.githubusercontent.com/Seralyth/Seralyth-Menu/4750b14e7b47fafe7a37d81926e82f5b58fb1bdb/Resources/Server/Audio/Mods/Fun/Soundboard/SoundLibrary.txt";
-
+            Buttons.buttons[Buttons.GetCategory("Sound Library")] = new ButtonInfo[]
+            {
+                new ButtonInfo { buttonText = "Exit Sound Library", method = () => LoadSoundboard(), isTogglable = false, toolTip = "Returns you back to the soundboard." },
+                new ButtonInfo { buttonText = "LibraryLoading", overlapText = "<color=grey>Loading library...</color>", isTogglable = false, toolTip = "Fetching the sound list." }
+            };
+            Buttons.CurrentCategoryName = "Sound Library";
             WebWrapper.Get(url, s => RunOnMain(() =>
             {
                 string libraryText = string.IsNullOrEmpty(s) || s.StartsWith("ERROR:", StringComparison.Ordinal) ? "" : s;
-                if (string.IsNullOrEmpty(libraryText))
-                {
-                    NotificationManager.SendNotification("<color=red>[INFO]</color> Sound library failed to load.", 4f);
-                    return;
-                }
                 List<ButtonInfo> soundbuttons = new List<ButtonInfo>
                 {
-                    new ButtonInfo
-                    {
-                        buttonText = "Exit Sound Library",
-                        method = () => LoadSoundboard(),
-                        isTogglable = false,
-                        toolTip = "Returns you back to the soundboard."
-                    }
+                    new ButtonInfo { buttonText = "Exit Sound Library", method = () => LoadSoundboard(), isTogglable = false, toolTip = "Returns you back to the soundboard." }
                 };
+                if (string.IsNullOrEmpty(libraryText))
+                {
+                    soundbuttons.Add(new ButtonInfo { buttonText = "LibraryFailed", overlapText = "<color=red>Library failed to load</color>", method = () => LoadSoundLibrary(), isTogglable = false, toolTip = "Tap to retry." });
+                    Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+                    return;
+                }
                 string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
                 int index = 0;
                 foreach (string audio in audios)
@@ -159,19 +159,14 @@ namespace JupiterX.Mods
                         {
                             string dName = data[0].Trim();
                             string dUrl = data[1].Trim();
-                            soundbuttons.Add(new ButtonInfo
-                            {
-                                buttonText = "SoundboardDownload" + index,
-                                overlapText = dName,
-                                method = () => DownloadSound(dName, dUrl),
-                                isTogglable = false,
-                                toolTip = $"Downloads {dName} to your sound library."
-                            });
+                            soundbuttons.Add(new ButtonInfo { buttonText = "SoundboardDownload" + index, overlapText = dName, method = () => DownloadSound(dName, dUrl), isTogglable = false, toolTip = $"Downloads {dName} to your sound library." });
                         }
                     }
                 }
-                Buttons.CurrentCategoryName = "Sound Library";
                 Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+                if (Buttons.CurrentCategoryName == "Sound Library")
+                    LoadSoundboard();
+                Buttons.CurrentCategoryName = "Sound Library";
             }));
         }
 
@@ -197,6 +192,7 @@ namespace JupiterX.Mods
             }
             WebWrapper.DownloadFile(resourcePath, fullPath, success => RunOnMain(() =>
             {
+                Utility.Log($"Download {(success ? "OK" : "FAIL")}: {resourcePath} -> {fullPath}", success ? JupxLogType.Info : JupxLogType.Error);
                 if (!success || !File.Exists(fullPath))
                 {
                     NotificationManager.SendNotification($"Download failed for {fileName}", 4f);
