@@ -127,14 +127,9 @@ namespace JupiterX.Mods
 
         public static void LoadSoundLibrary()
         {
-            string url = "https://github.com/iiDk-the-actual/ModInfo/raw/main/SoundLibrary.txt";
+            string url = "https://github.com/Seralyth/Seralyth-Menu/blob/4750b14e7b47fafe7a37d81926e82f5b58fb1bdb/Resources/Server/Audio/Mods/Fun/Soundboard/SoundLibrary.txt";
             string libraryText;
-            WebWrapper.Get(url, s =>
-            {
-                libraryText = s ?? "Library has nothing or empty";
-
-                string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
-                List<ButtonInfo> soundbuttons = new List<ButtonInfo>
+            List<ButtonInfo> soundbuttons = new List<ButtonInfo>
                 {
                     new ButtonInfo
                     {
@@ -144,6 +139,11 @@ namespace JupiterX.Mods
                         toolTip = "Returns you back to the soundboard."
                     }
                 };
+            WebWrapper.Get(url, s =>
+            {
+                libraryText = s ?? "Library has nothing or empty";
+
+                string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
                 int index = 0;
                 foreach (string audio in audios)
                 {
@@ -164,9 +164,9 @@ namespace JupiterX.Mods
                         }
                     }
                 }
-                Buttons.CurrentCategoryName = "Sound Library";
-                Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
             });
+            Buttons.CurrentCategoryName = "Sound Library";
+            Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
         }
 
         private static void ChangeVolume(bool positive = true)
