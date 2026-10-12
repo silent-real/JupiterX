@@ -12,7 +12,7 @@
 
 using UnityEngine;
 
-namespace JupiterX.Extensions
+namespace JupiterX
 {
     public static class GameObjectExtensions
     {
