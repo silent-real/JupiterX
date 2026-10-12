@@ -83,7 +83,7 @@ namespace JupiterX.Mods
                 else
                     soundbuttons.Add(new ButtonInfo { buttonText = $"SoundboardSound{index}", overlapText = cleanName, method = () => PlaySoundFile(relativePath), isTogglable = false, toolTip = $"Plays \"{cleanName}\" through your microphone." });
             }
-            soundbuttons.Add(new ButtonInfo { buttonText = "Volume", enableMethod = () => ChangeVolume(true), method = () => ChangeVolume(), disableMethod = () => ChangeVolume(false), incremental = true, isTogglable = false, toolTip = "Changes the current audio clips volume." });
+            soundbuttons.Add(new ButtonInfo { buttonText = "Volume", overlapText = $"Volume <color=grey>[</color><color=cyan>" + volume + "</color><color=grey>]</color>", enableMethod = () => ChangeVolume(true), method = () => ChangeVolume(), disableMethod = () => ChangeVolume(false), incremental = true, isTogglable = false, toolTip = "Changes the current audio clips volume." });
             soundbuttons.Add(new ButtonInfo { buttonText = "Loop Audio", enableMethod = () => LoopAudio = true, disableMethod = () => LoopAudio = false, isTogglable = true, toolTip = "Loops the current sound that is playing." });
             soundbuttons.Add(new ButtonInfo { buttonText = "Stop All Sounds", method = () => StopAllSounds(), isTogglable = false, toolTip = "Stops all currently playing sounds." });
             soundbuttons.Add(new ButtonInfo { buttonText = "Reload Sounds", method = () => LoadSoundboard(), isTogglable = false, toolTip = "Reloads all of your sounds." });
