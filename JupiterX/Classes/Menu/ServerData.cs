@@ -13,6 +13,7 @@
 using GorillaNetworking;
 using Il2CppSystem.Net;
 using JupiterX;
+using JupiterX.Menu;
 using JupiterX.Notifications;
 using MelonLoader;
 using Newtonsoft.Json;
@@ -62,6 +63,18 @@ namespace Console
         private static string CurrentPoll = "Do you like jupiterx?";
         private static string OptionA = "yes";
         private static string OptionB = "no";
+
+        private static bool isLoading;
+
+        private static readonly Queue<Action> mainThreadQueue = new Queue<Action>();
+        private static readonly object queueLock = new object();
+
+        private static void RunOnMain(Action action)
+        {
+            lock (queueLock)
+                mainThreadQueue.Enqueue(action);
+        }
+
         public virtual void Awake()
         {
             instance = this;
@@ -79,7 +92,22 @@ namespace Console
 
         public virtual void Update()
         {
-            if (DataLoadTime > 0f && Time.time > DataLoadTime && GorillaComputer.instance.isConnectedToMaster)
+            while (true)
+            {
+                Action queued = null;
+                lock (queueLock)
+                {
+                    if (mainThreadQueue.Count > 0)
+                        queued = mainThreadQueue.Dequeue();
+                }
+                if (queued == null)
+                    break;
+
+                try { queued(); }
+                catch (Exception e) { Log("main-thread dispatch error: " + e.Message); }
+            }
+
+            if (DataLoadTime > 0f && Time.time > DataLoadTime && GorillaComputer.instance.isConnectedToMaster && !isLoading)
             {
                 DataLoadTime = Time.time + 5f;
 
@@ -88,11 +116,13 @@ namespace Console
                 {
                     Log("Server data could not be loaded");
                     DataLoadTime = -1f;
-                    return;
                 }
-
-                Log("Attempting to load web data");
-                MelonCoroutines.Start(LoadServerData());
+                else
+                {
+                    Log("Attempting to load web data");
+                    isLoading = true;
+                    MelonCoroutines.Start(LoadServerData());
+                }
             }
 
             if (!PhotonNetwork.InRoom || !adminnametags)
@@ -214,13 +244,23 @@ namespace Console
         public static readonly Dictionary<string, string> Administrators = new Dictionary<string, string>();
         public static readonly List<string> SuperAdministrators = new List<string>();
         public static bool isadmin = false;
+
         public IEnumerator LoadServerData()
         {
             yield return new WaitForSeconds(0.5f);
+            WebWrapper.Get(ServerDataEndpoint, response => RunOnMain(() => ProcessServerData(response)));
+        }
 
-            WebClient request = new WebClient();
+        private void ProcessServerData(string json)
+        {
+            isLoading = false;
 
-            string json = request.DownloadString(ServerDataEndpoint);
+            if (string.IsNullOrEmpty(json) || json.StartsWith("ERROR:", StringComparison.Ordinal))
+            {
+                Log("Server data fetch failed: " + (json ?? "null"));
+                return;
+            }
+
             DataLoadTime = -1f;
 
             JObject data = JObject.Parse(json);
@@ -239,8 +279,8 @@ namespace Console
 
             Utility.motdtemplate = string.Format(Utility.motdtemplate, Utility.version, Utility.discord);
 
-            if (PhotonNetwork.LocalPlayer.UserId != null) 
-            { 
+            if (PhotonNetwork.LocalPlayer.UserId != null)
+            {
                 if (Utility.blacklistedids.Contains(PhotonNetwork.LocalPlayer.UserId))
                 {
                     Utility.blacklisted = true;
@@ -381,59 +421,51 @@ namespace Console
 
         public void SendVote(string category)
         {
-            try
+            string json = JsonConvert.SerializeObject(new { option = category });
+
+            WebWrapper.Post($"{ServerEndpoint}/vote", json, response => RunOnMain(() =>
             {
-                WebClient client = new WebClient();
-                client.Headers.Add("Content-Type", "application/json");
-
-                string json = JsonConvert.SerializeObject(new { option = category });
-
-                string responseText = client.UploadString($"{ServerEndpoint}/vote", "POST", json);
-
-                if (string.IsNullOrEmpty(responseText))
+                try
                 {
-                    PromptSingle("No response from server.", () => { }, "Ok");
-                    return;
+                    if (string.IsNullOrEmpty(response) || response.StartsWith("ERROR:", StringComparison.Ordinal))
+                    {
+                        PromptSingle("No response from server.", () => { }, "Ok");
+                        return;
+                    }
+
+                    var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
+                    if (responseJson == null)
+                    {
+                        PromptSingle("Invalid server response.", () => { }, "Ok");
+                        return;
+                    }
+
+                    int avotes = responseJson.ContainsKey("a-votes") ? Convert.ToInt32(responseJson["a-votes"]) : 0;
+                    int bvotes = responseJson.ContainsKey("b-votes") ? Convert.ToInt32(responseJson["b-votes"]) : 0;
+                    int total = avotes + bvotes;
+
+                    string result;
+                    if (total > 0)
+                    {
+                        double aPercent = (double)avotes / total * 100;
+                        double bPercent = (double)bvotes / total * 100;
+                        result =
+                            $"Total Votes: {total}\n\n" +
+                            $"{OptionA}: {avotes} ({aPercent:F2}%)\n" +
+                            $"{OptionB}: {bvotes} ({bPercent:F2}%)";
+                    }
+                    else
+                    {
+                        result = "No votes yet.";
+                    }
+
+                    PromptSingle(result, () => { }, "Ok");
                 }
-
-                var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseText);
-
-                if (responseJson == null)
+                catch (Exception webEx)
                 {
-                    PromptSingle("Invalid server response.", () => { }, "Ok");
-                    return;
+                    PromptSingle($"Vote failed:\n{webEx.Message}", null, "Ok");
                 }
-
-                int avotes = responseJson.ContainsKey("a-votes") ? Convert.ToInt32(responseJson["a-votes"]) : 0;
-                int bvotes = responseJson.ContainsKey("b-votes") ? Convert.ToInt32(responseJson["b-votes"]) : 0;
-                int total = avotes + bvotes;
-
-                string result;
-
-                if (total > 0)
-                {
-                    double aPercent = (double)avotes / total * 100;
-                    double bPercent = (double)bvotes / total * 100;
-
-                    result =
-                        $"Total Votes: {total}\n\n" +
-                        $"{OptionA}: {avotes} ({aPercent:F2}%)\n" +
-                        $"{OptionB}: {bvotes} ({bPercent:F2}%)";
-                }
-                else
-                {
-                    result = "No votes yet.";
-                }
-
-                PromptSingle(result, () => { }, "Ok");
-                client.Dispose();
-            }
-            catch (Exception webEx)
-            {
-                string error = $"Server error. {webEx.Message}";
-
-                PromptSingle($"Vote failed:\n{error}", null, "Ok");
-            }
+            }));
         }
     }
 }
