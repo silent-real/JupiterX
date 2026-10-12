@@ -473,7 +473,7 @@ namespace JupiterX.Mods
                     typeof(Recorder).GetProperty("DebugEchoMode")?.SetValue(component, true);
                 }
                 AudioIsPlaying = true;
-                RecoverTime = LoopAudio ? -1f : Time.time + clip.length + 0.4f;
+                RecoverTime = LoopAudio ? -1f : Time.time + clip.length + 0.05f;
             }
             catch { }
         }
