@@ -178,28 +178,26 @@ namespace JupiterX.Mods
             Buttons.GetIndex("Volume").overlapText = $"Volume <color=grey>[</color><color=cyan>" + volume + "</color><color=grey>]</color>";
         }
 
-        public static string LoadSoundFromURL(string resourcePath, string fileName)
+        public static void LoadSoundFromURL(string resourcePath, string fileName)
         {
             string folderName = "JupiterX";
             string fullPath = Path.Combine(folderName, fileName);
-            try
+            if (!Directory.Exists(folderName))
+                Directory.CreateDirectory(folderName);
+            if (File.Exists(fullPath))
             {
-                if (!Directory.Exists(folderName))
-                    Directory.CreateDirectory(folderName);
-                if (!File.Exists(fullPath))
-                {
-                    WebWrapper.DownloadFile(resourcePath, fullPath, b =>
-                    {
-                        if (b == false)
-                        {
-                            NotificationManager.SendNotification($"Download failed for file {resourcePath}");
-                        }
-                    });
-                }
-                LoadAndPlaySound(fileName);
-                return fullPath;
+                LoadAndPlaySound(fullPath);
+                return;
             }
-            catch { return null; }
+            WebWrapper.DownloadFile(resourcePath, fullPath, success => RunOnMain(() =>
+            {
+                if (!success || !File.Exists(fullPath))
+                {
+                    NotificationManager.SendNotification($"Download failed for {fileName}", 4f);
+                    return;
+                }
+                LoadAndPlaySound(fullPath);
+            }));
         }
 
 
@@ -229,9 +227,7 @@ namespace JupiterX.Mods
                 File.Delete("JupiterX/" + filename);
             if (audioFilePool.ContainsKey(name))
                 audioFilePool.Remove(name);
-            AudioClip soundDownloaded = (AudioClip)LoadSoundFromURL(url, filename);
-            if (soundDownloaded.length < 20f)
-                Play2DAudio(soundDownloaded, 1f);
+            LoadSoundFromURL(url, filename);
         }
 
         public static string GetFileExtension(string fileName) =>
@@ -277,15 +273,18 @@ namespace JupiterX.Mods
         {
             if (!File.Exists(soundpath))
                 return;
-
-            string extension = Path.GetExtension(soundpath).ToLowerInvariant();
             string clipName = Path.GetFileNameWithoutExtension(soundpath);
-
+            if (audioFilePool.TryGetValue(soundpath, out AudioClip cached) && cached != null)
+            {
+                if (PhotonNetwork.InRoom) PlayAudioThroughMicrophone(cached);
+                else PlayClipNotInRoom(cached);
+                return;
+            }
+            string extension = Path.GetExtension(soundpath).ToLowerInvariant();
             var t = new System.Threading.Thread(() =>
             {
                 float[] samples = null;
                 int channels = 0, sampleRate = 0;
-
                 try
                 {
                     if (extension == ".wav")
@@ -299,40 +298,34 @@ namespace JupiterX.Mods
                     }
                 }
                 catch { samples = null; }
-
                 if (samples == null || channels <= 0 || sampleRate <= 0)
                     return;
-
                 RunOnMain(() =>
                 {
                     int sampleCount = samples.Length / channels;
                     AudioClip clip = AudioClip.Create(clipName, sampleCount, channels, sampleRate, false);
-                    Plugin.StartCoroutine(UploadAndPlay(clip, samples));
+                    Plugin.StartCoroutine(UploadAndPlay(clip, samples, soundpath));
                 });
             });
             t.IsBackground = true;
             t.Start();
         }
 
-        private static System.Collections.IEnumerator UploadAndPlay(AudioClip clip, float[] samples)
+        private static System.Collections.IEnumerator UploadAndPlay(AudioClip clip, float[] samples, string soundpath)
         {
-            float gain = Mathf.Clamp(volume / 5f, 0f, 2f);
             const int chunk = 131072;
             int offset = 0;
-
             while (offset < samples.Length)
             {
                 int count = Math.Min(chunk, samples.Length - offset);
                 float[] slice = new float[count];
                 Array.Copy(samples, offset, slice, 0, count);
-                if (gain != 1f)
-                    for (int i = 0; i < count; i++)
-                        slice[i] = Mathf.Clamp(slice[i] * gain, -1f, 1f);
                 clip.SetData(slice, offset / clip.channels);
                 offset += count;
                 yield return null;
             }
-
+            if (!string.IsNullOrEmpty(soundpath))
+                audioFilePool[soundpath] = clip;
             if (PhotonNetwork.InRoom)
                 PlayAudioThroughMicrophone(clip);
             else
