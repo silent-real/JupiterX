@@ -226,10 +226,10 @@ namespace JupiterX.Menu
 
             if (pointerTrail && reference != null)
             {
-                TrailRenderer trail = reference.GetComponent<TrailRenderer>();
+                TrailRenderer trail = reference.GetOrAddComponent<TrailRenderer>();
                 if (trail == null)
                 {
-                    trail = reference.AddComponent<TrailRenderer>();
+                    trail = reference.GetOrAddComponent<TrailRenderer>();
                     _trailMat ??= new Material(Shader.Find("Sprites/Default"));
                     trail.startColor = backgroundColor.GetColor(0);
                     trail.endColor = backgroundColor.GetColor(1);
@@ -293,7 +293,7 @@ namespace JupiterX.Menu
                 UnityEngine.Object.Destroy(outlineMenu.GetComponent<BoxCollider>());
                 outlineMenu.transform.localScale = new Vector3(0.08f, 1.05f, 1.05f);
                 outlineMenu.transform.position = new Vector3(0.05f, 0f, 0f);
-                outlineMenu.GetComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
+                outlineMenu.GetOrAddComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
                 if (Rounding)
                     RoundMenuObject(outlineMenu);
             }
@@ -358,7 +358,7 @@ namespace JupiterX.Menu
 			text.alignment = TextAnchor.MiddleCenter;
 			text.resizeTextForBestFit = true;
 			text.resizeTextMinSize = 0;
-			RectTransform component = text.GetComponent<RectTransform>();
+			RectTransform component = text.GetOrAddComponent<RectTransform>();
 			component.localPosition = Vector3.zero;
 			component.sizeDelta = new Vector2(0.28f, 0.05f);
             if (NoAutoSizeText)
@@ -391,7 +391,7 @@ namespace JupiterX.Menu
                 buildLabel.alignment = TextAnchor.MiddleRight;
                 buildLabel.resizeTextForBestFit = true;
                 buildLabel.resizeTextMinSize = 0;
-                component = buildLabel.GetComponent<RectTransform>();
+                component = buildLabel.GetOrAddComponent<RectTransform>();
                 component.localPosition = Vector3.zero;
                 component.sizeDelta = new Vector2(0.28f, 0.02f);
                 component.position = new Vector3(0.04f, 0.0f, -0.17f);
@@ -424,7 +424,7 @@ namespace JupiterX.Menu
                 if (uppercaseMode)
                     fpsObject.text = fpsObject.text.ToUpper();
 
-                RectTransform component2 = fpsObject.GetComponent<RectTransform>();
+                RectTransform component2 = fpsObject.GetOrAddComponent<RectTransform>();
                 component2.localPosition = Vector3.zero;
                 component2.sizeDelta = new Vector2(0.28f, 0.02f);
                 if (NoAutoSizeText)
@@ -465,7 +465,7 @@ namespace JupiterX.Menu
             GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
 			UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
-			gameObject.GetComponent<BoxCollider>().isTrigger = true;
+			gameObject.GetOrAddComponent<BoxCollider>().isTrigger = true;
 			gameObject.transform.parent = menu.transform;
 			gameObject.transform.rotation = Quaternion.identity;
 			gameObject.transform.localScale = Utility.PageObjScale;
@@ -490,7 +490,7 @@ namespace JupiterX.Menu
 			text.alignment = TextAnchor.MiddleCenter;
 			text.resizeTextForBestFit = true;
 			text.resizeTextMinSize = 0;
-			component = text.GetComponent<RectTransform>();
+			component = text.GetOrAddComponent<RectTransform>();
 			component.localPosition = Vector3.zero;
 			component.sizeDelta = new Vector2(0.2f, 0.03f);
             if (NoAutoSizeText)
@@ -501,7 +501,7 @@ namespace JupiterX.Menu
 			GameObject gameObject2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
 			UnityEngine.Object.Destroy(gameObject2.GetComponent<Rigidbody>());
-            gameObject2.GetComponent<BoxCollider>().isTrigger = true;
+            gameObject2.GetOrAddComponent<BoxCollider>().isTrigger = true;
             gameObject2.transform.parent = menu.transform;
             gameObject2.transform.rotation = Quaternion.identity;
             gameObject2.transform.localScale = Utility.PageObjScale;
@@ -531,7 +531,7 @@ namespace JupiterX.Menu
 			text.alignment = TextAnchor.MiddleCenter;
 			text.resizeTextForBestFit = true;
 			text.resizeTextMinSize = 0;
-			component = text.GetComponent<RectTransform>();
+			component = text.GetOrAddComponent<RectTransform>();
 			component.localPosition = Vector3.zero;
 			component.sizeDelta = new Vector2(0.2f, 0.03f);
             if (NoAutoSizeText)
@@ -612,7 +612,7 @@ namespace JupiterX.Menu
             if (!method.label)
             {
                 GameObject buttonObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                buttonObject.GetComponent<BoxCollider>().isTrigger = true;
+                buttonObject.GetOrAddComponent<BoxCollider>().isTrigger = true;
                 buttonObject.transform.parent = menu.transform;
                 buttonObject.transform.rotation = Quaternion.identity;
 
@@ -642,11 +642,11 @@ namespace JupiterX.Menu
                 {
                     if (method.enabled)
                     {
-                        buttonObject.GetComponent<Renderer>().material.color = buttonColors[1].GetCurrentColor();
+                        buttonObject.GetOrAddComponent<Renderer>().material.color = buttonColors[1].GetCurrentColor();
                     }
                     else
                     {
-                        buttonObject.GetComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
+                        buttonObject.GetOrAddComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
                     }
                 }
 
@@ -692,7 +692,7 @@ namespace JupiterX.Menu
             buttonText.resizeTextForBestFit = true;
             buttonText.resizeTextMinSize = 0;
 
-            RectTransform textTransform = buttonText.GetComponent<RectTransform>();
+            RectTransform textTransform = buttonText.GetOrAddComponent<RectTransform>();
             textTransform.localPosition = Vector3.zero;
             textTransform.sizeDelta = new Vector2(method.incremental && incrementalButtons ? .18f : .2f, .03f * (0.1f / 0.1f));
             if (NoAutoSizeText)
@@ -708,7 +708,7 @@ namespace JupiterX.Menu
             {
                 GameObject buttonObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                buttonObject.GetComponent<BoxCollider>().isTrigger = true;
+                buttonObject.GetOrAddComponent<BoxCollider>().isTrigger = true;
                 buttonObject.transform.parent = menu.transform;
                 buttonObject.transform.rotation = Quaternion.identity;
 
@@ -754,7 +754,7 @@ namespace JupiterX.Menu
             buttonText.resizeTextForBestFit = true;
             buttonText.resizeTextMinSize = 0;
 
-            RectTransform textTransform = buttonText.GetComponent<RectTransform>();
+            RectTransform textTransform = buttonText.GetOrAddComponent<RectTransform>();
             textTransform.localPosition = Vector3.zero;
             textTransform.sizeDelta = new Vector2(.2f, .03f * (0.1f / 0.1f));
 
@@ -793,7 +793,7 @@ namespace JupiterX.Menu
         {
             GameObject buttonObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-            buttonObject.GetComponent<BoxCollider>().isTrigger = true;
+            buttonObject.GetOrAddComponent<BoxCollider>().isTrigger = true;
             buttonObject.transform.parent = menu.transform;
             buttonObject.transform.rotation = Quaternion.identity;
 
@@ -832,7 +832,7 @@ namespace JupiterX.Menu
             returnImage.material.SetTexture("_MainTex", returnIcon);
             returnImage.color = textColors[1];
 
-            RectTransform imageTransform = returnImage.GetComponent<RectTransform>();
+            RectTransform imageTransform = returnImage.GetOrAddComponent<RectTransform>();
             imageTransform.localPosition = Vector3.zero;
             imageTransform.sizeDelta = new Vector2(.03f, .03f);
 
@@ -848,7 +848,7 @@ namespace JupiterX.Menu
         {
             GameObject buttonObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-            buttonObject.GetComponent<BoxCollider>().isTrigger = true;
+            buttonObject.GetOrAddComponent<BoxCollider>().isTrigger = true;
             buttonObject.transform.parent = menu.transform;
             buttonObject.transform.rotation = Quaternion.identity;
 
@@ -877,7 +877,7 @@ namespace JupiterX.Menu
             searchImage.material.SetTexture("_MainTex", searchIcon);
             searchImage.color = textColors[KeyboardManager.KeyboardEnabled ? 2 : 1];
 
-            RectTransform imageTransform = searchImage.GetComponent<RectTransform>();
+            RectTransform imageTransform = searchImage.GetOrAddComponent<RectTransform>();
             imageTransform.localPosition = Vector3.zero;
             imageTransform.sizeDelta = new Vector2(.03f, .03f);
 
@@ -948,12 +948,12 @@ namespace JupiterX.Menu
             reference.transform.parent = RightHanded ? GorillaTagger.Instance.leftHandTransform : GorillaTagger.Instance.rightHandTransform;
             reference.transform.localPosition = new Vector3(0.013f, -0.025f, 0.1f);
             reference.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-			buttonCollider = reference.GetComponent<SphereCollider>();
-            reference.GetComponent<Renderer>().material.color = backgroundColor.GetCurrentColor();
+			buttonCollider = reference.GetOrAddComponent<SphereCollider>();
+            reference.GetOrAddComponent<Renderer>().material.color = backgroundColor.GetCurrentColor();
             if (hidepointer)
-                reference.GetComponent<Renderer>().enabled = false;
+                reference.GetOrAddComponent<Renderer>().enabled = false;
             else
-                reference.GetComponent<Renderer>().enabled = true;
+                reference.GetOrAddComponent<Renderer>().enabled = true;
 		}
 
         public static void Toggle(string buttonText, bool fromMenu = false, bool ignoreForce = false)
@@ -1322,7 +1322,7 @@ namespace JupiterX.Menu
             promptText.alignment = TextAnchor.MiddleCenter;
             promptText.resizeTextForBestFit = true;
             promptText.resizeTextMinSize = 0;
-            RectTransform component = promptText.GetComponent<RectTransform>();
+            RectTransform component = promptText.GetOrAddComponent<RectTransform>();
             component.sizeDelta = new Vector2(0.28f, CurrentPrompt.IsText ? 0.25f : 0.28f);
 
             component.localPosition = new Vector3(0.06f, 0f, CurrentPrompt.IsText ? -0.025f : 0f);
@@ -1349,7 +1349,7 @@ namespace JupiterX.Menu
 
                 promptImage.material = promptMat;
 
-                RectTransform imageTransform = promptImage.GetComponent<RectTransform>();
+                RectTransform imageTransform = promptImage.GetOrAddComponent<RectTransform>();
                 imageTransform.localPosition = Vector3.zero;
                 imageTransform.sizeDelta = new Vector2(.2f, .2f);
 
@@ -1360,7 +1360,7 @@ namespace JupiterX.Menu
             {
                 GameObject button = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                button.GetComponent<BoxCollider>().isTrigger = true;
+                button.GetOrAddComponent<BoxCollider>().isTrigger = true;
                 button.transform.parent = menu.transform;
                 button.transform.rotation = Quaternion.identity;
                 button.transform.localScale = new Vector3(0.09f, CurrentPrompt.DeclineText == null ? 0.9f : 0.4375f, 0.08f);
@@ -1384,7 +1384,7 @@ namespace JupiterX.Menu
                 text.resizeTextMinSize = 0;
                 text.color = textColors[1];
 
-                RectTransform textRect = text.GetComponent<RectTransform>();
+                RectTransform textRect = text.GetOrAddComponent<RectTransform>();
                 textRect.sizeDelta = new Vector2(0.2f, 0.03f);
                 textRect.localPosition = new Vector3(0.064f, CurrentPrompt.DeclineText != null ? 0.075f : 0f, -0.16f);
                 textRect.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
@@ -1397,7 +1397,7 @@ namespace JupiterX.Menu
             {
                 GameObject button = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                button.GetComponent<BoxCollider>().isTrigger = true;
+                button.GetOrAddComponent<BoxCollider>().isTrigger = true;
                 button.transform.parent = menu.transform;
                 button.transform.rotation = Quaternion.identity;
                 button.transform.localScale = new Vector3(0.09f, 0.4375f, 0.08f);
@@ -1421,7 +1421,7 @@ namespace JupiterX.Menu
 
                 text.color = textColors[1];
 
-                RectTransform textRect = text.GetComponent<RectTransform>();
+                RectTransform textRect = text.GetOrAddComponent<RectTransform>();
                 textRect.sizeDelta = new Vector2(0.2f, 0.03f);
 
                 textRect.localPosition = new Vector3(0.064f, -0.075f, -0.16f);
@@ -1664,45 +1664,45 @@ namespace JupiterX.Menu
                 return;
             }
 
-            Renderer ToRoundRenderer = toRound.GetComponent<Renderer>();
+            Renderer ToRoundRenderer = toRound.GetOrAddComponent<Renderer>();
 
             GameObject BaseA = FastPrimitive(PrimitiveType.Cube);
-            BaseA.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            BaseA.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             BaseA.transform.parent = menu.transform;
             BaseA.transform.rotation = Quaternion.identity;
             BaseA.transform.localPosition = toRound.transform.localPosition;
             BaseA.transform.localScale = toRound.transform.localScale + new Vector3(0f, Bevel * -2.55f, 0f);
 
             GameObject BaseB = FastPrimitive(PrimitiveType.Cube);
-            BaseB.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            BaseB.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             BaseB.transform.parent = menu.transform;
             BaseB.transform.rotation = Quaternion.identity;
             BaseB.transform.localPosition = toRound.transform.localPosition;
             BaseB.transform.localScale = toRound.transform.localScale + new Vector3(0f, 0f, -Bevel * 2f);
 
             GameObject RoundCornerA = FastPrimitive(PrimitiveType.Cylinder);
-            RoundCornerA.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            RoundCornerA.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             RoundCornerA.transform.parent = menu.transform;
             RoundCornerA.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
             RoundCornerA.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, toRound.transform.localScale.y / 2f - Bevel * 1.275f, toRound.transform.localScale.z / 2f - Bevel);
             RoundCornerA.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
             GameObject RoundCornerB = FastPrimitive(PrimitiveType.Cylinder);
-            RoundCornerB.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            RoundCornerB.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             RoundCornerB.transform.parent = menu.transform;
             RoundCornerB.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
             RoundCornerB.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, -(toRound.transform.localScale.y / 2f) + Bevel * 1.275f, toRound.transform.localScale.z / 2f - Bevel);
             RoundCornerB.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
             GameObject RoundCornerC = FastPrimitive(PrimitiveType.Cylinder);
-            RoundCornerC.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            RoundCornerC.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             RoundCornerC.transform.parent = menu.transform;
             RoundCornerC.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
             RoundCornerC.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, toRound.transform.localScale.y / 2f - Bevel * 1.275f, -(toRound.transform.localScale.z / 2f) + Bevel);
             RoundCornerC.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
             GameObject RoundCornerD = FastPrimitive(PrimitiveType.Cylinder);
-            RoundCornerD.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
+            RoundCornerD.GetOrAddComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             RoundCornerD.transform.parent = menu.transform;
             RoundCornerD.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
             RoundCornerD.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, -(toRound.transform.localScale.y / 2f) + Bevel * 1.275f, -(toRound.transform.localScale.z / 2f) + Bevel);
@@ -1730,9 +1730,9 @@ namespace JupiterX.Menu
             static GameObject CreatePrimitive(PrimitiveType type, Transform parent, bool rendererEnabled)
             {
                 GameObject obj = GameObject.CreatePrimitive(type);
-                obj.GetComponent<Renderer>().enabled = rendererEnabled;
+                obj.GetOrAddComponent<Renderer>().enabled = rendererEnabled;
 
-                Collider collider = obj.GetComponent<Collider>();
+                Collider collider = obj.GetOrAddComponent<Collider>();
                 if (collider != null)
                     GameObject.Destroy(collider);
 
@@ -1740,7 +1740,7 @@ namespace JupiterX.Menu
                 return obj;
             }
 
-            Renderer renderer = toRound.GetComponent<Renderer>();
+            Renderer renderer = toRound.GetOrAddComponent<Renderer>();
             if (renderer == null) return;
 
             Transform parent = toRound.transform;
@@ -1829,14 +1829,14 @@ namespace JupiterX.Menu
             {
                 Pointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 Pointer.transform.localScale = smallGunPointer ? Vector3.one * 0.03f : Vector3.one * 0.1f;
-                var renderer = Pointer.GetComponent<Renderer>();
+                var renderer = Pointer.GetOrAddComponent<Renderer>();
                 renderer.enabled = disableGunPointer ? false : true;
                 renderer.material.shader = Utility.GUIShader();
-                GameObject.Destroy(Pointer.GetComponent<Collider>());
+                GameObject.Destroy(Pointer.GetOrAddComponent<Collider>());
             }
 
             Color gunColor = gunLocked || GetGunInput(true) ? buttonColors[1].GetCurrentColor() : buttonColors[0].GetCurrentColor();
-            Pointer.GetComponent<Renderer>().material.color = gunColor;
+            Pointer.GetOrAddComponent<Renderer>().material.color = gunColor;
 
             Transform gunHand = SwapGunHand ? GorillaTagger.Instance.leftHandTransform : GorillaTagger.Instance.rightHandTransform;
 
@@ -2050,7 +2050,7 @@ namespace JupiterX.Menu
                 if (_cubeMesh == null)
                 {
                     GameObject tmp = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    _cubeMesh = tmp.GetComponent<MeshFilter>().sharedMesh;
+                    _cubeMesh = tmp.GetOrAddComponent<MeshFilter>().sharedMesh;
                     GameObject.Destroy(tmp);
                 }
                 return _cubeMesh;
@@ -2060,7 +2060,7 @@ namespace JupiterX.Menu
                 if (_cylinderMesh == null)
                 {
                     GameObject tmp = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                    _cylinderMesh = tmp.GetComponent<MeshFilter>().sharedMesh;
+                    _cylinderMesh = tmp.GetOrAddComponent<MeshFilter>().sharedMesh;
                     GameObject.Destroy(tmp);
                 }
                 return _cylinderMesh;
@@ -2070,8 +2070,8 @@ namespace JupiterX.Menu
         private static GameObject FastPrimitive(PrimitiveType type)
         {
             GameObject go = new GameObject("rnd");
-            go.AddComponent<MeshFilter>().sharedMesh = GetPrimitiveMesh(type);
-            MeshRenderer mr = go.AddComponent<MeshRenderer>();
+            go.GetOrAddComponent<MeshFilter>().sharedMesh = GetPrimitiveMesh(type);
+            MeshRenderer mr = go.GetOrAddComponent<MeshRenderer>();
             if (_roundMat == null)
                 _roundMat = new Material(Utility.StandardShader());
             mr.sharedMaterial = _roundMat;
