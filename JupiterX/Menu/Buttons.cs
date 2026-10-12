@@ -393,7 +393,7 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "UnMute Gun", method =() => Fun.UnMuteGun(), isTogglable = true, toolTip = "Lets you unmute the player you shoot the gun at." },
                 new ButtonInfo { buttonText = "UnMute All", method =() => Fun.UnMuteAll(), isTogglable = false, toolTip = "Lets you unmute everyone in the current room." },
 
-                new ButtonInfo { buttonText = "Report Gun", method =() => Fun.ReportGun(), isTogglable = false, toolTip = "Reports the person who you shoot at for cheating." },
+                new ButtonInfo { buttonText = "Report Gun", method =() => Fun.ReportGun(), isTogglable = true, toolTip = "Reports the person who you shoot at for cheating." },
                 new ButtonInfo { buttonText = "Report All", method =() => Fun.ReportAll(), isTogglable = false, toolTip = "Reports everyone in the lobby for cheating." },
 
                 new ButtonInfo { buttonText = "Fix Mic", method =() => Fun.FixMic(), isTogglable = false, toolTip = "Fixes your mic."  },
