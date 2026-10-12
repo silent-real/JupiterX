@@ -10,6 +10,7 @@
 //  Version: 2.0.0 | By Silent/Ashley/Nova (@s1lnt)
 // ============================================================
 
+using JupiterX.Managers;
 using Photon.Pun;
 using System.IO;
 
@@ -40,6 +41,14 @@ namespace JupiterX.Mods
             {
                 PhotonNetwork.LocalPlayer.NickName = File.ReadAllText(filePath);
             }
+        }
+
+        public static void CustomInputName()
+        {
+            KeyboardManager.Input("Enter a custom name", name =>
+            {
+                ChangeName(name, "white");
+            });
         }
     }
 }

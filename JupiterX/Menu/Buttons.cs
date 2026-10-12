@@ -424,7 +424,8 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "PBBV Name", method =() => Name.ChangeName("\nPBBV", "white"), isTogglable = true, toolTip = "Sets your name as PBBV." },
                 new ButtonInfo { buttonText = "ECHO Name", method =() => Name.ChangeName("\nECHO", "white"), isTogglable = true, toolTip = "Sets your name as ECHO." },
                 new ButtonInfo { buttonText = "DAISY09 Name", method =() => Name.ChangeName("\nDAISY09", "white"), isTogglable = true, toolTip = "Sets your name as DAISY09." },
-                new ButtonInfo { buttonText = "Custom Name", method =() => Name.CustomName(), isTogglable = true, toolTip = "Makes your name be the custom name you set in a file." },
+                new ButtonInfo { buttonText = "Custom File Name", method =() => Name.CustomName(), isTogglable = true, toolTip = "Makes your name be the custom name you set in a file." },
+                new ButtonInfo { buttonText = "Custom Name", method =() => Name.CustomInputName(), isTogglable = true, toolTip = "Makes your name be the custom name you set with the keyboard." },
 
                 new ButtonInfo { buttonText = "No Name", method =() => Name.ChangeName("\n\n", "white"), isTogglable = true, toolTip = "Makes you have no name."  },
                 new ButtonInfo { buttonText = "Emoji Name (1)", method =() => Utility.BetaEmojiName(0), isTogglable = true, toolTip = "Sets your name as a emoji."  },
