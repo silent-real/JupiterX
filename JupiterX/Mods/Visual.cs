@@ -198,9 +198,9 @@ namespace JupiterX.Mods
             }
         }
 
-        private static readonly Dictionary<VRRig, Renderer> boxEspPool = new Dictionary<VRRig, Renderer>();
-        private static readonly Dictionary<VRRig, Renderer> capsuleEspPool = new Dictionary<VRRig, Renderer>();
-        private static readonly Dictionary<VRRig, Renderer> sphereEspPool = new Dictionary<VRRig, Renderer>();
+        public static readonly Dictionary<VRRig, Renderer> boxEspPool = new Dictionary<VRRig, Renderer>();
+        public static readonly Dictionary<VRRig, Renderer> capsuleEspPool = new Dictionary<VRRig, Renderer>();
+        public static readonly Dictionary<VRRig, Renderer> sphereEspPool = new Dictionary<VRRig, Renderer>();
 
         private static Material espTaggedMat;
         private static Material espNormalMat;
@@ -262,11 +262,11 @@ namespace JupiterX.Mods
         public static void SphereESP() => UpdateShapeESP(sphereEspPool, PrimitiveType.Sphere);
         public static void DisableSphereESP() => ClearPool(sphereEspPool);
 
-        private static readonly Dictionary<VRRig, TextMesh> nameTagPool = new Dictionary<VRRig, TextMesh>();
-        private static readonly Dictionary<VRRig, TextMesh> IDnameTagPool = new Dictionary<VRRig, TextMesh>();
-        private static readonly Dictionary<VRRig, TextMesh> PlatformnameTagPool = new Dictionary<VRRig, TextMesh>();
-        private static readonly Dictionary<VRRig, TextMesh> MasternameTagPool = new Dictionary<VRRig, TextMesh>();
-        private static readonly Dictionary<VRRig, TextMesh> TaggednameTagPool = new Dictionary<VRRig, TextMesh>();
+        public static readonly Dictionary<VRRig, TextMesh> nameTagPool = new Dictionary<VRRig, TextMesh>();
+        public static readonly Dictionary<VRRig, TextMesh> IDnameTagPool = new Dictionary<VRRig, TextMesh>();
+        public static readonly Dictionary<VRRig, TextMesh> PlatformnameTagPool = new Dictionary<VRRig, TextMesh>();
+        public static readonly Dictionary<VRRig, TextMesh> MasternameTagPool = new Dictionary<VRRig, TextMesh>();
+        public static readonly Dictionary<VRRig, TextMesh> TaggednameTagPool = new Dictionary<VRRig, TextMesh>();
 
         private static TextMesh CreateTextMesh(string name, int fontSize, float characterSize, FontStyle style = FontStyle.Normal)
         {

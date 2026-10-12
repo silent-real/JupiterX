@@ -12,7 +12,9 @@
 
 using easyInputs;
 using JupiterX.Classes.Menu;
+using JupiterX.Extensions;
 using JupiterX.Managers;
+using JupiterX.Mods;
 using JupiterX.Notifications;
 using Photon.Pun;
 using System;
@@ -1213,6 +1215,32 @@ namespace JupiterX.Menu
         public static string GetFileExtension(string fileName) =>
             fileName.ToLower().Split('.')[fileName.Split('.').Length - 1];
 
+        public static void CleanVisualsOnLeave(VRRig rig = null)
+        {
+            if (rig)
+            {
+                Visual.boxEspPool.Remove(rig);
+                Visual.capsuleEspPool.Remove(rig);
+                Visual.sphereEspPool.Remove(rig);
+                Visual.nameTagPool.Remove(rig);
+                Visual.IDnameTagPool.Remove(rig);
+                Visual.PlatformnameTagPool.Remove(rig);
+                Visual.MasternameTagPool.Remove(rig);
+                Visual.TaggednameTagPool.Remove(rig);
+            }
+            else
+            {
+                Visual.boxEspPool.Clear();
+                Visual.capsuleEspPool.Clear();
+                Visual.sphereEspPool.Clear();
+                Visual.nameTagPool.Clear();
+                Visual.IDnameTagPool.Clear();
+                Visual.PlatformnameTagPool.Clear();
+                Visual.MasternameTagPool.Clear();
+                Visual.TaggednameTagPool.Clear();
+            }
+        }
+
         public static void OnJoinedRoom()
         {
             lastRoom = PhotonNetwork.CurrentRoom.Name;
@@ -1226,7 +1254,8 @@ namespace JupiterX.Menu
                 NotificationManager.ClearAllNotifications();
 
             if (!disableRoomNotifications)
-                NotificationManager.SendNotification("<color=grey>[</color><color=blue>LEAVE ROOM</color><color=grey>]</color> Room Code: " + lastRoom + "");
+                NotificationManager.SendNotification("<color=grey>[</color><color=blue>LEAVE ROOM</color><color=grey>]</color> Room Code: " + lastRoom);
+            CleanVisualsOnLeave();
         }
 
         public static void OnMasterClientSwitched()
@@ -1253,6 +1282,8 @@ namespace JupiterX.Menu
         {
             if (player != PhotonNetwork.LocalPlayer && !Main.disablePlayerNotifications)
                 NotificationManager.SendNotification($"<color=grey>[</color><color=red>LEAVE</color><color=grey>]</color> Name: {Utility.CleanPlayerName(player.NickName)}");
+
+            CleanVisualsOnLeave(player.Rig());
         }
 
         private static void RenderPrompt()
