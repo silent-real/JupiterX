@@ -1438,7 +1438,6 @@ namespace JupiterX
         public static Text cocText;
         public static Text codeOfConduct;
 
-        public static string lastDeltaTime;
         public static bool FirstLaunch;
         public static VRRig GetVRRigFromPhotonView(PhotonView who)
         {

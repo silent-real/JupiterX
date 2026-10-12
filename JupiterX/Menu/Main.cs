@@ -191,8 +191,6 @@ namespace JupiterX.Menu
                 }
             }
 
-            Utility.lastDeltaTime = (1f / Time.deltaTime).ToString();
-
             // Constant
             try
             {
