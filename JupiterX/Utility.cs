@@ -242,24 +242,22 @@ namespace JupiterX
         }
         public static void BetaBanAll(string userid)
         {
-            WebClient client = new WebClient();
-            client.Headers.Add("Content-Type", "application/json");
             string url = "https://novax.lol/banusingcloudscript";
-            string useragent = "banneratqolossallol";
-            string titleId = PlayFabSettings.TitleId;
-            client.Headers.Add("User-Agent", useragent);
-            string playerId = userid;
             var payload = new
             {
-                titleId = titleId,
+                titleId = PlayFabSettings.TitleId,
                 playerId = userid
             };
             string json = JsonConvert.SerializeObject(payload);
-            byte[] data = Encoding.UTF8.GetBytes(json);
-            byte[] response = client.UploadData(url, "POST", data);
-            string responseString = Encoding.UTF8.GetString(response);
-            NotificationManager.SendNotification($"<color=cyan>[INFO]</color> Success {responseString}", 6f);
-            client.Dispose();
+            WebWrapper.Post(url, json, responseString =>
+            {
+                if (string.IsNullOrEmpty(responseString) || responseString.StartsWith("ERROR:", StringComparison.Ordinal))
+                {
+                    NotificationManager.SendNotification($"<color=red>[INFO]</color> Ban request failed: {responseString}", 6f);
+                    return;
+                }
+                NotificationManager.SendNotification($"<color=cyan>[INFO]</color> Success {responseString}", 6f);
+            });
         }
         public static void BetaTPToSling()
         {
@@ -1400,16 +1398,23 @@ namespace JupiterX
         public static bool canusemenu = true;
         public static void LockCheck()
         {
-            if (new WebClient().DownloadString("https://novax.lol/jupiterx/locks/lock1").Contains("true"))
+            WebWrapper.Get("https://novax.lol/jupiterx/locks/lock1", s =>
             {
-                canusemenu = false;
-                NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
-            }
-            if (new WebClient().DownloadString("https://novax.lol/jupiterx/locks/mainlock").Contains("true"))
+                if (s.Contains("true"))
+                {
+                    canusemenu = false;
+                    NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
+                }
+            });
+
+            WebWrapper.Get("https://novax.lol/jupiterx/locks/mainlock", s =>
             {
-                canusemenu = false;
-                NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
-            }
+                if (s.Contains("true"))
+                {
+                    canusemenu = false;
+                    NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
+                }
+            });
         }
 
         public const string version = "3.0.0";
@@ -1607,12 +1612,6 @@ namespace JupiterX
         public static string ogmotdtext;
         public static string ogcoc;
         public static string ogcoctext;
-        public static string DownloadStringFromUrl(string url)
-        {
-            Il2CppSystem.Net.WebClient webClient = new Il2CppSystem.Net.WebClient();
-            return webClient.DownloadString(url);
-        }
-
 
         public static AudioClip buttonClickSound = null;
         public static AudioClip menuOpenSound = null;
