@@ -1109,19 +1109,30 @@ namespace JupiterX
             PhotonNetwork.SendAllOutgoingCommands();
         }
 
+        private static Shader _standardCached;
         public static Shader StandardShader()
         {
-            if (Shader.Find("GorillaTag/UberShader") == null)
-                return Shader.Find("Standard");
-            else
-                return Shader.Find("GorillaTag/UberShader");
+            if (_standardCached == null)
+            {
+                if (Shader.Find("GorillaTag/UberShader") == null)
+                {
+                    _standardCached = Shader.Find("Standard");
+                }
+                else
+                {
+                    _standardCached = Shader.Find("GorillaTag/UberShader");
+                }
+            }
+            return _standardCached;
         }
 
+        private static Shader _cachedUnlitShader;
         public static Shader UnlitShader() =>
-            Shader.Find("Unlit/Color");
+            _cachedUnlitShader ??= Shader.Find("Unlit/Color");
 
+        private static Shader _cachedGUIShader;
         public static Shader GUIShader() =>
-            Shader.Find("GUI/Text Shader");
+            _cachedGUIShader ??= Shader.Find("GUI/Text Shader");
 
         public static Vector3 ThrowMenu(easyInputs.EasyHand hand) =>
             easyInputs.EasyInputs.GetDeviceVelocity(hand);

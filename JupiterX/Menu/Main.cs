@@ -224,11 +224,12 @@ namespace JupiterX.Menu
 				Utility.Log(string.Format("{0} // Error with executing mods at {1}: {2}", Utility.name, exc.StackTrace, exc.Message), JupxLogType.Error);
 			}
 
-            if (pointerTrail)
+            if (pointerTrail && reference != null)
             {
-                try
+                TrailRenderer trail = reference.GetComponent<TrailRenderer>();
+                if (trail == null)
                 {
-                    TrailRenderer trail = reference.GetOrAddComponent<TrailRenderer>();
+                    trail = reference.AddComponent<TrailRenderer>();
                     _trailMat ??= new Material(Shader.Find("Sprites/Default"));
                     trail.startColor = backgroundColor.GetColor(0);
                     trail.endColor = backgroundColor.GetColor(1);
@@ -238,10 +239,9 @@ namespace JupiterX.Menu
                     trail.material = _trailMat;
                     trail.time = 2f;
                 }
-                catch { }
             }
 
-            if (menuTrail)
+            if (menuTrail && menu != null)
             {
                 try
                 {
@@ -762,13 +762,22 @@ namespace JupiterX.Menu
             textTransform.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
         }
 
+        public static void RefreshButtonStates()
+        {
+            if (menu == null)
+            {
+                CreateMenu();
+                return;
+            }
+            ReloadMenu();
+        }
+
         public static void ReloadMenu()
         {
             if (menu != null)
             {
                 GameObject.Destroy(menu);
                 menu = null;
-
                 CreateMenu();
             }
 
@@ -776,7 +785,6 @@ namespace JupiterX.Menu
             {
                 GameObject.Destroy(reference);
                 reference = null;
-
                 CreateReference();
             }
         }
@@ -791,6 +799,9 @@ namespace JupiterX.Menu
 
             buttonObject.transform.localScale = new Vector3(0.09f, 0.102f, 0.08f);
             buttonObject.transform.localPosition = new Vector3(0.56f, -0.450f, -0.58f);
+
+            if (Rounding)
+                RoundMenuObject(buttonObject);
 
             if (offcenteredPosition)
                 buttonObject.transform.localPosition += new Vector3(0f, 0.16f, 0f);
@@ -980,7 +991,7 @@ namespace JupiterX.Menu
                     {
                         CurrentPrompt.AcceptAction?.Invoke();
                         if (prompts.Count > 0) prompts.RemoveAt(0);
-                        ReloadMenu();
+                        RefreshButtonStates();
                     }
                     return;
 
@@ -989,7 +1000,7 @@ namespace JupiterX.Menu
                     {
                         CurrentPrompt.DeclineAction?.Invoke();
                         if (prompts.Count > 0) prompts.RemoveAt(0);
-                        ReloadMenu();
+                        RefreshButtonStates();
                     }
                     return;
 
@@ -1014,7 +1025,6 @@ namespace JupiterX.Menu
                     HandleButtonAction(buttonText, fromMenu, ignoreForce);
                     break;
             }
-
             ReloadMenu();
         }
 
@@ -1655,72 +1665,50 @@ namespace JupiterX.Menu
             }
 
             Renderer ToRoundRenderer = toRound.GetComponent<Renderer>();
-            GameObject BaseA = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            BaseA.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(BaseA.GetComponent<Collider>());
 
+            GameObject BaseA = FastPrimitive(PrimitiveType.Cube);
+            BaseA.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
             BaseA.transform.parent = menu.transform;
             BaseA.transform.rotation = Quaternion.identity;
             BaseA.transform.localPosition = toRound.transform.localPosition;
             BaseA.transform.localScale = toRound.transform.localScale + new Vector3(0f, Bevel * -2.55f, 0f);
 
-            GameObject BaseB = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject BaseB = FastPrimitive(PrimitiveType.Cube);
             BaseB.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(BaseB.GetComponent<Collider>());
-
             BaseB.transform.parent = menu.transform;
             BaseB.transform.rotation = Quaternion.identity;
             BaseB.transform.localPosition = toRound.transform.localPosition;
             BaseB.transform.localScale = toRound.transform.localScale + new Vector3(0f, 0f, -Bevel * 2f);
 
-            GameObject RoundCornerA = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            GameObject RoundCornerA = FastPrimitive(PrimitiveType.Cylinder);
             RoundCornerA.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(RoundCornerA.GetComponent<Collider>());
-
             RoundCornerA.transform.parent = menu.transform;
             RoundCornerA.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
-
             RoundCornerA.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, toRound.transform.localScale.y / 2f - Bevel * 1.275f, toRound.transform.localScale.z / 2f - Bevel);
             RoundCornerA.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
-            GameObject RoundCornerB = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            GameObject RoundCornerB = FastPrimitive(PrimitiveType.Cylinder);
             RoundCornerB.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(RoundCornerB.GetComponent<Collider>());
-
             RoundCornerB.transform.parent = menu.transform;
             RoundCornerB.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
-
             RoundCornerB.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, -(toRound.transform.localScale.y / 2f) + Bevel * 1.275f, toRound.transform.localScale.z / 2f - Bevel);
             RoundCornerB.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
-            GameObject RoundCornerC = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            GameObject RoundCornerC = FastPrimitive(PrimitiveType.Cylinder);
             RoundCornerC.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(RoundCornerC.GetComponent<Collider>());
-
             RoundCornerC.transform.parent = menu.transform;
             RoundCornerC.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
-
             RoundCornerC.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, toRound.transform.localScale.y / 2f - Bevel * 1.275f, -(toRound.transform.localScale.z / 2f) + Bevel);
             RoundCornerC.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
-            GameObject RoundCornerD = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            GameObject RoundCornerD = FastPrimitive(PrimitiveType.Cylinder);
             RoundCornerD.GetComponent<Renderer>().enabled = ToRoundRenderer.enabled;
-            GameObject.Destroy(RoundCornerD.GetComponent<Collider>());
-
             RoundCornerD.transform.parent = menu.transform;
             RoundCornerD.transform.rotation = Quaternion.identity * Quaternion.Euler(0f, 0f, 90f);
-
             RoundCornerD.transform.localPosition = toRound.transform.localPosition + new Vector3(0f, -(toRound.transform.localScale.y / 2f) + Bevel * 1.275f, -(toRound.transform.localScale.z / 2f) + Bevel);
             RoundCornerD.transform.localScale = new Vector3(Bevel * 2.55f, toRound.transform.localScale.x / 2f, Bevel * 2f);
 
-            GameObject[] ToChange = {
-                BaseA,
-                BaseB,
-                RoundCornerA,
-                RoundCornerB,
-                RoundCornerC,
-                RoundCornerD
-            };
+            GameObject[] ToChange = { BaseA, BaseB, RoundCornerA, RoundCornerB, RoundCornerC, RoundCornerD };
 
             foreach (GameObject Changed in ToChange)
             {
@@ -2050,5 +2038,44 @@ namespace JupiterX.Menu
             new[] { transform.forward, -transform.up, 
                 transform == GorillaTagger.Instance.rightHandTransform ? GorillaTagger.Instance.rightHandTransform.forward : GorillaTagger.Instance.leftHandTransform.forward, 
                 GorillaTagger.Instance.headCollider.transform.forward }[GunDirection];
+
+        private static Mesh _cubeMesh;
+        private static Mesh _cylinderMesh;
+        private static Material _roundMat;
+
+        private static Mesh GetPrimitiveMesh(PrimitiveType type)
+        {
+            if (type == PrimitiveType.Cube)
+            {
+                if (_cubeMesh == null)
+                {
+                    GameObject tmp = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    _cubeMesh = tmp.GetComponent<MeshFilter>().sharedMesh;
+                    GameObject.Destroy(tmp);
+                }
+                return _cubeMesh;
+            }
+            else
+            {
+                if (_cylinderMesh == null)
+                {
+                    GameObject tmp = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                    _cylinderMesh = tmp.GetComponent<MeshFilter>().sharedMesh;
+                    GameObject.Destroy(tmp);
+                }
+                return _cylinderMesh;
+            }
+        }
+
+        private static GameObject FastPrimitive(PrimitiveType type)
+        {
+            GameObject go = new GameObject("rnd");
+            go.AddComponent<MeshFilter>().sharedMesh = GetPrimitiveMesh(type);
+            MeshRenderer mr = go.AddComponent<MeshRenderer>();
+            if (_roundMat == null)
+                _roundMat = new Material(Utility.StandardShader());
+            mr.sharedMaterial = _roundMat;
+            return go;
+        }
     }
 }
