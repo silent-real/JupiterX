@@ -83,14 +83,23 @@ namespace JupiterX.Menu
             Utility.LeftJoystick = EasyInputs.GetThumbStickButtonDown(EasyHand.LeftHand);
             Utility.LeftJoystickAxis = EasyInputs.GetThumbStick2DAxis(EasyHand.LeftHand);
 
+            KeyboardManager.Update();
+
             try
-			{
+            {
                 Utility.toOpen = bothHands ? (Utility.LeftSecondary || Utility.RightSecondary) : (!RightHanded && Utility.LeftSecondary || (RightHanded && Utility.RightSecondary));
 
                 if (menu == null)
-				{
-					if (Utility.toOpen)
-					{
+                {
+                    if (KeyboardManager.KeyboardEnabled)
+                    {
+                        CreateMenu();
+                        KeyboardManager.PositionMenu(menu);
+                        if (reference == null)
+                            CreateReference();
+                    }
+                    else if (Utility.toOpen)
+                    {
                         if (!DisableMenuSounds)
                             Utility.PlaySound(Utility.menuOpenSound);
                         CreateMenu();
@@ -107,17 +116,21 @@ namespace JupiterX.Menu
                             Plugin.StartCoroutine(GrowCoroutine());
 
                         RecenterMenu();
-						if (reference == null)
-						    CreateReference();
-					}
-				}
-				else
-				{
-					if (Utility.toOpen)
-					    RecenterMenu();
-					else
-					{
-						if (!dynamicAnimations)
+                        if (reference == null)
+                            CreateReference();
+                    }
+                }
+                else
+                {
+                    if (KeyboardManager.KeyboardEnabled)
+                        KeyboardManager.PositionMenu(menu);
+                    else if (Utility.toOpen)
+                        RecenterMenu();
+                    else if (KeyboardManager.KeepMenuOpen || KeyboardManager.InputActive)
+                    { }
+                    else
+                    {
+                        if (!dynamicAnimations)
                         {
                             Rigidbody comp = menu.GetOrAddComponent<Rigidbody>();
                             switch (Utility.MainDropType)
@@ -157,12 +170,12 @@ namespace JupiterX.Menu
                         if (!DisableMenuSounds)
                             Utility.PlaySound(Utility.menuCloseSound);
                     }
-				}
-			}
-			catch (Exception exc)
-			{
-				Utility.Log(string.Format("{0} // Error with drawing {1} : {2}", Utility.name, exc.StackTrace, exc.Message), JupxLogType.Error);
-			}
+                }
+            }
+            catch (Exception exc)
+            {
+                Utility.Log(string.Format("{0} // Error with drawing {1} : {2}", Utility.name, exc.StackTrace, exc.Message), JupxLogType.Error);
+            }
 
             if (Utility.isTriggers)
             {
@@ -457,8 +470,18 @@ namespace JupiterX.Menu
                 }
             }
 
-            if (!disableReturnButton && Buttons.CurrentCategoryName != "Main")
-                AddReturnButton(false);
+            // Search Buttons
+            if (!disableSearchButton)
+            {
+                AddSearchButton();
+                if (!disableReturnButton && CurrentCategoryName != "Main")
+                    AddReturnButton(true);
+            }
+            else
+            {
+                if (!disableReturnButton && CurrentCategoryName != "Main")
+                    AddReturnButton(false);
+            }
 
             // Buttons
             // Page Buttons
@@ -554,46 +577,56 @@ namespace JupiterX.Menu
             {
                 try
                 {
-                    if (CurrentCategoryName == "Main")
-                    {
-                        List<ButtonInfo> buttons = new List<ButtonInfo>();
-                        foreach (var button in Buttons.buttons[CurrentCategoryIndex])
-                        {
-                            if (!skipButtons.Contains(button.buttonText))
-                                buttons.Add(button);
-                        }
-                        renderButtons = buttons.ToArray();
-                    }
-                    else if (CurrentCategoryName == "Favorite")
-                    {
-                        foreach (var favoriteMod in favorites.Where(favoriteMod => Buttons.GetIndex(favoriteMod) == null).ToList())
-                            favorites.Remove(favoriteMod);
-                        renderButtons = StringsToInfos(favorites.ToArray());
-                    }
-                    else if (CurrentCategoryName == "Enabled")
-                    {
-                        List<ButtonInfo> enabledMods = new List<ButtonInfo>() { };
-                        int categoryIndex = 0;
-                        foreach (ButtonInfo[] buttonlist in buttons)
-                        {
-                            foreach (ButtonInfo v in buttonlist)
-                            {
-                                if (v.enabled && (!categoryNames[categoryIndex].Contains("Settings")))
-                                    enabledMods.Add(v);
-                            }
-                            categoryIndex++;
-                        }
-                        enabledMods = enabledMods.OrderBy(v => v.buttonText).ToList();
-                        enabledMods.Insert(0, GetIndex("Exit Enabled"));
 
-                        renderButtons = enabledMods.ToArray();
+                    if (KeyboardManager.KeyboardEnabled)
+                    {
+                        buttonIndexOffset = 1;
+                        int perPage = Math.Max(1, buttonsPerPage - buttonIndexOffset);
+                        renderButtons = KeyboardManager.GetResults(keyboardInput)
+                            .Skip(pageNumber * perPage).Take(perPage).ToArray();
+                        AddSearchInputBox(0.1f * 0.1f);
                     }
                     else
-                        renderButtons = Buttons.buttons[Buttons.CurrentCategoryIndex];
+                    {
+                        if (CurrentCategoryName == "Main")
+                        {
+                            List<ButtonInfo> buttons = new List<ButtonInfo>();
+                            foreach (var button in Buttons.buttons[CurrentCategoryIndex])
+                            {
+                                if (!skipButtons.Contains(button.buttonText))
+                                    buttons.Add(button);
+                            }
+                            renderButtons = buttons.ToArray();
+                        }
+                        else if (CurrentCategoryName == "Favorite")
+                        {
+                            foreach (var favoriteMod in favorites.Where(favoriteMod => Buttons.GetIndex(favoriteMod) == null).ToList())
+                                favorites.Remove(favoriteMod);
+                            renderButtons = StringsToInfos(favorites.ToArray());
+                        }
+                        else if (CurrentCategoryName == "Enabled")
+                        {
+                            List<ButtonInfo> enabledMods = new List<ButtonInfo>() { };
+                            int categoryIndex = 0;
+                            foreach (ButtonInfo[] buttonlist in buttons)
+                            {
+                                foreach (ButtonInfo v in buttonlist)
+                                {
+                                    if (v.enabled && (!categoryNames[categoryIndex].Contains("Settings")))
+                                        enabledMods.Add(v);
+                                }
+                                categoryIndex++;
+                            }
+                            enabledMods = enabledMods.OrderBy(v => v.buttonText).ToList();
+                            enabledMods.Insert(0, GetIndex("Exit Enabled"));
 
-                    renderButtons = renderButtons.Skip(pageNumber * (buttonsPerPage - buttonIndexOffset)).Take(buttonsPerPage - buttonIndexOffset).ToArray();
+                            renderButtons = enabledMods.ToArray();
+                        }
+                        else
+                            renderButtons = Buttons.buttons[Buttons.CurrentCategoryIndex];
 
-                    // Mod Buttons
+                        renderButtons = renderButtons.Skip(pageNumber * (buttonsPerPage - buttonIndexOffset)).Take(buttonsPerPage - buttonIndexOffset).ToArray();
+                    }
                     for (int i = 0; i < renderButtons.Length; i++)
                         AddButton((i + buttonIndexOffset + 0.1f) * 0.1f, i, renderButtons[i]);
                 }
@@ -834,7 +867,7 @@ namespace JupiterX.Menu
             imageTransform.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
         }
 
-        /*private static void AddSearchButton()
+        private static void AddSearchButton()
         {
             GameObject buttonObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -865,7 +898,7 @@ namespace JupiterX.Menu
 
             searchImage.material = searchMat;
             searchImage.material.SetTexture("_MainTex", searchIcon);
-            searchImage.color = textColors[KeyboardManager.KeyboardEnabled ? 2 : 1];
+            searchImage.color = textColors[KeyboardManager.KeyboardEnabled ? 0 : 1];
 
             RectTransform imageTransform = searchImage.GetOrAddComponent<RectTransform>();
             imageTransform.localPosition = Vector3.zero;
@@ -874,7 +907,37 @@ namespace JupiterX.Menu
             imageTransform.localPosition = new Vector3(.064f, -0.35f / 2.6f, -0.58f / 2.6f);
 
             imageTransform.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
-        }*/
+        }
+
+        private static void AddSearchInputBox(float offset)
+        {
+            GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            UnityEngine.Object.Destroy(box.GetComponent<BoxCollider>());
+            box.transform.parent = menu.transform;
+            box.transform.rotation = Quaternion.identity;
+            box.transform.localScale = new Vector3(0.09f, 0.9f, 0.08f);
+            box.transform.localPosition = new Vector3(0.56f, 0f, 0.28f - offset);
+            box.GetOrAddComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
+            if (Rounding)
+                RoundMenuObject(box);
+
+            searchInputText = new GameObject { transform = { parent = canvasObject.transform } }.GetOrAddComponent<Text>();
+            searchInputText.font = currentFont;
+            searchInputText.fontSize = 1;
+            searchInputText.fontStyle = Utility.currentFontStyle;
+            searchInputText.supportRichText = true;
+            searchInputText.alignment = TextAnchor.MiddleCenter;
+            searchInputText.resizeTextForBestFit = true;
+            searchInputText.resizeTextMinSize = 0;
+            searchInputText.color = textColors[0];
+            searchInputText.text = KeyboardManager.InputDisplay();
+
+            RectTransform rt = searchInputText.GetOrAddComponent<RectTransform>();
+            rt.localPosition = Vector3.zero;
+            rt.sizeDelta = new Vector2(0.2f, 0.03f);
+            rt.localPosition = new Vector3(.064f, 0f, .111f - offset / 2.6f);
+            rt.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+        }
 
         public static Texture2D LoadTexture(string fileName)
         {
@@ -972,6 +1035,12 @@ namespace JupiterX.Menu
 
                     lastPage = ((enabledMods.Count + buttonsPerPage - 1) / buttonsPerPage) - 1;
                     break;
+            }
+
+            if (KeyboardManager.KeyboardEnabled)
+            {
+                int perPage = Math.Max(1, buttonsPerPage - 1);
+                lastPage = Math.Max(0, (KeyboardManager.GetResults(keyboardInput).Count + perPage - 1) / perPage - 1);
             }
 
             switch (buttonText)
@@ -1588,6 +1657,8 @@ namespace JupiterX.Menu
         public static int pageNumber = 0;
         public static int framePressCooldown;
 
+        public static string keyboardInput;
+
         public static bool lastInRoom = false;
         public static string lastRoom = "";
 
@@ -1643,6 +1714,8 @@ namespace JupiterX.Menu
 
         public static Material searchMat;
         public static Material returnMat;
+
+        public static Text searchInputText;
 
         private static int menuOpenCount;
 

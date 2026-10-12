@@ -62,6 +62,7 @@ namespace JupiterX
             ClassInjector.RegisterTypeInIl2Cpp<ClampColor>();
             ClassInjector.RegisterTypeInIl2Cpp<ButtonCollider>();
             ClassInjector.RegisterTypeInIl2Cpp<NotificationManager>();
+            ClassInjector.RegisterTypeInIl2Cpp<SphereKeyTrigger>();
 
             GameObject notiHolder = new GameObject();
             notiHolder.name = "JupiterX_Holder";
