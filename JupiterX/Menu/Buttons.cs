@@ -477,8 +477,6 @@ namespace JupiterX.Menu
             new ButtonInfo[] { // Overpowered
                 new ButtonInfo { buttonText = "Exit Overpowered", method =() => CurrentCategoryName = "Main", isTogglable = false, toolTip = "Returns to the main page of the menu." },
 
-                new ButtonInfo { buttonText = "MasterLabel", label = true },
-
                 new ButtonInfo { buttonText = "Cosmetix", method =() => Utility.UnlockAll(), isTogglable = false, toolTip = "Gives you every cosmetic in the game." },
 
                 new ButtonInfo { buttonText = "Unban Self", method =() => Experimental.Unban(), isTogglable = false, toolTip = "Attempts to login you into a new playfab account if your main gets banned." },
@@ -558,6 +556,8 @@ namespace JupiterX.Menu
 
             new ButtonInfo[] { // Master
                 new ButtonInfo { buttonText = "Exit Master", method =() => CurrentCategoryName = "Main", isTogglable = false, toolTip = "Returns to the main page of the menu."},
+
+                new ButtonInfo { buttonText = "MasterLabel", label = true },
 
                 new ButtonInfo { buttonText = "Set Master Gun", method =() => Overpowered.SetMasterGun(), isTogglable = true, toolTip = "Lets you set someone as master client." },
 
