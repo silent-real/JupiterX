@@ -1547,6 +1547,7 @@ namespace JupiterX
             GameObject.Destroy(lineholder, Time.deltaTime);
             return (lineholder, line);
         }
+
         public static void BetaAntiCosmetic(string cosmeticId)
         {
             if (PhotonNetwork.InRoom)
@@ -1564,6 +1565,7 @@ namespace JupiterX
                 }
             }
         }
+
         public static void BetaAntiReport(bool Crash, bool Disconnect)
         {
             if (PhotonNetwork.InRoom)
@@ -1585,7 +1587,7 @@ namespace JupiterX
                                     if (Crash)
                                     {
                                         MakeMeMaster();
-                                        PhotonNetwork.DestroyPlayerObjects(rig.photonView.Owner);
+                                        BetaCrashPlayer(rig.GetPhotonPlayer());
                                     }
                                     if (Disconnect)
                                     {
