@@ -127,9 +127,17 @@ namespace JupiterX.Mods
 
         public static void LoadSoundLibrary()
         {
-            string url = "https://github.com/Seralyth/Seralyth-Menu/blob/4750b14e7b47fafe7a37d81926e82f5b58fb1bdb/Resources/Server/Audio/Mods/Fun/Soundboard/SoundLibrary.txt";
-            string libraryText;
-            List<ButtonInfo> soundbuttons = new List<ButtonInfo>
+            string url = "https://raw.githubusercontent.com/Seralyth/Seralyth-Menu/4750b14e7b47fafe7a37d81926e82f5b58fb1bdb/Resources/Server/Audio/Mods/Fun/Soundboard/SoundLibrary.txt";
+
+            WebWrapper.Get(url, s => RunOnMain(() =>
+            {
+                string libraryText = string.IsNullOrEmpty(s) || s.StartsWith("ERROR:", StringComparison.Ordinal) ? "" : s;
+                if (string.IsNullOrEmpty(libraryText))
+                {
+                    NotificationManager.SendNotification("<color=red>[INFO]</color> Sound library failed to load.", 4f);
+                    return;
+                }
+                List<ButtonInfo> soundbuttons = new List<ButtonInfo>
                 {
                     new ButtonInfo
                     {
@@ -139,10 +147,6 @@ namespace JupiterX.Mods
                         toolTip = "Returns you back to the soundboard."
                     }
                 };
-            WebWrapper.Get(url, s =>
-            {
-                libraryText = s ?? "Library has nothing or empty";
-
                 string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
                 int index = 0;
                 foreach (string audio in audios)
@@ -153,20 +157,22 @@ namespace JupiterX.Mods
                         string[] data = audio.Split(';');
                         if (data.Length >= 2)
                         {
+                            string dName = data[0].Trim();
+                            string dUrl = data[1].Trim();
                             soundbuttons.Add(new ButtonInfo
                             {
                                 buttonText = "SoundboardDownload" + index,
-                                overlapText = data[0],
-                                method = () => DownloadSound(data[0], data[1]),
+                                overlapText = dName,
+                                method = () => DownloadSound(dName, dUrl),
                                 isTogglable = false,
-                                toolTip = $"Downloads {data[0]} to your sound library."
+                                toolTip = $"Downloads {dName} to your sound library."
                             });
                         }
                     }
                 }
-            });
-            Buttons.CurrentCategoryName = "Sound Library";
-            Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+                Buttons.CurrentCategoryName = "Sound Library";
+                Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+            }));
         }
 
         private static void ChangeVolume(bool positive = true)
