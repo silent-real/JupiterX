@@ -23,5 +23,13 @@ namespace JupiterX
                 component = obj.AddComponent<T>();
             return component;
         }
+
+        public static T GetOrAddComponent<T>(this Component obj) where T : Component
+        {
+            T component = obj.GetComponent<T>();
+            if (component == null)
+                component = obj.gameObject.AddComponent<T>();
+            return component;
+        }
     }
 }
