@@ -111,7 +111,7 @@ namespace JupiterX.Managers
 
             if (!didtut)
             {
-                NotificationManager.SendNotification("ENTER runs the top search result.", 7f);
+                NotificationManager.SendNotification("Thank you for using JupiterX.", 2f);
                 didtut = true;
             }
 
