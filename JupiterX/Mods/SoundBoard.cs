@@ -18,6 +18,7 @@ using Il2CppSystem.Net;
 using JupiterX.Classes.Menu;
 using JupiterX.Managers;
 using JupiterX.Menu;
+using JupiterX.Notifications;
 using NLayer;
 using Photon.Pun;
 using Photon.Voice.Unity;
@@ -128,49 +129,44 @@ namespace JupiterX.Mods
         {
             string url = "https://github.com/iiDk-the-actual/ModInfo/raw/main/SoundLibrary.txt";
             string libraryText;
+            WebWrapper.Get(url, s =>
+            {
+                libraryText = s ?? "Library has nothing or empty";
 
-            WebClient client = new WebClient();
-            try
-            {
-                libraryText = client.DownloadString(url);
-            }
-            catch
-            {
-                return;
-            }
-            string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
-            List<ButtonInfo> soundbuttons = new List<ButtonInfo>
-            {
-                new ButtonInfo
+                string[] audios = AlphabetizeNoSkip(libraryText.Split('\n'));
+                List<ButtonInfo> soundbuttons = new List<ButtonInfo>
                 {
-                    buttonText = "Exit Sound Library",
-                    method = () => LoadSoundboard(),
-                    isTogglable = false,
-                    toolTip = "Returns you back to the soundboard."
-                }
-            };
-            int index = 0;
-            foreach (string audio in audios)
-            {
-                if (audio.Length > 2)
-                {
-                    index++;
-                    string[] data = audio.Split(';');
-                    if (data.Length >= 2)
+                    new ButtonInfo
                     {
-                        soundbuttons.Add(new ButtonInfo
+                        buttonText = "Exit Sound Library",
+                        method = () => LoadSoundboard(),
+                        isTogglable = false,
+                        toolTip = "Returns you back to the soundboard."
+                    }
+                };
+                int index = 0;
+                foreach (string audio in audios)
+                {
+                    if (audio.Length > 2)
+                    {
+                        index++;
+                        string[] data = audio.Split(';');
+                        if (data.Length >= 2)
                         {
-                            buttonText = "SoundboardDownload" + index,
-                            overlapText = data[0],
-                            method = () => DownloadSound(data[0], data[1]),
-                            isTogglable = false,
-                            toolTip = $"Downloads {data[0]} to your sound library."
-                        });
+                            soundbuttons.Add(new ButtonInfo
+                            {
+                                buttonText = "SoundboardDownload" + index,
+                                overlapText = data[0],
+                                method = () => DownloadSound(data[0], data[1]),
+                                isTogglable = false,
+                                toolTip = $"Downloads {data[0]} to your sound library."
+                            });
+                        }
                     }
                 }
-            }
-            Buttons.CurrentCategoryName = "Sound Library";
-            Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+                Buttons.CurrentCategoryName = "Sound Library";
+                Buttons.buttons[Buttons.GetCategory("Sound Library")] = soundbuttons.ToArray();
+            });
         }
 
         private static void ChangeVolume(bool positive = true)
@@ -192,9 +188,13 @@ namespace JupiterX.Mods
                     Directory.CreateDirectory(folderName);
                 if (!File.Exists(fullPath))
                 {
-                    UnityEngine.Debug.Log($"Downloading {fileName} from {resourcePath}");
-                    WebClient client = new WebClient();
-                    client.DownloadFile(resourcePath, fullPath);
+                    WebWrapper.DownloadFile(resourcePath, fullPath, b =>
+                    {
+                        if (b == false)
+                        {
+                            NotificationManager.SendNotification($"Download failed for file {resourcePath}");
+                        }
+                    });
                 }
                 LoadAndPlaySound(fileName);
                 return fullPath;
