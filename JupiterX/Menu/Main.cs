@@ -230,7 +230,7 @@ namespace JupiterX.Menu
                 if (trail == null)
                 {
                     trail = reference.GetOrAddComponent<TrailRenderer>();
-                    _trailMat ??= new Material(Shader.Find("Sprites/Default"));
+                    _trailMat ??= new Material(Utility.UnlitShader());
                     trail.startColor = backgroundColor.GetColor(0);
                     trail.endColor = backgroundColor.GetColor(1);
                     trail.startWidth = 0.015f;
@@ -246,7 +246,7 @@ namespace JupiterX.Menu
                 try
                 {
                     TrailRenderer trail = menu.GetOrAddComponent<TrailRenderer>();
-                    _trailMat ??= new Material(Shader.Find("Sprites/Default"));
+                    _trailMat ??= new Material(Utility.UnlitShader());
                     trail.startColor = backgroundColor.GetColor(0);
                     trail.endColor = backgroundColor.GetColor(1);
                     trail.startWidth = 0.015f;
