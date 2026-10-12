@@ -762,16 +762,6 @@ namespace JupiterX.Menu
             textTransform.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
         }
 
-        public static void RefreshButtonStates()
-        {
-            if (menu == null)
-            {
-                CreateMenu();
-                return;
-            }
-            ReloadMenu();
-        }
-
         public static void ReloadMenu()
         {
             if (menu != null)
@@ -991,7 +981,7 @@ namespace JupiterX.Menu
                     {
                         CurrentPrompt.AcceptAction?.Invoke();
                         if (prompts.Count > 0) prompts.RemoveAt(0);
-                        RefreshButtonStates();
+                        ReloadMenu();
                     }
                     return;
 
@@ -1000,7 +990,7 @@ namespace JupiterX.Menu
                     {
                         CurrentPrompt.DeclineAction?.Invoke();
                         if (prompts.Count > 0) prompts.RemoveAt(0);
-                        RefreshButtonStates();
+                        ReloadMenu();
                     }
                     return;
 
