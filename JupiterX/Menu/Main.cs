@@ -294,7 +294,8 @@ namespace JupiterX.Menu
                 outlineMenu.transform.localScale = new Vector3(0.08f, 1.05f, 1.05f);
                 outlineMenu.transform.position = new Vector3(0.05f, 0f, 0f);
                 outlineMenu.GetComponent<Renderer>().material.color = buttonColors[0].GetCurrentColor();
-                RoundMenuObject(outlineMenu);
+                if (Rounding)
+                    RoundMenuObject(outlineMenu);
             }
 
 			// Canvas
