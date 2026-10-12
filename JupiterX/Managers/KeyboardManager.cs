@@ -52,7 +52,7 @@ namespace JupiterX.Managers
         public static float FollowSpeed = 8f;
 
         public static Vector3 RightSphereOffset = new(0.013f, -0.025f, 0.1f);
-        public static Vector3 LeftSphereOffset = new(-0.017f, -0.025f, 0.1f);
+        public static Vector3 LeftSphereOffset = new(-0.015f, -0.025f, 0.1f);
 
         private static readonly HashSet<string> ExcludedFromSearch = new() { "Search", "Disconnect", "Global Return", "Admin" };
 
