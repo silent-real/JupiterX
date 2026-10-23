@@ -32,5 +32,6 @@ namespace JupiterX.Classes.Menu
         public bool incremental;
 
         public bool hideFromArraylist;
+        public bool dontPanic = false;
     }
 }

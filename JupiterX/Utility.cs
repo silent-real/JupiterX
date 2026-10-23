@@ -1520,7 +1520,7 @@ namespace JupiterX
             {
                 foreach (ButtonInfo button in btn)
                 {
-                    if (button.enabled)
+                    if (button.enabled && !button.dontPanic)
                         Toggle(button.buttonText);
                 }
             }
