@@ -36,6 +36,8 @@ namespace JupiterX.Mods
                 Utility.ActualRig().enabled = true;
                 Utility.GhostView(false);
             }
+
+            invisActive = Utility.RightSecondary;
         }
 
         private static bool ghostActive;
@@ -54,6 +56,8 @@ namespace JupiterX.Mods
                 Utility.ActualRig().enabled = true;
                 Utility.GhostView(false);
             }
+
+            ghostActive = Utility.RightPrimary;
         }
 
         private static float delaytimebeesbleh;
