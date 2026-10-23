@@ -19,9 +19,13 @@ namespace JupiterX.Mods
 {
     public class vRRig
     {
+        private static bool invisActive;
         public static void InvisMonke()
         {
             if (Utility.RightSecondary)
+                invisActive = !invisActive;
+
+            if (invisActive)
             {
                 Utility.ActualRig().enabled = false;
                 Utility.ActualRig().transform.position = new Vector3(20397230f, 32423, 3432);
@@ -32,11 +36,15 @@ namespace JupiterX.Mods
                 Utility.ActualRig().enabled = true;
                 Utility.GhostView(false);
             }
-
         }
+
+        private static bool ghostActive;
         public static void GhostMonke()
         {
             if (Utility.RightPrimary)
+                ghostActive = !ghostActive;
+
+            if (ghostActive)
             {
                 Utility.ActualRig().enabled = false;
                 Utility.GhostView(true);
