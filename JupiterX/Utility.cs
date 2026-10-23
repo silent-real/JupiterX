@@ -1678,7 +1678,7 @@ namespace JupiterX
         {
             if (clip == null)
                 return;
-            AudioSource source = offlineVRRig().gameObject.AddComponent<AudioSource>();
+            AudioSource source = offlineVRRig().gameObject.GetOrAddComponent<AudioSource>();
             source.clip = clip;
             source.volume = volume;
             source.loop = false;

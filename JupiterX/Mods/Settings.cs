@@ -51,6 +51,7 @@ namespace JupiterX
         public static bool bothHands = false;
         public static bool StumpText = true;
         public static bool Notifications = true;
+        public static bool disableNotificationSound = true;
         public static bool Rounding = false;
         public static bool menuoutline = false;
         public static bool lowqualttext = false;

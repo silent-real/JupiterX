@@ -157,6 +157,10 @@ namespace JupiterX.Notifications
                 duration = notificationDecayTime;
             if (!text.EndsWith("\n"))
                 text += "\n";
+            if (!Settings.disableNotificationSound)
+            {
+                Utility.PlaySound(Utility.notificationSound);
+            }
             activeNotifications.Add(new Notification
             {
                 Text = text,
