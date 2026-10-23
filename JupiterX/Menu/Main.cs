@@ -112,6 +112,13 @@ namespace JupiterX.Menu
                                 description = "Open the menu 100 times."
                             });
 
+                        if (menuOpenCount == 200)
+                            AchievementManager.UnlockAchievement(new AchievementManager.Achievement
+                            {
+                                name = "Persistent V2",
+                                description = "Open the menu 200 times."
+                            });
+
                         if (dynamicAnimations)
                             Plugin.StartCoroutine(GrowCoroutine());
 
