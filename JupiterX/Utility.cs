@@ -925,6 +925,7 @@ namespace JupiterX
 
         static GameObject sphereeR = null;
         static GameObject sphereeL = null;
+        private static VRRig ghostRig;
         public static void GhostView(bool enabled)
         {
             if (disableGhostview)
