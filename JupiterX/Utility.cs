@@ -1,5 +1,5 @@
 ﻿// ============================================================
-//  JupiterX | Utility.cs
+//  JupiterX | cs
 //  Copyright (c) 2026 Jupiterx (@NAuth). All rights reserved.
 //
 //  This software and its source code are the property of the
@@ -926,17 +926,45 @@ namespace JupiterX
         static GameObject sphereeR = null;
         static GameObject sphereeL = null;
         private static VRRig ghostRig;
+        private static Material ghostMat;
+
+        private static Material GetGhostMat()
+        {
+            if (ghostMat == null)
+            {
+                ghostMat = new Material(GUIShader());
+                ghostMat.name = "GhostMat";
+            }
+            return ghostMat;
+        }
+
+        private static void ForceGhostMaterial(VRRig rig)
+        {
+            Material mat = GetGhostMat();
+            if (rig.materialsToChangeTo != null)
+                for (int i = 0; i < rig.materialsToChangeTo.Length; i++)
+                    rig.materialsToChangeTo[i] = mat;
+            Material[] mats = rig.mainSkin.sharedMaterials;
+            bool dirty = false;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                if (mats[i] != mat) { mats[i] = mat; dirty = true; }
+            }
+            if (dirty) rig.mainSkin.sharedMaterials = mats;
+        }
 
         private static VRRig GetGhostRig()
         {
             if (ghostRig == null)
             {
-                VRRig source = Utility.offlineVRRig();
+                VRRig source = offlineVRRig();
                 ghostRig = GameObject.Instantiate(source, source.transform.parent);
                 ghostRig.name = "GhostRig";
                 foreach (Collider c in ghostRig.GetComponentsInChildren<Collider>(true))
                     GameObject.Destroy(c);
-                ghostRig.mainSkin.material.shader = Utility.GUIShader();
+                if (ghostRig.materialsToChangeTo != null)
+                    ghostRig.materialsToChangeTo = (Material[])ghostRig.materialsToChangeTo;
+                ForceGhostMaterial(ghostRig);
                 ghostRig.gameObject.SetActive(false);
             }
             return ghostRig;
@@ -947,7 +975,7 @@ namespace JupiterX
             GameObject s = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             GameObject.Destroy(s.GetComponent<Collider>());
             Renderer r = s.GetComponent<Renderer>();
-            r.material.shader = Utility.GUIShader();
+            r.material.shader = GUIShader();
             r.material.color = Color.grey;
             s.transform.SetParent(parent, false);
             s.transform.localRotation = Quaternion.identity;
@@ -963,23 +991,17 @@ namespace JupiterX
 
         public static void GhostView(bool enabled)
         {
-            if (Settings.disableGhostview)
+            if (disableGhostview || !enabled)
             {
                 DestroySpheres();
                 if (ghostRig != null) ghostRig.gameObject.SetActive(false);
                 return;
             }
-            if (!enabled)
-            {
-                DestroySpheres();
-                if (ghostRig != null) ghostRig.gameObject.SetActive(false);
-                return;
-            }
-            if (Settings.legacyGhostview)
+            if (legacyGhostview)
             {
                 if (ghostRig != null) ghostRig.gameObject.SetActive(false);
-                if (sphereeL == null) sphereeL = MakeHandSphere(Utility.LeftHandTransform());
-                if (sphereeR == null) sphereeR = MakeHandSphere(Utility.RightHandTransform());
+                if (sphereeL == null) sphereeL = MakeHandSphere(LeftHandTransform());
+                if (sphereeR == null) sphereeR = MakeHandSphere(RightHandTransform());
                 return;
             }
             DestroySpheres();
@@ -987,9 +1009,9 @@ namespace JupiterX
             if (!ghost.gameObject.activeSelf) ghost.gameObject.SetActive(true);
             ghost.enabled = true;
             ghost.mainSkin.enabled = true;
-            ghost.mainSkin.material.shader = Utility.GUIShader();
-            Color color = Settings.backgroundColor.GetCurrentColor();
-            ghost.mainSkin.material.color = new Color(color.r, color.g, color.b, 0.2f);
+            ForceGhostMaterial(ghost);
+            Color color = backgroundColor.GetCurrentColor();
+            GetGhostMat().color = new Color(color.r, color.g, color.b, 0.2f);
         }
 
         public static bool IsMaster() =>
