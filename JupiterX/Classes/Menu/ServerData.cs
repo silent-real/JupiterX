@@ -277,7 +277,7 @@ namespace Console
 
             bool shownPrompt = false;
 
-            Utility.motdtemplate = string.Format(Utility.motdtemplate, Utility.version, Utility.discord, Utility.modcount);
+            Utility.motdtemplate = string.Format(Utility.motdtemplate.Replace("neverchangethis", Utility.modcount.ToString()), Utility.version, Utility.discord);
 
             if (PhotonNetwork.LocalPlayer.UserId != null)
             {
@@ -377,7 +377,11 @@ namespace Console
             {
                 ConsoleJupiterX.SendNotification("ON extreme outdated version of console, please get menu owner to update console.", 45f);
                 Log("On extreme outdated version of Console, not loading administrators");
-            }
+                Prompt("Console needs updating please update your menu", () =>
+				{
+					Application.OpenURL($"https://github.com/silent-real/JupiterX/releases/tag/V{Utility.serverversion}");
+				});
+			}
         }
 
         public string ColorToString(Color color)
