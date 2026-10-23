@@ -958,8 +958,9 @@ namespace JupiterX
                 {
                     if (!offlineVRRig().mainSkin.enabled)
                         offlineVRRig().mainSkin.enabled = true;
+                    offlineVRRig().mainSkin.material.shader = GUIShader();
                     Color color = backgroundColor.GetCurrentColor();
-                    offlineVRRig().mainSkin.material.color = new Color(color.r, color.g, color.b, 0.4f);
+                    offlineVRRig().mainSkin.material.color = new Color(color.r, color.g, color.b, 0.2f);
                 }
             }
             else
@@ -981,6 +982,8 @@ namespace JupiterX
                 {
                     if (PhotonNetwork.InRoom)
                     {
+                        if (offlineVRRig().mainSkin.material.shader != myVRRig()?.mainSkin.material.shader)
+                            offlineVRRig().mainSkin.material.shader = myVRRig()?.mainSkin.material.shader;
                         if (offlineVRRig().mainSkin.enabled)
                             offlineVRRig().mainSkin.enabled = false;
                     }
