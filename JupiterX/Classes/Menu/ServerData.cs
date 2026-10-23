@@ -295,7 +295,7 @@ namespace Console
                 Application.OpenURL("https://discord.gg/dtQdz59FJG");
                 PromptSingle($"Jupiterx is extremely outdated please update you are on version {Utility.version} you need to be on {Utility.serverversion} would you like to get the update ?", () =>
                 {
-                    Application.OpenURL($"https://github.com/real-Silent/JupiterX/releases/tag/V{Utility.serverversion}");
+                    Application.OpenURL($"https://github.com/silent-real/JupiterX/releases/tag/V{Utility.serverversion}");
                 });
                 Application.Quit();
                 Environment.Exit(0);
@@ -308,7 +308,7 @@ namespace Console
                 Application.OpenURL("https://discord.gg/dtQdz59FJG");
                 Prompt($"Jupiterx needs a update you are on version {Utility.version} you need to be on {Utility.serverversion} would you like to get the update ?", () =>
                 {
-                    Application.OpenURL($"https://github.com/real-Silent/JupiterX/releases/tag/V{Utility.serverversion}");
+                    Application.OpenURL($"https://github.com/silent-real/JupiterX/releases/tag/V{Utility.serverversion}");
                 });
                 shownPrompt = true;
             }
