@@ -88,8 +88,8 @@ namespace JupiterX
             Utility.ogmotdtext = Utility.motdText.text;
 
             Utility.CacheSounds();
-            Utility.LoadEmbeddedDll("JupiterX.Resources.NLayer.dll");
-            Utility.LoadEmbeddedDll("JupiterX.Resources.NVorbis.dll");
+            Utility.LoadEmbeddedDll("JupiterX.Resources.Depends.NLayer.dll");
+            Utility.LoadEmbeddedDll("JupiterX.Resources.Depends.NVorbis.dll");
 
             try
             {

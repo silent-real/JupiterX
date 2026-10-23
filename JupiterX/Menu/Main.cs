@@ -952,7 +952,7 @@ namespace JupiterX.Menu
 
         public static Texture2D LoadTexture(string fileName)
         {
-            using (Stream stream = typeof(Plugin).Assembly.GetManifestResourceStream($"JupiterX.Resources.{fileName}.png"))
+            using (Stream stream = typeof(Plugin).Assembly.GetManifestResourceStream($"JupiterX.Resources.Images.{fileName}.png"))
             {
                 if (stream == null) return null;
 

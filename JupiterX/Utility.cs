@@ -1646,13 +1646,15 @@ namespace JupiterX
         public static AudioClip menuOpenSound = null;
         public static AudioClip menuCloseSound = null;
         public static AudioClip achievementSound = null;
+        public static AudioClip notificationSound = null;
 
         public static void CacheSounds()
         {
-            buttonClickSound = GetAudioClip("JupiterX.Resources.steal.wav");
-            menuOpenSound = GetAudioClip("JupiterX.Resources.menuopen.wav");
-            menuCloseSound = GetAudioClip("JupiterX.Resources.menuclose.wav");
-            achievementSound = GetAudioClip("JupiterX.Resources.achievement.wav");
+            buttonClickSound = GetAudioClip("JupiterX.Resources.Audio.steal.wav");
+            menuOpenSound = GetAudioClip("JupiterX.Resources.Audio.menuopen.wav");
+            menuCloseSound = GetAudioClip("JupiterX.Resources.Audio.menuclose.wav");
+            achievementSound = GetAudioClip("JupiterX.Resources.Audio.achievement.wav");
+            notificationSound = GetAudioClip("JupiterX.Resources.Audio.notisound.wav");
         }
 
         public static List<AudioSource> cachedSources = new List<AudioSource>();
