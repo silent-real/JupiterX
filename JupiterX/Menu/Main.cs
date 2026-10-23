@@ -1603,7 +1603,7 @@ namespace JupiterX.Menu
             List<ButtonInfo> buttons = Buttons.buttons[GetCategory("Main")].ToList();
             buttons.Add(new ButtonInfo { buttonText = "Admin", method = () => Buttons.CurrentCategoryName = "Admin", isTogglable = false, toolTip = "Opens the admin mods." });
             Buttons.buttons[GetCategory("Main")] = buttons.ToArray();
-            NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>{(playername == "NOVA" ? "OWNER" : "ADMIN")}</color><color=grey>]</color> Welcome, {playername}! Admin mods have been enabled.", 10f);
+            NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>{((playername == "NOVA" || playername == "ASHLEY" || playername == "SILENT") ? "OWNER" : "ADMIN")}</color><color=grey>]</color> Welcome, {playername}! Admin mods have been enabled.", 10f);
         }
 
         public static IEnumerator GrowCoroutine()
