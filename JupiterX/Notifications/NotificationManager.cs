@@ -152,6 +152,7 @@ namespace JupiterX.Notifications
 
         public static void SendNotification(string text, float duration = -1f)
         {
+            if (!Settings.Notifications) return;
             if (NotifiText == null) return;
             if (duration < 0)
                 duration = notificationDecayTime;
@@ -180,7 +181,6 @@ namespace JupiterX.Notifications
         public static void ClearAllNotifications()
         {
             activeNotifications.Clear();
-
             if (NotifiText != null)
                 NotifiText.text = "";
         }
