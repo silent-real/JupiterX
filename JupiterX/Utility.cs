@@ -926,70 +926,70 @@ namespace JupiterX
         static GameObject sphereeR = null;
         static GameObject sphereeL = null;
         private static VRRig ghostRig;
+
+        private static VRRig GetGhostRig()
+        {
+            if (ghostRig == null)
+            {
+                VRRig source = Utility.offlineVRRig();
+                ghostRig = GameObject.Instantiate(source, source.transform.parent);
+                ghostRig.name = "GhostRig";
+                foreach (Collider c in ghostRig.GetComponentsInChildren<Collider>(true))
+                    GameObject.Destroy(c);
+                ghostRig.mainSkin.material.shader = Utility.GUIShader();
+                ghostRig.gameObject.SetActive(false);
+            }
+            return ghostRig;
+        }
+
+        private static GameObject MakeHandSphere(Transform parent)
+        {
+            GameObject s = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            GameObject.Destroy(s.GetComponent<Collider>());
+            Renderer r = s.GetComponent<Renderer>();
+            r.material.shader = Utility.GUIShader();
+            r.material.color = Color.grey;
+            s.transform.SetParent(parent, false);
+            s.transform.localRotation = Quaternion.identity;
+            s.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            return s;
+        }
+
+        private static void DestroySpheres()
+        {
+            if (sphereeL != null) { GameObject.Destroy(sphereeL); sphereeL = null; }
+            if (sphereeR != null) { GameObject.Destroy(sphereeR); sphereeR = null; }
+        }
+
         public static void GhostView(bool enabled)
         {
-            if (disableGhostview)
+            if (Settings.disableGhostview)
+            {
+                DestroySpheres();
+                if (ghostRig != null) ghostRig.gameObject.SetActive(false);
                 return;
-            if (enabled)
-            {
-                if (legacyGhostview)
-                {
-                    if (sphereeL == null)
-                    {
-                        sphereeL = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        sphereeL.GetComponent<Renderer>().material.shader = GUIShader();
-                        sphereeL.transform.SetParent(LeftHandTransform(), false);
-                        sphereeL.transform.localRotation = Quaternion.identity;
-                        sphereeL.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                        sphereeL.GetComponent<Renderer>().material.color = Color.grey;
-                        GameObject.Destroy(sphereeL.GetComponent<Collider>());
-                    }
-                    if (sphereeR == null)
-                    {
-                        sphereeR = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        sphereeR.GetComponent<Renderer>().material.shader = GUIShader();
-                        sphereeR.transform.SetParent(RightHandTransform(), false);
-                        sphereeR.transform.localRotation = Quaternion.identity;
-                        sphereeR.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                        sphereeR.GetComponent<Renderer>().material.color = Color.grey;
-                        GameObject.Destroy(sphereeR.GetComponent<Collider>());
-                    }
-                }
-                else
-                {
-                    if (!offlineVRRig().mainSkin.enabled)
-                        offlineVRRig().mainSkin.enabled = true;
-                    offlineVRRig().mainSkin.material.shader = GUIShader();
-                    Color color = backgroundColor.GetCurrentColor();
-                    offlineVRRig().mainSkin.material.color = new Color(color.r, color.g, color.b, 0.2f);
-                }
             }
-            else
+            if (!enabled)
             {
-                if (legacyGhostview)
-                {
-                    if (sphereeL != null)
-                    {
-                        GameObject.Destroy(sphereeL);
-                        sphereeL = null;
-                    }
-                    if (sphereeR != null)
-                    {
-                        GameObject.Destroy(sphereeR);
-                        sphereeR = null;
-                    }
-                }
-                else
-                {
-                    if (PhotonNetwork.InRoom)
-                    {
-                        if (offlineVRRig().mainSkin.material.shader != myVRRig()?.mainSkin.material.shader)
-                            offlineVRRig().mainSkin.material.shader = myVRRig()?.mainSkin.material.shader;
-                        if (offlineVRRig().mainSkin.enabled)
-                            offlineVRRig().mainSkin.enabled = false;
-                    }
-                }
+                DestroySpheres();
+                if (ghostRig != null) ghostRig.gameObject.SetActive(false);
+                return;
             }
+            if (Settings.legacyGhostview)
+            {
+                if (ghostRig != null) ghostRig.gameObject.SetActive(false);
+                if (sphereeL == null) sphereeL = MakeHandSphere(Utility.LeftHandTransform());
+                if (sphereeR == null) sphereeR = MakeHandSphere(Utility.RightHandTransform());
+                return;
+            }
+            DestroySpheres();
+            VRRig ghost = GetGhostRig();
+            if (!ghost.gameObject.activeSelf) ghost.gameObject.SetActive(true);
+            ghost.enabled = true;
+            ghost.mainSkin.enabled = true;
+            ghost.mainSkin.material.shader = Utility.GUIShader();
+            Color color = Settings.backgroundColor.GetCurrentColor();
+            ghost.mainSkin.material.color = new Color(color.r, color.g, color.b, 0.2f);
         }
 
         public static bool IsMaster() =>

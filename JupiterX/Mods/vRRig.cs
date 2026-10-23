@@ -19,45 +19,49 @@ namespace JupiterX.Mods
 {
     public class vRRig
     {
-        private static bool invisActive;
+        private static bool invisActive, lastInvisPress;
         public static void InvisMonke()
         {
-            if (Utility.RightSecondary)
+            bool pressed = Utility.RightSecondary;
+            if (pressed && !lastInvisPress)
+            {
                 invisActive = !invisActive;
+                if (!invisActive)
+                {
+                    Utility.ActualRig().enabled = true;
+                    Utility.GhostView(false);
+                }
+            }
+            lastInvisPress = pressed;
 
             if (invisActive)
             {
                 Utility.ActualRig().enabled = false;
-                Utility.ActualRig().transform.position = new Vector3(20397230f, 32423, 3432);
+                Utility.ActualRig().transform.position = new Vector3(20397230f, 32423f, 3432f);
                 Utility.GhostView(true);
             }
-            else
-            {
-                Utility.ActualRig().enabled = true;
-                Utility.GhostView(false);
-            }
-
-            invisActive = Utility.RightSecondary;
         }
 
-        private static bool ghostActive;
+        private static bool ghostActive, lastGhostPress;
         public static void GhostMonke()
         {
-            if (Utility.RightPrimary)
+            bool pressed = Utility.RightPrimary;
+            if (pressed && !lastGhostPress)
+            {
                 ghostActive = !ghostActive;
+                if (!ghostActive)
+                {
+                    Utility.ActualRig().enabled = true;
+                    Utility.GhostView(false);
+                }
+            }
+            lastGhostPress = pressed;
 
             if (ghostActive)
             {
                 Utility.ActualRig().enabled = false;
                 Utility.GhostView(true);
             }
-            else
-            {
-                Utility.ActualRig().enabled = true;
-                Utility.GhostView(false);
-            }
-
-            ghostActive = Utility.RightPrimary;
         }
 
         private static float delaytimebeesbleh;
