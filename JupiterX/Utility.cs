@@ -1674,17 +1674,23 @@ namespace JupiterX
             return clip;
         }
 
+
         public static void PlaySound(AudioClip clip, float volume = 0.5f)
         {
             if (clip == null)
                 return;
-            AudioSource source = offlineVRRig().gameObject.GetOrAddComponent<AudioSource>();
-            source.clip = clip;
-            source.volume = volume;
+            GameObject soundObject = new GameObject("JupXSound");
+            UnityEngine.Object.DontDestroyOnLoad(soundObject);
+            AudioSource source = soundObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
             source.loop = false;
+            source.volume = Mathf.Clamp01(volume);
+            source.spatialBlend = 0f;
+            source.clip = clip;
             source.Play();
-            UnityEngine.Object.Destroy(source, clip.length + 0.1f);
+            UnityEngine.Object.Destroy(soundObject, clip.length + 0.25f);
         }
+
 
         private static byte[] LoadEmbeddedSounds(string resourceName)
         {
