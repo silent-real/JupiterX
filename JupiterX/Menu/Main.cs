@@ -1612,12 +1612,12 @@ namespace JupiterX.Menu
 
             float elapsedTime = 0f;
             Vector3 target = menu.transform.localScale;
-            while (elapsedTime < (slowDynamicAnimations ? 0.1f : 0.05f))
+            while (elapsedTime < (slowDynamicAnimations ? 0.15f : 0.05f))
             {
                 if (menuObject == null)
                     yield break;
 
-                menuObject.transform.localScale = Vector3.Lerp(Vector3.zero, target, elapsedTime / (slowDynamicAnimations ? 0.1f : 0.05f));
+                menuObject.transform.localScale = Vector3.Lerp(Vector3.zero, target, elapsedTime / (slowDynamicAnimations ? 0.15f : 0.05f));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -1635,9 +1635,9 @@ namespace JupiterX.Menu
 
             Vector3 before = menuTransform.localScale;
             float elapsedTime = 0f;
-            while (elapsedTime < (slowDynamicAnimations ? 0.1f : 0.05f))
+            while (elapsedTime < (slowDynamicAnimations ? 0.15f : 0.05f))
             {
-                menuTransform.localScale = Vector3.Lerp(before, Vector3.zero, elapsedTime / (slowDynamicAnimations ? 0.1f : 0.05f));
+                menuTransform.localScale = Vector3.Lerp(before, Vector3.zero, elapsedTime / (slowDynamicAnimations ? 0.15f : 0.05f));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
