@@ -1454,11 +1454,13 @@ namespace JupiterX
             });
         }
 
-        public const string version = "3.0.1";
+        public const string version = "3.0.2";
         public static string serverversion;
         public static string minversion;
         public static string discord = "https://novax.lol/d";
         public static string[] blacklistedids;
+
+        public static int modcount;
 
         public static bool isBetaRelease = false;
         public static bool updateneeded = false;
