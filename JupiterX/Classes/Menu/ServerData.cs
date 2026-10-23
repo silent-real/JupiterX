@@ -277,7 +277,7 @@ namespace Console
 
             bool shownPrompt = false;
 
-            Utility.motdtemplate = string.Format(Utility.motdtemplate, Utility.version, Utility.discord);
+            Utility.motdtemplate = string.Format(Utility.motdtemplate, Utility.version, Utility.discord, Utility.modcount);
 
             if (PhotonNetwork.LocalPlayer.UserId != null)
             {

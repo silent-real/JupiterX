@@ -41,6 +41,8 @@ namespace JupiterX.Menu
 
             NetworkSystem.PlayerJoinedRoom += OnPlayerJoined;
             NetworkSystem.PlayerLeftRoom += OnPlayerLeave;
+
+            Utility.modcount = buttons.SelectMany(list => list).ToArray().Length;
         }
 
         public static void OnDeinitMelon()
