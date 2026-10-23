@@ -225,7 +225,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
         public static void Log(string text) => // Method used to log info, replace if using a custom logger
             Utility.Log(text, JupxLogType.Info);
 
-        public virtual void Awake()
+        public void Awake()
         {
             instance = this;
 
@@ -244,7 +244,7 @@ namespace Console // All Credits goto iiDk, kingofnetflix, twig and the others
 ");
         }
 
-        public virtual void Update()
+        public void Update()
         {
             HandleCommands(); // DO NOT EVER REMOVE
             HandleCones(); // DO NOT EVER REMOVE

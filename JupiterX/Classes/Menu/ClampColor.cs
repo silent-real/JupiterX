@@ -19,7 +19,7 @@ namespace JupiterX.Classes.Menu
     public class ClampColor : MonoBehaviour
     {
         public ClampColor(IntPtr e) : base(e) { }
-        public virtual void Start()
+        public void Start()
         {
             targetRenderer.gameObject.GetComponent<ColorChanger>()?.Start();
 
@@ -27,7 +27,7 @@ namespace JupiterX.Classes.Menu
             Update();
         }
 
-        public virtual void Update()
+        public void Update()
         {
             if (gameObjectRenderer.material.shader != targetRenderer.material.shader)
                 gameObjectRenderer.material = new Material(targetRenderer.material.shader);

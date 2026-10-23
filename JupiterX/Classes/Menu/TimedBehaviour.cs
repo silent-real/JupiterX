@@ -19,12 +19,12 @@ namespace JupiterX.Classes.Menu
     public class TimedBehaviour : MonoBehaviour
     {
         public TimedBehaviour(IntPtr ptr) : base(ptr) { }
-        public virtual void Start()
+        public void Start()
         {
             startTime = Time.time;
         }
 
-        public virtual void Update()
+        public void Update()
         {
             if (!complete)
             {
@@ -43,7 +43,7 @@ namespace JupiterX.Classes.Menu
             }
         }
 
-        public virtual void OnLoop()
+        public void OnLoop()
         {
             startTime = Time.time;
         }

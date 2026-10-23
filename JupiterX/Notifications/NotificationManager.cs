@@ -36,7 +36,7 @@ namespace JupiterX.Notifications
         private static List<Notification> activeNotifications = new List<Notification>();
         public static Dictionary<string, string> information = new Dictionary<string, string>();
 
-        public virtual void Start()
+        public void Start()
         {
             instance = this;
         }
@@ -82,7 +82,7 @@ namespace JupiterX.Notifications
             return txt;
         }
 
-        public virtual void FixedUpdate()
+        public void FixedUpdate()
         {
             try
             {

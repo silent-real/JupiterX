@@ -19,7 +19,7 @@ namespace JupiterX.Classes.Menu
     public class ColorChanger : MonoBehaviour
     {
         public ColorChanger(IntPtr e) : base(e) { }
-        public virtual void Start()
+        public void Start()
         {
             if (colors == null)
             {
@@ -39,7 +39,7 @@ namespace JupiterX.Classes.Menu
             Update();
         }
 
-        public virtual void Update()
+        public void Update()
         {
             targetRenderer.enabled = overrideTransparency ?? !colors.transparent;
 

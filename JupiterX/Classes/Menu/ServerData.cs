@@ -75,7 +75,7 @@ namespace Console
                 mainThreadQueue.Enqueue(action);
         }
 
-        public virtual void Awake()
+        public void Awake()
         {
             instance = this;
             DataLoadTime = Time.time + 5f;
@@ -90,7 +90,7 @@ namespace Console
 
         private readonly Dictionary<VRRig, TextMeshPro> activeTags = new Dictionary<VRRig, TextMeshPro>();
 
-        public virtual void Update()
+        public void Update()
         {
             while (true)
             {
