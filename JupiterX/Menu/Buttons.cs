@@ -107,6 +107,8 @@ namespace JupiterX.Menu
 
                 new ButtonInfo { buttonText = "Disable Favorite Keybind", enableMethod =() => disableFavoritingKeybind = true, disableMethod =() => disableFavoritingKeybind = false, toolTip = "Makes it so toggling a button while holding left grip does nothing.", dontPanic = true },
 
+                new ButtonInfo { buttonText = "Disable Panic Prompt", enableMethod =() => disablepanicprompt = true, disableMethod =() => disablepanicprompt = false, toolTip = "Lets you panic without a prompt being in the way.", dontPanic = true },
+
                 new ButtonInfo { buttonText = "Smooth Menu Position", enableMethod =() => smoothMenuPosition = true, disableMethod =() => smoothMenuPosition = false, toolTip = "Smoothes the menu's position.", dontPanic = true },
                 new ButtonInfo { buttonText = "Smooth Menu Rotation", enableMethod =() => smoothMenuRotation = true, disableMethod =() => smoothMenuRotation = false, toolTip = "Smoothes the menu's rotation.", dontPanic = true },
 

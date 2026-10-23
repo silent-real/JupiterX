@@ -81,6 +81,7 @@ namespace JupiterX
         public static bool smoothMenuRotation;
         public static bool serversidedButtonSounds;
         public static bool disableFavoritingKeybind;
+        public static bool disablepanicprompt;
 
         public static KeyCode keyboardButton = KeyCode.Q;
 

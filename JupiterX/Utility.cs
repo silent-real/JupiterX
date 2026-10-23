@@ -1516,13 +1516,30 @@ namespace JupiterX
         }
         public static void Panic()
         {
-            foreach (ButtonInfo[] btn in Buttons.buttons)
+            if (disablepanicprompt)
             {
-                foreach (ButtonInfo button in btn)
+                foreach (ButtonInfo[] btn in Buttons.buttons)
                 {
-                    if (button.enabled && !button.dontPanic)
-                        Toggle(button.buttonText);
+                    foreach (ButtonInfo button in btn)
+                    {
+                        if (button.enabled && !button.dontPanic)
+                            Toggle(button.buttonText);
+                    }
                 }
+            }
+            else
+            {
+                Prompt("Are you sure you want to panic ?\nthis disables every mod", () =>
+                {
+                    foreach (ButtonInfo[] btn in Buttons.buttons)
+                    {
+                        foreach (ButtonInfo button in btn)
+                        {
+                            if (button.enabled && !button.dontPanic)
+                                Toggle(button.buttonText);
+                        }
+                    }
+                });
             }
         }
 
