@@ -206,6 +206,18 @@ namespace JupiterX.Menu
                 new ButtonInfo { buttonText = "Connect to EU", method =() => Important.ConnectToRegion("eu"), toolTip = "Connects you to the Europe servers."},
 
                 new ButtonInfo { buttonText = "Turning", method =() => Important.Turning(), isTogglable = true, toolTip = "Lets you turn while moving your right joystick." },
+
+                new ButtonInfo { buttonText = "Get Title Data", method =() => Important.GetTitleData(), isTogglable = false, toolTip = "Saves the games title data to a file." },
+
+                new ButtonInfo { buttonText = "Get ReturnCurrentVersionNew", method =() => Important.GetCloudscriptFunction("ReturnCurrentVersionNew"), isTogglable = false, toolTip = "Saves the games cloudscript function \"ReturnCurrentVersionNew\" to a file." },
+                new ButtonInfo { buttonText = "Get ReturnCurrentVersion", method =() => Important.GetCloudscriptFunction("ReturnCurrentVersion"), isTogglable = false, toolTip = "Saves the games cloudscript function \"ReturnCurrentVersion\" to a file." },
+                new ButtonInfo { buttonText = "Get Report", method =() => Important.GetCloudscriptFunction("Report"), isTogglable = false, toolTip = "Saves the games cloudscript function \"Report\" to a file." },
+                new ButtonInfo { buttonText = "Get ThroughMessage", method =() => Important.GetCloudscriptFunction("ThroughMessage"), isTogglable = false, toolTip = "Saves the games cloudscript function \"ThroughMessage\" to a file." },
+                new ButtonInfo { buttonText = "Get RoomEventRaised", method =() => Important.GetCloudscriptFunction("RoomEventRaised"), isTogglable = false, toolTip = "Saves the games cloudscript function \"RoomEventRaised\" to a file." },
+                new ButtonInfo { buttonText = "Get RoomCreated", method =() => Important.GetCloudscriptFunction("RoomCreated"), isTogglable = false, toolTip = "Saves the games cloudscript function \"RoomCreated\" to a file." },
+                new ButtonInfo { buttonText = "Get RoomJoined", method =() => Important.GetCloudscriptFunction("RoomJoined"), isTogglable = false, toolTip = "Saves the games cloudscript function \"RoomJoined\" to a file." },
+                new ButtonInfo { buttonText = "Get RoomLeft", method =() => Important.GetCloudscriptFunction("RoomLeft"), isTogglable = false, toolTip = "Saves the games cloudscript function \"RoomLeft\" to a file." },
+                new ButtonInfo { buttonText = "Get RoomClosed", method =() => Important.GetCloudscriptFunction("RoomClosed"), isTogglable = false, toolTip = "Saves the games cloudscript function \"RoomClosed\" to a file." },
             },
 
             new ButtonInfo[] { // Safety

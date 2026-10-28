@@ -254,5 +254,99 @@ namespace JupiterX.Menu
             }
             return outMs.ToArray();
         }
+
+        public static void PlayFabSend(string url, Dictionary<string, object> payload, Dictionary<string, string> headers = null, Action<WebWrapper.Response> callback = null)
+        {
+            string body = JsonSerialize(payload);
+            var hdrs = headers != null
+                ? new Dictionary<string, string>(headers) : new Dictionary<string, string>();
+            if (!hdrs.ContainsKey("Content-Type"))
+                hdrs["Content-Type"] = "application/json";
+            WebWrapper.Send("POST", url, body, resp =>
+            {
+                callback?.Invoke(resp);
+            }, hdrs);
+        }
+
+        static string JsonSerialize(object o)
+        {
+            var sb = new StringBuilder();
+            WriteValue(sb, o);
+            return sb.ToString();
+        }
+
+        static void WriteValue(StringBuilder sb, object o)
+        {
+            switch (o)
+            {
+                case null:
+                    sb.Append("null");
+                    break;
+                case string s:
+                    sb.Append('"').Append(JsonEscape(s)).Append('"');
+                    break;
+                case bool b:
+                    sb.Append(b ? "true" : "false");
+                    break;
+                case int or long or short or byte:
+                    sb.Append(Convert.ToString(o, CultureInfo.InvariantCulture));
+                    break;
+                case float f:
+                    sb.Append(f.ToString("R", CultureInfo.InvariantCulture));
+                    break;
+                case double d:
+                    sb.Append(d.ToString("R", CultureInfo.InvariantCulture));
+                    break;
+                case Dictionary<string, object> dict:
+                    sb.Append('{');
+                    bool firstD = true;
+                    foreach (var kv in dict)
+                    {
+                        if (!firstD) sb.Append(',');
+                        firstD = false;
+                        sb.Append('"').Append(JsonEscape(kv.Key)).Append("\":");
+                        WriteValue(sb, kv.Value);
+                    }
+                    sb.Append('}');
+                    break;
+                case System.Collections.IEnumerable list:
+                    sb.Append('[');
+                    bool firstL = true;
+                    foreach (var item in list)
+                    {
+                        if (!firstL) sb.Append(',');
+                        firstL = false;
+                        WriteValue(sb, item);
+                    }
+                    sb.Append(']');
+                    break;
+                default:
+                    sb.Append('"').Append(JsonEscape(o.ToString())).Append('"');
+                    break;
+            }
+        }
+
+        static string JsonEscape(string s)
+        {
+            var sb = new StringBuilder(s.Length + 16);
+            foreach (char c in s)
+            {
+                switch (c)
+                {
+                    case '"': sb.Append("\\\""); break;
+                    case '\\': sb.Append("\\\\"); break;
+                    case '\b': sb.Append("\\b"); break;
+                    case '\f': sb.Append("\\f"); break;
+                    case '\n': sb.Append("\\n"); break;
+                    case '\r': sb.Append("\\r"); break;
+                    case '\t': sb.Append("\\t"); break;
+                    default:
+                        if (c < 0x20) sb.Append("\\u").Append(((int)c).ToString("x4"));
+                        else sb.Append(c);
+                        break;
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

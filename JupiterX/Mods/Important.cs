@@ -12,14 +12,18 @@
 
 using ExitGames.Client.Photon;
 using GorillaNetworking;
+using Harmony;
 using JupiterX.Managers;
+using JupiterX.Menu;
 using JupiterX.Notifications;
 using JupiterX.Patches;
 using Photon.Pun;
 using Photon.Realtime;
+using PlayFab;
 using System;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -132,19 +136,6 @@ namespace JupiterX.Mods
                 PhotonNetwork.CreateRoom(roomconfig.customRoomName);
             }
 
-            void AskPublic()
-            {
-                Prompt("Would you like to make a public room ?", () =>
-                {
-                    roomconfig.open = true;
-                    CreateRoom();
-                }, () =>
-                {
-                    roomconfig.open = false;
-                    CreateRoom();
-                });
-            }
-
             void AskMaxPlayers()
             {
                 Prompt("Would you like to use max players or keep default ?", () =>
@@ -228,6 +219,39 @@ namespace JupiterX.Mods
             if (turnMethod == null)
                 return;
             turnMethod.Invoke(playerInstance, new object[] { degrees });
+        }
+
+        public static void GetTitleData()
+        {
+            string url = $"https://{PlayFabSettings.TitleId}.playfabapi.com/Client/GetTitleData";
+            WebWrapper.PlayFabSend(url, null, new System.Collections.Generic.Dictionary<string, string>()
+            {
+                { "X-Authorization", PlayFabSettings.staticPlayer.ClientSessionTicket }
+            }, callback =>
+            {
+                string fileLoc = Utility.MainPath;
+                string file = fileLoc + "/PlayFab/TitleData.txt";
+                File.WriteAllText(file, callback.Body);
+                NotificationManager.SendNotification($"Saved title data to {file}");
+            });
+        }
+
+        public static void GetCloudscriptFunction(string functionName)
+        {
+            string url = $"https://{PlayFabSettings.TitleId}.playfabapi.com/Client/GetCloudScriptRevision";
+            WebWrapper.PlayFabSend(url, new System.Collections.Generic.Dictionary<string, object>()
+            {
+                { "FunctionName", functionName }
+            }, new System.Collections.Generic.Dictionary<string, string>()
+            {
+                { "X-Authorization", PlayFabSettings.staticPlayer.ClientSessionTicket }
+            }, callback =>
+            {
+                string fileLoc = Utility.MainPath;
+                string file = fileLoc + $"/PlayFab/Cloudscripts/{functionName}.txt";
+                File.WriteAllText(file, callback.Body);
+                NotificationManager.SendNotification($"Saved function {functionName} to {file}");
+            });
         }
     }
 }
