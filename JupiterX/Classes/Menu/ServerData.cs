@@ -284,14 +284,14 @@ namespace Console
                 if (Utility.blacklistedids.Contains(PhotonNetwork.LocalPlayer.UserId))
                 {
                     Utility.blacklisted = true;
-                    NotificationManager.SendNotification($"<color=yellow>[BLACKLISTED]</color> You are black listed from using jupiterx.", 50f);
+                    NotificationManager.SendNotification($"<color=grey>[</color><color=yellow>BLACKLISTED</color><color=grey>]</color> You are black listed from using jupiterx.", 50f);
                 }
             }
 
             if (currentVersion < minimumVersion)
             {
                 Utility.extremeupdateneeded = true;
-                NotificationManager.SendNotification("<color=red>[OUTDATED]</color> On Extreme outdated version of jupiterx please update the menu now.", 30f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> On Extreme outdated version of jupiterx please update the menu now.", 30f);
                 Application.OpenURL("https://discord.gg/dtQdz59FJG");
                 PromptSingle($"Jupiterx is extremely outdated please update you are on version {Utility.version} you need to be on {Utility.serverversion} would you like to get the update ?", () =>
                 {
@@ -304,7 +304,7 @@ namespace Console
             else if (currentVersion < serverVersion)
             {
                 Utility.updateneeded = true;
-                NotificationManager.SendNotification($"<color=red>[UPDATE]</color> JupiterX Needs an update please update to latest version {Utility.serverversion}.", 30f);
+                NotificationManager.SendNotification($"<color=grey>[</color><color=red>UPDATE</color><color=grey>]</color> JupiterX Needs an update please update to latest version {Utility.serverversion}.", 30f);
                 Application.OpenURL("https://discord.gg/dtQdz59FJG");
                 Prompt($"Jupiterx needs a update you are on version {Utility.version} you need to be on {Utility.serverversion} would you like to get the update ?", () =>
                 {

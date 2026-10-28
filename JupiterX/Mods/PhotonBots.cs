@@ -102,12 +102,12 @@ namespace JupiterX.Mods
         {
             if (!PhotonNetwork.InRoom)
             {
-                NotificationManager.SendNotification("<color=red>[BOTS]</color> Join a room first!", 3f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>BOTS</color><color=grey>]</color> Join a room first!", 3f);
                 return;
             }
             if (spawning || bots.Count > 0)
             {
-                NotificationManager.SendNotification("<color=yellow>[BOTS]</color> Bots already running, stopping first...", 3f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>BOTS</color><color=grey>]</color> Bots already running, stopping first...", 3f);
                 StopBots();
             }
 
@@ -116,7 +116,7 @@ namespace JupiterX.Mods
             Vector3 center = GetSpawnCenter();
             AppSettings baseCfg = BuildSettings();
 
-            NotificationManager.SendNotification("<color=cyan>[BOTS]</color> Spawning " + botCount + " bots in [" + roomName + "] region [" + region + "]", 4f);
+            NotificationManager.SendNotification("<color=grey>[</color><color=cyan>BOTS</color><color=grey>]</color> Spawning " + botCount + " bots in [" + roomName + "] region [" + region + "]", 4f);
 
             spawning = true;
             spawnRoutine = BootstrapAndSpawn(roomName, center, baseCfg, botCount);
@@ -264,7 +264,7 @@ namespace JupiterX.Mods
             }
             catch { }
             bots.Clear();
-            NotificationManager.SendNotification("<color=cyan>[BOTS]</color> Stopped / cleared bots.", 3f);
+            NotificationManager.SendNotification("<color=grey>[</color><color=cyan>BOTS</color><color=grey>]</color> Stopped / cleared bots.", 3f);
         }
 
         public static int moveMode = 0;
@@ -482,7 +482,7 @@ namespace JupiterX.Mods
         {
             if (bots.Count == 0)
             {
-                NotificationManager.SendNotification("<color=red>[BOTS]</color> No bots spawned.", 2f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>BOTS</color><color=grey>]</color> No bots spawned.", 2f);
                 return;
             }
             Vector3 center = GetSpawnCenter();

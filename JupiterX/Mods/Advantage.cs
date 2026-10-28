@@ -43,12 +43,12 @@ namespace JupiterX.Mods
                             Utility.ActualRig().transform.position = rig.headConstraint.transform.position;
                             Utility.ActualRig().rightHandTransform.transform.position = rig.headConstraint.transform.position;
                             Utility.RightHandTransform().position = rig.headConstraint.transform.position;
-                            NotificationManager.SendNotification("<color=yellow>[INFO]</color> Tagged all!", 7f);
+                            NotificationManager.SendNotification("<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Tagged all!", 7f);
                         }
                         else
                         {
                             Utility.ActualRig().enabled = true;
-                            NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not tagged.", 10f);
+                            NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not tagged.", 10f);
                         }
                     }
                 }

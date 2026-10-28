@@ -59,13 +59,13 @@ namespace JupiterX.Menu
 		{
             if (Utility.canusemenu == false)
             {
-                NotificationManager.SendNotification("<color=red>[INFO]</color> Menu is locked!", 15f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>LOCKDOWN</color><color=grey>]</color> Menu is locked!", 15f);
                 return;
             }
 
             if (Utility.blacklisted)
             {
-                NotificationManager.SendNotification("<color=yellow>[BLACKLISTED]</color> You can not use jupiterx anymore. please join the discord https://novax.lol/d", 15f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>BLACKLISTED</color><color=grey>]</color> You can not use jupiterx anymore. please join the discord https://novax.lol/d", 15f);
                 return;
             }
 

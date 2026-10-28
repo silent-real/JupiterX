@@ -27,11 +27,11 @@ namespace JupiterX.Patches
             if (AntiCheatSelf)
             {
                 if (susId == PhotonNetwork.LocalPlayer.UserId)
-                    NotificationManager.SendNotification($"<color=cyan>[ANTICHEAT]</color> AntiCheat Reported you for {susReason}.");
+                    NotificationManager.SendNotification($"<color=grey>[</color><color=yellow>ANTICHEAT</color><color=grey>]</color> AntiCheat Reported you for {susReason}.");
             }
             if (AntiCheatAll)
             {
-                NotificationManager.SendNotification($"<color=cyan>[ANTICHEAT]</color> AntiCheat Reported {susNick} for {susReason}.");
+                NotificationManager.SendNotification($"<color=grey>[</color><color=yellow>ANTICHEAT</color><color=grey>]</color> AntiCheat Reported {susNick} for {susReason}.");
             }
         }
     }

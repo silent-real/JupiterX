@@ -253,10 +253,10 @@ namespace JupiterX
             {
                 if (string.IsNullOrEmpty(responseString) || responseString.StartsWith("ERROR:", StringComparison.Ordinal))
                 {
-                    NotificationManager.SendNotification($"<color=red>[INFO]</color> Ban request failed: {responseString}", 6f);
+                    NotificationManager.SendNotification($"<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> Ban request failed: {responseString}", 6f);
                     return;
                 }
-                NotificationManager.SendNotification($"<color=cyan>[INFO]</color> Success {responseString}", 6f);
+                NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Success {responseString}", 6f);
             });
         }
         public static void BetaTPToSling()
@@ -1440,7 +1440,7 @@ namespace JupiterX
                 if (s.Contains("true"))
                 {
                     canusemenu = false;
-                    NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
+                    NotificationManager.SendNotification("<color=grey>[</color><color=red>LOCKDOWN</color><color=grey>]</color> Menu has been locked down!", 50f);
                 }
             });
 
@@ -1449,7 +1449,7 @@ namespace JupiterX
                 if (s.Contains("true"))
                 {
                     canusemenu = false;
-                    NotificationManager.SendNotification("<color=red>[LOCKDOWN]</color> Menu has been locked down!", 50f);
+                    NotificationManager.SendNotification("<color=grey>[</color><color=red>LOCKDOWN</color><color=grey>]</color> Menu has been locked down!", 50f);
                 }
             });
         }

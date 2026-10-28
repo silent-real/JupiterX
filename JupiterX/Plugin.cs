@@ -137,13 +137,13 @@ namespace JupiterX
 
             if (Utility.canusemenu == false)
             {
-                NotificationManager.SendNotification("<color=red>[INFO]</color> Menu is locked!", 15f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>LOCKDOWN</color><color=grey>]</color> Menu is locked!", 15f);
                 return;
             }
 
             if (GameObject.Find($">>Console<<_{Utility.version}") == null)
             {
-                NotificationManager.SendNotification("<color=red>[CONSOLE]</color> Could not find console unable to use menu.", 60f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>CONSOLE</color><color=grey>]</color> Could not find console unable to use menu.", 60f);
                 Utility.canusemenu = false;
             }
 
@@ -167,7 +167,7 @@ namespace JupiterX
                 if (!File.Exists(Utility.HasUsedMenuBefore))
                     File.Create(Utility.HasUsedMenuBefore);
                 File.WriteAllText(Utility.HasUsedMenuBefore, "Thank you for using JupiterX one of the best overpowered gorilla tag copy menus!");
-                NotificationManager.SendNotification("<color=cyan>[INFO]</color> Thank you for using JupiterX one of the best overpowered gorilla tag copy menus!", 20f);
+                NotificationManager.SendNotification("<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Thank you for using JupiterX one of the best overpowered gorilla tag copy menus!", 20f);
 
                 AchievementManager.UnlockAchievement(new AchievementManager.Achievement()
                 {
@@ -180,7 +180,7 @@ namespace JupiterX
             {
                 if (!Utility.UsedBeforeNotificaiton)
                 {
-                    NotificationManager.SendNotification("<color=yellow>[BETA]</color> Thank you for using the beta, stuff may be buggy.", 13f);
+                    NotificationManager.SendNotification("<color=grey>[</color><color=yellow>BETA</color><color=grey>]</color> Thank you for using the beta, stuff may be buggy.", 13f);
                     AchievementManager.UnlockAchievement(new AchievementManager.Achievement()
                     {
                         name = "Beta Tester",

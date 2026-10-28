@@ -136,7 +136,7 @@ namespace JupiterX.Mods
             Recorder rec = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
             if (rec == null)
             {
-                NotificationManager.SendNotification("<color=yellow>[NULL]</color> 'rec' is null how the fuck did this happen 😭");
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>NULL</color><color=grey>]</color> 'rec' is null how the fuck did this happen 😭");
                 return;
             }
 
@@ -151,7 +151,7 @@ namespace JupiterX.Mods
             Recorder rec = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
             if (rec == null)
             {
-                NotificationManager.SendNotification("<color=yellow>[NULL]</color> 'rec' is null how the fuck did this happen 😭");
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>NULL</color><color=grey>]</color> 'rec' is null how the fuck did this happen 😭");
                 return;
             }
 
@@ -168,7 +168,7 @@ namespace JupiterX.Mods
             Recorder rec = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
             if (rec == null)
             {
-                NotificationManager.SendNotification("<color=yellow>[NULL]</color> 'rec' is null how the fuck did this happen 😭");
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>NULL</color><color=grey>]</color> 'rec' is null how the fuck did this happen 😭");
                 return;
             }
 
@@ -184,7 +184,7 @@ namespace JupiterX.Mods
             Recorder rec = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
             if (rec == null)
             {
-                NotificationManager.SendNotification("<color=yellow>[NULL]</color> 'rec' is null how the fuck did this happen 😭");
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>NULL</color><color=grey>]</color> 'rec' is null how the fuck did this happen 😭");
                 return;
             }
 
@@ -199,7 +199,7 @@ namespace JupiterX.Mods
             Recorder rec = GameObject.FindObjectsOfType<Recorder>().FirstOrDefault();
             if (rec == null)
             {
-                NotificationManager.SendNotification("<color=yellow>[NULL]</color> 'rec' is null how the fuck did this happen 😭");
+                NotificationManager.SendNotification("<color=grey>[</color><color=yellow>NULL</color><color=grey>]</color> 'rec' is null how the fuck did this happen 😭");
                 return;
             }
 
@@ -212,7 +212,7 @@ namespace JupiterX.Mods
 
         public static void GetIdSelf()
         {
-            NotificationManager.SendNotification($"<color=cyan>[INFO]</color> Your userid is {Utility.MyPlayer().UserId}");
+            NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Your userid is {Utility.MyPlayer().UserId}");
             if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "JupiterX/Ids")))
                 Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "JupiterX/Ids"));
             else if (!File.Exists(Path.Combine(Application.persistentDataPath, "JupiterX/Ids/SelfId.txt")))
@@ -234,7 +234,7 @@ namespace JupiterX.Mods
                     VRRig who = Ray.collider.GetComponentInParent<VRRig>();
                     if (who)
                     {
-                        NotificationManager.SendNotification($"<color=cyan>[INFO]</color> There userid is {who.photonView.Owner.UserId}");
+                        NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> There userid is {who.photonView.Owner.UserId}");
                         if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "JupiterX/Ids")))
                             Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "JupiterX/Ids"));
                         else if (!File.Exists(Path.Combine(Application.persistentDataPath, $"JupiterX/Ids/{who.photonView.Owner.NickName}_UserId.txt")))
@@ -250,12 +250,12 @@ namespace JupiterX.Mods
         {
             if (!PhotonNetwork.InRoom)
             {
-                NotificationManager.SendNotification("<color=red>[ERROR]</color> Are you in a room ?");
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> Are you in a room ?");
                 return;
             }
             foreach (Photon.Realtime.Player plr in PhotonNetwork.PlayerListOthers)
             {
-                NotificationManager.SendNotification($"<color=cyan>[INFO]</color> There userid is {plr.UserId}");
+                NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> There userid is {plr.UserId}");
                 if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "JupiterX/Ids")))
                     Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "JupiterX/Ids"));
                 else if (!File.Exists(Path.Combine(Application.persistentDataPath, $"JupiterX/Ids/{plr.NickName}_UserId.txt")))
@@ -269,7 +269,7 @@ namespace JupiterX.Mods
         {
             if (!PhotonNetwork.InRoom)
             {
-                NotificationManager.SendNotification("<color=red>[ERROR]</color> Are you in a room ?");
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> Are you in a room ?");
                 return;
             }
             foreach (Photon.Realtime.Player plr in PhotonNetwork.PlayerListOthers)
@@ -279,7 +279,7 @@ namespace JupiterX.Mods
                 stringBuilder.AppendLine($"NickName: {plr.NickName}, UserId: {plr.UserId}, Cosmetics: {RigManager.GetVRRigFromPlayer(plr).concatStringOfCosmeticsAllowed}");
                 stringBuilder.Append("\nRoom Info Pulled By JupiterX");
                 string payload = stringBuilder.ToString();
-                NotificationManager.SendNotification($"<color=cyan>[INFO]</color> Grabbed player info for room {PhotonNetwork.CurrentRoom.Name}");
+                NotificationManager.SendNotification($"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Grabbed player info for room {PhotonNetwork.CurrentRoom.Name}");
                 if (!Directory.Exists(Path.Combine(Application.persistentDataPath, "JupiterX/RoomInfo")))
                     Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "JupiterX/RoomInfo"));
                 else if (!File.Exists(Path.Combine(Application.persistentDataPath, $"JupiterX/RoomInfo/{PhotonNetwork.CurrentRoom.Name}_Info.txt")))

@@ -746,7 +746,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Gong;
                 lucy.isSummoned = false;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
         public static void InstantSpawnBlueLucy()
         {
@@ -756,7 +756,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Gong;
                 lucy.isSummoned = false;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void SpawnRedLucy()
@@ -767,7 +767,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Gong;
                 lucy.isSummoned = false;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
         public static void InstantSpawnRedLucy()
         {
@@ -777,7 +777,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Gong;
                 lucy.isSummoned = true;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void DepawnLucy()
@@ -787,7 +787,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Dormant;
                 lucy.isSummoned = false;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void MoveLucyGun()
@@ -802,7 +802,7 @@ namespace JupiterX.Mods
                     {
                         lucy.transform.position = Pointer.transform.position;
                     }
-                    else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                    else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
                 }
             }
         }
@@ -816,7 +816,7 @@ namespace JupiterX.Mods
                     lucy.transform.position = Utility.RightHandTransform().transform.position;
                     lucy.transform.rotation = Utility.RightHandTransform().transform.rotation;
                 }
-                else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
             }
             if (Utility.LeftGrip)
             {
@@ -826,7 +826,7 @@ namespace JupiterX.Mods
                     lucy.transform.position = Utility.LeftHandTransform().transform.position;
                     lucy.transform.rotation = Utility.LeftHandTransform().transform.rotation;
                 }
-                else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
             }
         }
 
@@ -837,7 +837,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Chasing;
                 lucy.targetPlayer = Utility.MyPlayer();
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void LucyChaseGun()
@@ -858,7 +858,7 @@ namespace JupiterX.Mods
                             lucy.targetPlayer = RigManager.GetPlayerFromVRRig(rig);
                         }
                     }
-                    else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                    else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
                 }
             }
         }
@@ -871,7 +871,7 @@ namespace JupiterX.Mods
                 lucy.grabTime = Time.time;
                 lucy.targetPlayer = Utility.MyPlayer();
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void LucyAttackGun()
@@ -893,7 +893,7 @@ namespace JupiterX.Mods
                             lucy.targetPlayer = RigManager.GetPlayerFromVRRig(rig);
                         }
                     }
-                    else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                    else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
                 }
             }
         }
@@ -904,7 +904,7 @@ namespace JupiterX.Mods
             {
                 lucy.currentSpeed = 0.4f;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
         public static void FastLucy()
         {
@@ -912,7 +912,7 @@ namespace JupiterX.Mods
             {
                 lucy.currentSpeed = 5f;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
         public static void LucyOrbitSelf()
         {
@@ -921,7 +921,7 @@ namespace JupiterX.Mods
                 lucy.transform.RotateAround(Utility.MainTransform().position, Vector3.up, 90f * Time.deltaTime);
                 lucy.transform.LookAt(Utility.MainTransform());
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void LucyOrbitGun()
@@ -942,7 +942,7 @@ namespace JupiterX.Mods
                             lucy.transform.LookAt(rig.headMesh.transform);
                         }
                     }
-                    else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                    else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
                 }
             }
         }
@@ -956,7 +956,7 @@ namespace JupiterX.Mods
                 lucy.timeRiseStarted = 0f;
                 lucy.followTarget = Utility.myVRRig().head.rigTarget;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void LucyFloatGun()
@@ -976,7 +976,7 @@ namespace JupiterX.Mods
                         lucy.timeRiseStarted = 0f;
                         lucy.followTarget = rig.head.rigTarget;
                     }
-                    else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+                    else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
                 }
             }
         }
@@ -993,7 +993,7 @@ namespace JupiterX.Mods
                     chasespazdelayyhing = Time.time + 0.15f;
                 }
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         public static void SpawnColouredLucy(Color color)
@@ -1006,7 +1006,7 @@ namespace JupiterX.Mods
                 lucy.currentState = HalloweenGhostChaser.ChaseState.Gong;
                 lucy.isSummoned = false;
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
 
         private static float lucyspaztimedelaything = 0f;
@@ -1021,7 +1021,7 @@ namespace JupiterX.Mods
                     lucyspaztimedelaything = Time.time + 0.15f;
                 }
             }
-            else { NotificationManager.SendNotification("<color=red>[ERROR]</color> You are not master client!", 3f); }
+            else { NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client!", 3f); }
         }
     }
 }
