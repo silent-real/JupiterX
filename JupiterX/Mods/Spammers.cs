@@ -16,6 +16,7 @@ using JupiterX.Menu;
 using Photon.Pun;
 using System;
 using System.Reflection;
+using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 
@@ -27,12 +28,53 @@ namespace JupiterX.Mods
         {
             if (PhotonNetwork.InRoom)
             {
-                RPCManager.RigRPC("PlayHandTap", RpcTarget.All, new object[] { index, false, 99999f });
+                PlaySound(index, false, 9999f);
+                //RPCManager.RigRPC("PlayHandTap", RpcTarget.All, new object[] { index, false, 99999f });
             }
             else
             {
                 PlayHandTapLocal(index, false, 999999f);
             }
+        }
+
+        public static unsafe void PlaySound(params object[] args)
+        {
+            var array = new Il2CppReferenceArray<Il2CppSystem.Object>(args.Length);
+            for (int i = 0; i < args.Length; i++)
+            {
+                object arg = args[i];
+                if (arg == null)
+                {
+                    array[i] = null;
+                }
+                else if (arg is Il2CppSystem.Object il2cppObj)
+                {
+                    array[i] = il2cppObj;
+                }
+                else if (arg is string str)
+                {
+                    array[i] = (Il2CppSystem.Object)str;
+                }
+                else if (arg is int intValue)
+                {
+                    IntPtr ptr = IL2CPP.il2cpp_object_new(Il2CppClassPointerStore<int>.NativeClassPtr);
+                    *(int*)IL2CPP.il2cpp_object_unbox(ptr) = intValue;
+                    array[i] = new Il2CppSystem.Object(ptr);
+                }
+                else if (arg is bool boolValue)
+                {
+                    IntPtr ptr = IL2CPP.il2cpp_object_new(Il2CppClassPointerStore<bool>.NativeClassPtr);
+                    *(bool*)IL2CPP.il2cpp_object_unbox(ptr) = boolValue;
+                    array[i] = new Il2CppSystem.Object(ptr);
+                }
+                else if (arg is float floatValue)
+                {
+                    IntPtr ptr = IL2CPP.il2cpp_object_new(Il2CppClassPointerStore<float>.NativeClassPtr);
+                    *(float*)IL2CPP.il2cpp_object_unbox(ptr) = floatValue;
+                    array[i] = new Il2CppSystem.Object(ptr);
+                }
+            }
+            GorillaTagger.Instance.myVRRig.photonView.RPC("PlayHandTap", RpcTarget.All, array);
         }
 
         public static void PlayHandTapLocal(int soundIndex, bool isLeftHand, float volume)
