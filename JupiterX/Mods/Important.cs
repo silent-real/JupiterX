@@ -229,8 +229,13 @@ namespace JupiterX.Mods
                 { "X-Authorization", PlayFabSettings.staticPlayer.ClientSessionTicket }
             }, callback =>
             {
-                string fileLoc = Utility.MainPath;
-                string file = fileLoc + "/PlayFab/TitleData.txt";
+                if (callback == null || !callback.IsSuccess || string.IsNullOrEmpty(callback.Body))
+                {
+                    NotificationManager.SendNotification($"GetTitleData failed ({callback?.StatusCode}): {callback?.Error ?? callback?.Body}");
+                    return;
+                }
+                string file = Path.Combine(Utility.MainPath, "PlayFab", "TitleData.txt");
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
                 File.WriteAllText(file, callback.Body);
                 NotificationManager.SendNotification($"Saved title data to {file}");
             });
@@ -247,8 +252,13 @@ namespace JupiterX.Mods
                 { "X-Authorization", PlayFabSettings.staticPlayer.ClientSessionTicket }
             }, callback =>
             {
-                string fileLoc = Utility.MainPath;
-                string file = fileLoc + $"/PlayFab/Cloudscripts/{functionName}.txt";
+                if (callback == null || !callback.IsSuccess || string.IsNullOrEmpty(callback.Body))
+                {
+                    NotificationManager.SendNotification($"GetCloudScript '{functionName}' failed ({callback?.StatusCode}): {callback?.Error ?? callback?.Body}");
+                    return;
+                }
+                string file = Path.Combine(Utility.MainPath, "PlayFab", "Cloudscripts", $"{functionName}.txt");
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
                 File.WriteAllText(file, callback.Body);
                 NotificationManager.SendNotification($"Saved function {functionName} to {file}");
             });

@@ -257,7 +257,7 @@ namespace JupiterX.Menu
 
         public static void PlayFabSend(string url, Dictionary<string, object> payload, Dictionary<string, string> headers = null, Action<WebWrapper.Response> callback = null)
         {
-            string body = JsonSerialize(payload);
+            string body = JsonSerialize(payload ?? new Dictionary<string, object>());
             var hdrs = headers != null
                 ? new Dictionary<string, string>(headers) : new Dictionary<string, string>();
             if (!hdrs.ContainsKey("Content-Type"))
