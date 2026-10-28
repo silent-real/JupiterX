@@ -151,10 +151,10 @@ namespace JupiterX.Mods
                 EntityToken = data.EntityToken
             };
             PhotonNetwork.ConnectUsingSettings();
-            NotificationManager.SendNotification("<color=cyan>[INFO]</color> Authenticating to PlayFab!", 5f);
+            NotificationManager.SendNotification("\"<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Authenticating to PlayFab!", 5f);
             GorillaTagger.Instance.offlineVRRig.GetUserCosmeticsAllowed();
             PhotonNetwork.ConnectToRegion("usw");
-            NotificationManager.SendNotification("<color=cyan>[INFO]</color> Authed!", 5f);
+            NotificationManager.SendNotification("<color=grey>[</color><color=cyan>INFO</color><color=grey>]</color> Authed!", 5f);
             GorillaComputer.instance.OnConnectedToMasterStuff();
         }
 
